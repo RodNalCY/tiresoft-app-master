@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
-
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {

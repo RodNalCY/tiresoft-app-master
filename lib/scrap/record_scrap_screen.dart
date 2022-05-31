@@ -605,8 +605,11 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
         pickedImageAsBytes2 = null;
       });
       onSuccess();
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ListTireScrapScreen()));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ListTireScrapScreen("5"))); // RDX - DEFINIR ID CLIENTE
     } else {
       onError();
       // Si la llamada no fue exitosa, lanza un error.

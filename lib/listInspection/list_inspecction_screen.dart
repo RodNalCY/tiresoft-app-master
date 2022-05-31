@@ -7,6 +7,10 @@ import 'dart:convert';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListInspectionScreen extends StatefulWidget {
+  final String _id_cliente;
+
+  ListInspectionScreen(this._id_cliente, {Key? key}) : super(key: key);
+
   @override
   _ListInspectionScreenState createState() => _ListInspectionScreenState();
 }
@@ -16,16 +20,29 @@ class _ListInspectionScreenState extends State<ListInspectionScreen> {
   int _currentSortColumn = 0;
   bool _isSortAsc = true;
 
-  var url = Uri.parse(
-      "https://tiresoft2.lab-elsol.com/api/inspecciones/getAllInspectionsMinified");
-
   void getInspections() async {
-    var graphResponse = await http.get(url);
-    final myInspections = json.decode(graphResponse.body) as List;
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/inspecciones/getAllInspectionsMinified"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._id_cliente,
+      }),
+    );
 
-    setState(() {
-      _myInspections = myInspections;
-    });
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      final _lista_inspeccion = _json_decode['success']['resultado'] as List;
+
+      setState(() {
+        _myInspections = _lista_inspeccion;
+      });
+    } else {
+      throw Exception("Falló la Conexión");
+    }
   }
 
   @override

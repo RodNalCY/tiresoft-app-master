@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/listInspection/list_inspecction_screen.dart';
+import 'package:tiresoft/neumaticos/list_neumaticos.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
 import 'package:tiresoft/scrap/record_scrap_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
+  final String _g_id_cliente = "5";
+
+  // const CustomDrawer(this._g_id_cliente, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -59,7 +64,8 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListInspectionScreen()),
+                      builder: (context) =>
+                          ListInspectionScreen(_g_id_cliente)),
                 );
               },
             ),
@@ -83,7 +89,13 @@ class CustomDrawer extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.data_saver_off),
               title: const Text('Reporte Neumáticos'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListNeumaticos(_g_id_cliente)),
+                );
+              },
             ),
           ),
           Container(
@@ -117,7 +129,7 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListTireScrapScreen()),
+                      builder: (context) => ListTireScrapScreen(_g_id_cliente)),
                 );
               },
             ),
