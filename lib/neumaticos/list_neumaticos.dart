@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/neumaticos/models/neumatico.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -32,7 +33,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print(jsonData['success']['resultado']);
+      // print(jsonData['success']['resultado']);
 
       for (var item in jsonData['success']['resultado']) {
         neumaticos.add(Neumatico(
@@ -46,6 +47,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
             item["vehiculo"],
             item["fecha_registro"]));
       }
+
       return neumaticos;
     } else {
       throw Exception("Falló la Conexión");
@@ -72,8 +74,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
           future: _listadoNeumaticos,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return GridView.count(
-                  crossAxisCount: 2, children: _listNeumaticos(snapshot.data));
+              return _myListNeumaticos(context, snapshot.data);
             } else if (snapshot.hasError) {
               return Text("Error");
             }
@@ -84,45 +85,27 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
     );
   }
 
-  List<Widget> _listNeumaticos(data) {
-    List<Widget> neumaticos = [];
-
-    for (var neu in data) {
-      neumaticos.add(Card(
-        child: Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.all(8.0), child: Text(neu.n_serie))
-          ],
-        ),
-      ));
-    }
-
-    return neumaticos;
-  }
-}
-
-class Neumatico {
-  int n_id;
-  String n_serie;
-  String n_marca;
-  String n_modelo;
-  String n_medida;
-  String n_condicion;
-  String n_estado;
-  String n_vehiculo;
-  String n_f_registro;
-
-  Neumatico(this.n_id, this.n_serie, this.n_marca, this.n_modelo, this.n_medida,
-      this.n_condicion, this.n_estado, this.n_vehiculo, this.n_f_registro) {
-    this.n_id = n_id;
-    this.n_serie = n_serie;
-    this.n_marca = n_marca;
-    this.n_modelo = n_modelo;
-    this.n_medida = n_medida;
-    this.n_condicion = n_condicion;
-    this.n_estado = n_estado;
-    this.n_vehiculo = n_vehiculo;
-    this.n_f_registro = n_f_registro;
+  Widget _myListNeumaticos(BuildContext context, data) {
+    // backing data
+    return ListView.builder(
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () => {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Serie: " + data[index].n_serie)))
+          },
+          title: Text('Serie: ' + data[index].n_serie),
+          subtitle: Text(data[index].n_marca +
+              ' ' +
+              data[index].n_modelo +
+              ' ' +
+              data[index].n_medida),
+          leading:
+              CircleAvatar(child: Text(data[index].n_marca.substring(0, 1))),
+          trailing: Icon(Icons.arrow_forward_ios),
+        );
+      },
+    );
   }
 }

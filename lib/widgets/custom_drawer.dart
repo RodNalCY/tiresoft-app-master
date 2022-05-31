@@ -4,6 +4,7 @@ import 'package:tiresoft/listInspection/list_inspecction_screen.dart';
 import 'package:tiresoft/neumaticos/list_neumaticos.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
 import 'package:tiresoft/scrap/record_scrap_screen.dart';
+import 'package:tiresoft/vehiculos/list_vehiculos.dart';
 
 class CustomDrawer extends StatelessWidget {
   final String _g_id_cliente = "5";
@@ -78,7 +79,13 @@ class CustomDrawer extends StatelessWidget {
             child: ListTile(
               leading: const Icon(Icons.toys),
               title: const Text('Reporte Vehiculos'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListVehiculos(_g_id_cliente)),
+                );
+              },
             ),
           ),
           Container(

@@ -1,0 +1,124 @@
+import 'package:flutter/material.dart';
+import 'package:tiresoft/vehiculos/models/vehiculo.dart';
+import 'package:tiresoft/widgets/custom_drawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class ListVehiculos extends StatefulWidget {
+  final String _id_cliente;
+
+  ListVehiculos(this._id_cliente, {Key? key}) : super(key: key);
+
+  @override
+  State<ListVehiculos> createState() => _ListVehiculosState();
+}
+
+class _ListVehiculosState extends State<ListVehiculos> {
+  late Future<List<Vehiculo>> _listadoVehiculos;
+
+  Future<List<Vehiculo>> _postVehiculos() async {
+    final response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/listaVehiculos"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._id_cliente,
+      }),
+    );
+
+    List<Vehiculo> _vehiculos = [];
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      print("JSON:");
+      print(jsonData['success']['resultado']);
+
+      String str_codigo = "-";
+      String str_tipo = "-";
+
+      for (var item in jsonData['success']['resultado']) {
+        if (item["codigo"] != null) {
+          str_codigo = item["codigo"];
+        }
+        if (item["id_tipo"] != null) {
+          str_tipo = item["id_tipo"].toString();
+        }
+        _vehiculos.add(Vehiculo(
+            item["id"],
+            item["placa"],
+            str_codigo,
+            str_tipo,
+            item["id_marca"].toString(),
+            item["id_modelo"].toString(),
+            item["id_configuracion"].toString(),
+            item["ruta"].toString(),
+            item["id_planta"].toString(),
+            item["estado"].toString(),
+            item["created_at"]));
+      }
+
+      return _vehiculos;
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _listadoVehiculos = _postVehiculos();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(""),
+          backgroundColor: Color(0xff212F3D),
+          elevation: 0.0,
+        ),
+        drawer: CustomDrawer(),
+        body: FutureBuilder(
+          future: _listadoVehiculos,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return _myListVehiculos(context, snapshot.data);
+            } else if (snapshot.hasError) {
+              return Text("Error");
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _myListVehiculos(BuildContext context, data) {
+    // backing data
+    return ListView.builder(
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () => {
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Placa: " + data[index].v_placa)))
+          },
+          title: Text('Placa: ' + data[index].v_placa),
+          subtitle: Text(data[index].v_tipo +
+              ' ' +
+              data[index].v_marca +
+              ' ' +
+              data[index].v_modelo +
+              ' ' +
+              data[index].v_configuracion),
+          leading:
+              CircleAvatar(child: Text(data[index].v_marca.substring(0, 1))),
+          trailing: Icon(Icons.arrow_forward_ios),
+        );
+      },
+    );
+  }
+}
