@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/neumaticos/list_neumatico_details.dart';
 import 'package:tiresoft/neumaticos/models/neumatico.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -90,20 +91,30 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          onTap: () => {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Serie: " + data[index].n_serie)))
-          },
-          title: Text('Serie: ' + data[index].n_serie),
-          subtitle: Text(data[index].n_marca +
-              ' ' +
-              data[index].n_modelo +
-              ' ' +
-              data[index].n_medida),
-          leading:
-              CircleAvatar(child: Text(data[index].n_marca.substring(0, 1))),
-          trailing: Icon(Icons.arrow_forward_ios),
+        return Card(
+          child: ListTile(
+            onTap: () => {
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //     SnackBar(content: Text("Serie: " + data[index].n_serie)))
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListNeumaticosDetails(
+                          data[index], data[index].n_serie)))
+            },
+            title: Text(
+              'Serie: ' + data[index].n_serie,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(data[index].n_marca +
+                ' ' +
+                data[index].n_modelo +
+                ' ' +
+                data[index].n_medida),
+            leading:
+                CircleAvatar(child: Text(data[index].n_marca.substring(0, 1))),
+            trailing: Icon(Icons.arrow_forward_ios),
+          ),
         );
       },
     );

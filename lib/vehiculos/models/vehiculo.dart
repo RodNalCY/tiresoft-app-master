@@ -9,6 +9,7 @@ class Vehiculo {
   String v_aplicacion;
   String v_planta;
   String v_estado;
+  String v_anio_fabricacion;
   String v_f_registro;
 
   Vehiculo(
@@ -22,6 +23,7 @@ class Vehiculo {
       this.v_aplicacion,
       this.v_planta,
       this.v_estado,
+      this.v_anio_fabricacion,
       this.v_f_registro) {
     this.v_id = v_id;
     this.v_placa = v_placa;
@@ -33,6 +35,7 @@ class Vehiculo {
     this.v_aplicacion = v_aplicacion;
     this.v_planta = v_planta;
     this.v_estado = v_estado;
+    this.v_anio_fabricacion = v_anio_fabricacion;
     this.v_f_registro = v_f_registro;
   }
 }

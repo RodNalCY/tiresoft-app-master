@@ -35,28 +35,27 @@ class _ListVehiculosState extends State<ListVehiculos> {
       print("JSON:");
       print(jsonData['success']['resultado']);
 
-      String str_codigo = "-";
+      String str_f_fabricacion = "-";
       String str_tipo = "-";
 
       for (var item in jsonData['success']['resultado']) {
-        if (item["codigo"] != null) {
-          str_codigo = item["codigo"];
+        if (item["fecha_fabricacion"] != null) {
+          str_f_fabricacion = item["fecha_fabricacion"];
         }
-        if (item["id_tipo"] != null) {
-          str_tipo = item["id_tipo"].toString();
-        }
+
         _vehiculos.add(Vehiculo(
             item["id"],
             item["placa"],
-            str_codigo,
-            str_tipo,
-            item["id_marca"].toString(),
-            item["id_modelo"].toString(),
-            item["id_configuracion"].toString(),
-            item["ruta"].toString(),
-            item["id_planta"].toString(),
-            item["estado"].toString(),
-            item["created_at"]));
+            item["codigo"],
+            item["tipo"],
+            item["marca"],
+            item["modelo"],
+            item["configuracion"],
+            item["aplicacion"],
+            item["nomplanta"],
+            item["nomestado"],
+            str_f_fabricacion,
+            item["fecha_registro"]));
       }
 
       return _vehiculos;
@@ -106,10 +105,10 @@ class _ListVehiculosState extends State<ListVehiculos> {
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Placa: " + data[index].v_placa)))
           },
-          title: Text('Placa: ' + data[index].v_placa),
-          subtitle: Text(data[index].v_tipo +
-              ' ' +
-              data[index].v_marca +
+          title: Text(
+              'Placa: ' + data[index].v_placa + ' - ' + data[index].v_tipo,
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text(data[index].v_marca +
               ' ' +
               data[index].v_modelo +
               ' ' +
