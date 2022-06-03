@@ -33,7 +33,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_marca,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                     ),
                     style: TextStyle(fontSize: 16.0)),
@@ -48,7 +48,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_modelo,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                       style: TextStyle(fontSize: 16.0)),
                 ),
@@ -62,7 +62,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                       TextSpan(
                           text: widget._neumatico.n_medida,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17.0)),
+                              fontWeight: FontWeight.w500, fontSize: 17.0)),
                     ],
                     style: TextStyle(fontSize: 16.0))),
               ),
@@ -76,7 +76,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_condicion,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                       style: TextStyle(fontSize: 16.0)),
                 ),
@@ -91,7 +91,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_estado,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                     ),
                     style: TextStyle(fontSize: 16.0)),
@@ -106,7 +106,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_vehiculo,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                     ),
                     style: TextStyle(fontSize: 16.0)),
@@ -121,7 +121,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
                         TextSpan(
                             text: widget._neumatico.n_f_registro,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                                fontWeight: FontWeight.w500, fontSize: 17.0)),
                       ],
                       style: TextStyle(fontSize: 16.0)),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/vehiculos/list_vehiculo_details.dart';
 import 'package:tiresoft/vehiculos/models/vehiculo.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 import 'package:http/http.dart' as http;
@@ -102,8 +103,13 @@ class _ListVehiculosState extends State<ListVehiculos> {
       itemBuilder: (context, index) {
         return ListTile(
           onTap: () => {
-            ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Placa: " + data[index].v_placa)))
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //     SnackBar(content: Text("Placa: " + data[index].v_placa)))
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ListVehiculoDetails(data[index], data[index].v_placa)))
           },
           title: Text(
               'Placa: ' + data[index].v_placa + ' - ' + data[index].v_tipo,
