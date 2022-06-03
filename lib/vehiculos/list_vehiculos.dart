@@ -107,7 +107,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
           },
           title: Text(
               'Placa: ' + data[index].v_placa + ' - ' + data[index].v_tipo,
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: TextStyle(fontWeight: FontWeight.w500)),
           subtitle: Text(data[index].v_marca +
               ' ' +
               data[index].v_modelo +

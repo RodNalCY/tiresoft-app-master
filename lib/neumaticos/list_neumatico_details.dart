@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tiresoft/neumaticos/models/neumatico.dart';
 
 class ListNeumaticosDetails extends StatefulWidget {
-  final String texto;
   final Neumatico _neumatico;
+  final String texto;
+
   ListNeumaticosDetails(this._neumatico, this.texto, {Key? key})
       : super(key: key);
 
@@ -20,13 +21,124 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
           backgroundColor: Color(0xff212F3D),
         ),
         body: Container(
-          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.all(25.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text("Rodnal"),
-              Text("Cabello"),
-              Text("Yacolca")
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                    TextSpan(
+                      text: 'Marca: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_marca,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                    ),
+                    style: TextStyle(fontSize: 16.0)),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                  TextSpan(
+                      text: 'Modelo: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_modelo,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                      style: TextStyle(fontSize: 16.0)),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(TextSpan(
+                    text: 'Medida: ', // default text style
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: widget._neumatico.n_medida,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 17.0)),
+                    ],
+                    style: TextStyle(fontSize: 16.0))),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                  TextSpan(
+                      text: 'Condición: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_condicion,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                      style: TextStyle(fontSize: 16.0)),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                    TextSpan(
+                      text: 'Estado: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_estado,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                    ),
+                    style: TextStyle(fontSize: 16.0)),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                    TextSpan(
+                      text: 'Vehiculo: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_vehiculo,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                    ),
+                    style: TextStyle(fontSize: 16.0)),
+              ),
+              SizedBox(height: 10.0),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                  TextSpan(
+                      text: 'Fecha de Registro: ', // default text style
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: widget._neumatico.n_f_registro,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 17.0)),
+                      ],
+                      style: TextStyle(fontSize: 16.0)),
+                ),
+              ),
+              SizedBox(height: 50.0),
+              MaterialButton(
+                minWidth: 150.0,
+                height: 40.0,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Se envio a Scrap : " + widget._neumatico.n_serie)));
+                },
+                color: Color(0xff212F3D),
+                child:
+                    Text('Enviar Scrap', style: TextStyle(color: Colors.white)),
+              ),
             ],
           ),
         ));

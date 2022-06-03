@@ -104,7 +104,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
             },
             title: Text(
               'Serie: ' + data[index].n_serie,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.w500),
             ),
             subtitle: Text(data[index].n_marca +
                 ' ' +
