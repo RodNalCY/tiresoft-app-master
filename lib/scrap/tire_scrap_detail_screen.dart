@@ -23,7 +23,15 @@ class _TireScrapDetailScreenState extends State<TireScrapDetailScreen> {
         "https://tiresoft2.lab-elsol.com/api/scrap/showRecorridoNeumatico/" +
             widget.neumaticoId.toString());
 
-    var graphResponse = await http.get(url);
+    var graphResponse = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': "5",
+      }),
+    );
 
     final myTire = json.decode(graphResponse.body);
     print(myTire.toString());

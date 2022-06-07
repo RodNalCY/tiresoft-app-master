@@ -7,6 +7,7 @@ import 'package:tiresoft/inspection/record_inspection_header.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
   final String title = 'Seleccionar cliente';
+  final String _global_id_cliente = '5';
 
   State<StatefulWidget> createState() => _CustomerSelectionScreenState();
 }
@@ -123,7 +124,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           RecordInspectionHeader(
-                                            slugDatabase: _slugDatabase,
+                                            widget._global_id_cliente,
                                           )),
                                 )
                               }),

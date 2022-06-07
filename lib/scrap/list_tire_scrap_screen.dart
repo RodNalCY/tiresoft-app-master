@@ -101,8 +101,8 @@ class _ListTireScrapScreenState extends State<ListTireScrapScreen> {
       ),
       DataColumn(label: Text('Serie')),
       DataColumn(label: Text('Fecha Retiro')),
-      DataColumn(label: Text('Rem Final')),
-      DataColumn(label: Text('Rem Lim')),
+      DataColumn(label: Text('Rm. Final')),
+      DataColumn(label: Text('Rm. Límite')),
     ];
   }
 

@@ -39,6 +39,8 @@ class ValidationSessionScreenState extends State<ValidationSessionScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<int> _counter;
   int userId = 0;
+  String _global_id_cliente = "5";
+
   Future<void> _getDataSession() async {
     final SharedPreferences prefs = await _prefs;
     print('chequeame ${prefs.getInt('userId')}');
@@ -51,9 +53,7 @@ class ValidationSessionScreenState extends State<ValidationSessionScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const RecordInspectionHeader(
-                  slugDatabase: 'tenant2',
-                )),
+            builder: (context) => RecordInspectionHeader(_global_id_cliente)),
       );
     }
 

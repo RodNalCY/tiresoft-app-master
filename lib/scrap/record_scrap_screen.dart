@@ -7,6 +7,7 @@ import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -609,7 +610,7 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  ListTireScrapScreen("5"))); // RDX - DEFINIR ID CLIENTE
+                  ListScrap("5"))); // RDX - DEFINIR ID CLIENTE
     } else {
       onError();
       // Si la llamada no fue exitosa, lanza un error.

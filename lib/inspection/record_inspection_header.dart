@@ -13,11 +13,10 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class RecordInspectionHeader extends StatefulWidget {
   final String title = 'Registration';
-  final String slugDatabase;
-  const RecordInspectionHeader({
-    Key? key,
-    required this.slugDatabase,
-  }) : super(key: key);
+  final String _id_cliente;
+
+  RecordInspectionHeader(this._id_cliente, {Key? key}) : super(key: key);
+
   State<StatefulWidget> createState() => _RecordInspectionHeaderState();
 }
 
@@ -51,19 +50,30 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
     setState(() {});
   }
 
-  var url = Uri.parse("https://tiresoft2.lab-elsol.com/api/vehiculosMinified");
-
   void getVehicles() async {
-    var graphResponse = await http.get(url);
-    final my_vehicles = json.decode(graphResponse.body) as List;
+    var response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/vehiculosMinified"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._id_cliente,
+      }),
+    );
 
-    for (final element in my_vehicles) {
-      letters.add(element['placa'].toString());
-      setState(() {});
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      final _lista_vehiculos = _json_decode['success']['resultado'] as List;
+
+      for (final element in _lista_vehiculos) {
+        letters.add(element['placa'].toString());
+        setState(() {});
+      }
+      setState(() {
+        vehicles = _lista_vehiculos;
+      });
     }
-    setState(() {
-      vehicles = my_vehicles;
-    });
   }
 
   bool validateFormIsEmpty() {

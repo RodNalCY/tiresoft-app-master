@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/listInspection/list_inspecction_screen.dart';
 import 'package:tiresoft/neumaticos/list_neumaticos.dart';
+import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
 import 'package:tiresoft/scrap/record_scrap_screen.dart';
 import 'package:tiresoft/vehiculos/list_vehiculos.dart';
@@ -46,9 +47,8 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RecordInspectionHeader(
-                            slugDatabase: 'tenant2',
-                          )),
+                      builder: (context) =>
+                          RecordInspectionHeader(_g_id_cliente)),
                 );
               },
             ),
@@ -133,10 +133,15 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.format_list_bulleted),
               title: const Text('Neumaticos en Scrap'),
               onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ListTireScrapScreen(_g_id_cliente)),
+                // );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ListTireScrapScreen(_g_id_cliente)),
+                      builder: (context) => ListScrap(_g_id_cliente)),
                 );
               },
             ),
