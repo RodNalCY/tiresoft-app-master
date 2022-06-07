@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/inspeccion/list_inspeccion.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/listInspection/list_inspecction_screen.dart';
 import 'package:tiresoft/neumaticos/list_neumaticos.dart';
@@ -62,11 +63,17 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.format_list_bulleted),
               title: const Text('Reporte Inspección'),
               onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //           ListInspectionScreen(_g_id_cliente)),
+                // );
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ListInspectionScreen(_g_id_cliente)),
+                      builder: (context) => ListInspeccion(_g_id_cliente)),
                 );
               },
             ),

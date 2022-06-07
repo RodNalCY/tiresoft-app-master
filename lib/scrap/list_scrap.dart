@@ -17,6 +17,7 @@ class ListScrap extends StatefulWidget {
 
 class _ListScrapState extends State<ListScrap> {
   late Future<List<Scrapt>> _listadoScrap;
+  String searchString = "";
 
   Future<List<Scrapt>> _postListScrap() async {
     final response = await http.post(
@@ -96,16 +97,37 @@ class _ListScrapState extends State<ListScrap> {
         elevation: 0.0,
       ),
       drawer: CustomDrawer(),
-      body: FutureBuilder(
-        future: _listadoScrap,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _myListScrap(context, snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text("Error");
-          }
-          return Center(child: CircularProgressIndicator());
-        },
+      body: Container(
+        child: FutureBuilder(
+          future: _listadoScrap,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'buscar x serie',
+                      ),
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                  Expanded(child: _myListScrap(context, snapshot.data))
+                ]),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error");
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     ));
   }
@@ -115,28 +137,31 @@ class _ListScrapState extends State<ListScrap> {
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, index) {
-        return Card(
-          child: ListTile(
-            onTap: () => {
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //     SnackBar(content: Text("Serie: " + data[index].n_serie)))
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          ListScraptDetails(data[index], data[index].s_serie)))
-            },
-            title: Text(
-              'Serie: ' + data[index].s_serie,
-              style: TextStyle(fontWeight: FontWeight.w500),
-            ),
-            subtitle: Text(
-                data[index].s_motivo_scrap + ' \n' + data[index].s_fecha_scrap),
-            leading:
-                CircleAvatar(child: Text(data[index].s_marca.substring(0, 1))),
-            trailing: Icon(Icons.arrow_forward_ios),
-          ),
-        );
+        return data[index].s_serie.contains(searchString)
+            ? Card(
+                child: ListTile(
+                  onTap: () => {
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(content: Text("Serie: " + data[index].n_serie)))
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ListScraptDetails(
+                                data[index], data[index].s_serie)))
+                  },
+                  title: Text(
+                    'Serie: ' + data[index].s_serie,
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  subtitle: Text(data[index].s_motivo_scrap +
+                      ' \n' +
+                      data[index].s_fecha_scrap),
+                  leading: CircleAvatar(
+                      child: Text(data[index].s_marca.substring(0, 1))),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                ),
+              )
+            : Container();
       },
     );
   }
