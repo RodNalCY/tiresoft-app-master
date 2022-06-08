@@ -15,12 +15,9 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class RecordScrapScreen extends StatefulWidget {
   final String title = 'Registration';
+  final String _cliente_id;
 
-  final String slugDatabase;
-  const RecordScrapScreen({
-    Key? key,
-    required this.slugDatabase,
-  }) : super(key: key);
+  const RecordScrapScreen(this._cliente_id, {Key? key}) : super(key: key);
   State<StatefulWidget> createState() => _RecordScrapScreenState();
 }
 
@@ -56,52 +53,84 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   void initState() {
     getVehicles();
     super.initState();
-    mapTires = {'0': 'Seleccione un vehiculo', '1': 'Seleccione un vehiculo'};
+    mapTires = {
+      '0': 'Debe seleccionar un vehiculo',
+      '1': 'Debe seleccionar un vehiculo'
+    };
 
     listIdTires = ['0', '1'];
   }
 
-  var url = Uri.parse("https://tiresoft2.lab-elsol.com/api/vehiculosMinified");
-
   void getVehicles() async {
-    var graphResponse = await http.get(url);
-    final my_vehicles = json.decode(graphResponse.body) as List;
-
-    for (final element in my_vehicles) {
-      letters.add(element['placa'].toString());
-      setState(() {});
+    final response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/vehiculosMinified"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._cliente_id,
+      }),
+    );
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      final my_vehicles = _json_decode['success']['resultado'] as List;
+      for (final element in my_vehicles) {
+        if (element['neumaticos']) {
+          letters.add(element['placa'].toString());
+          setState(() {});
+        }
+      }
+      setState(() {
+        vehicles = my_vehicles;
+      });
+    } else {
+      throw Exception("Falló la Conexión");
     }
-    setState(() {
-      vehicles = my_vehicles;
-    });
   }
 
   Map mapTires = {'0': '7914', '1': '7915', '2': '1070 - 4'};
   final ImagePicker _picker = ImagePicker();
   List<String> listIdTires = ['0', '1', '2'];
+
   Future<String> getTires() async {
-    var url2 = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/inspecciones/getneumatico/" +
-            selectedVehiculoId.toString());
-    var graphResponse = await http.get(url2);
+    var response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/inspecciones/getneumatico/" +
+              selectedVehiculoId.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._cliente_id,
+      }),
+    );
 
-    final myTires = json.decode(graphResponse.body) as List;
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      final myTires = _json_decode as List;
+      print(
+          "JSON--------------------------------------------------------------");
+      print(selectedVehiculoId.toString());
+      print(myTires);
 
-    bool isfound = false;
-    List<String> tmp = [];
-    Map tmp2 = new Map();
-    for (final element in myTires) {
-      if (element['neumatico'] != null) {
-        int id = element['neumatico']['id'];
-        tmp.add(id.toString());
-        tmp2[id.toString()] = element['neumatico']['num_serie'];
-        selectedTireId = id;
+      bool isfound = false;
+      List<String> tmp = [];
+      Map tmp2 = new Map();
+      for (final element in myTires) {
+        if (element['neumatico'] != null) {
+          int id = element['neumatico']['id'];
+          tmp.add(id.toString());
+          tmp2[id.toString()] = element['neumatico']['num_serie'];
+          selectedTireId = id;
+        }
       }
+      setState(() {
+        listIdTires = tmp;
+        mapTires = tmp2;
+      });
     }
-    setState(() {
-      listIdTires = tmp;
-      mapTires = tmp2;
-    });
 
     print('Mira aqui ${listIdTires}');
     print('Mira aqui mapa ${mapTires}');
@@ -194,10 +223,22 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                           labelText: 'Placa del Vehiculo',
                           border: OutlineInputBorder()),
                       // suggestionsHeight: 200.0,
-                      maxSuggestions: 20,
+                      maxSuggestions: 1000,
                       itemBuilder: (context, item) => Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(item!),
+                        padding: EdgeInsets.only(top: 7.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xff212F3D),
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          padding: EdgeInsets.only(
+                              left: 30.0, bottom: 5.0, top: 5.0),
+                          child: Text(
+                            item!,
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16.0),
+                          ),
+                        ),
                       ),
                       onSearch: (String search) async => search.isEmpty
                           ? letters
@@ -306,14 +347,22 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 5.0),
                     child: Row(
-                      children: [addPhotoWidget(), addPhotoWidget2()],
+                      children: [
+                        Padding(padding: EdgeInsets.all(5.0)),
+                        addPhotoWidget(),
+                        Padding(padding: EdgeInsets.all(5.0)),
+                        addPhotoWidget2()
+                      ],
                     ),
                   ),
+                  SizedBox(height: 25.0),
                   Center(
-                    child: FlatButton(
+                    child: MaterialButton(
+                      minWidth: 150.0,
+                      height: 40.0,
                       padding: EdgeInsets.all(15.0),
                       child: Text('Siguiente'),
-                      color: Colors.green,
+                      color: Color(0xff212F3D),
                       textColor: Colors.white,
                       onPressed: () => {
                         if (!validateFormIsEmpty()) {createScrap()}
@@ -333,22 +382,22 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     'PESTAÑA DAÑADA',
     'PESTAÑA QUEMADA',
     'CORTE PASANTE EN EL FLANCO',
-    'CORTE PASANTE EN LA BANDA DE RODAMIENTO',
-    'EXCESIVO DESGASTE DE LA BANDA DE RODAMIENTO',
+    'CORTE PASANTE EN LA \nBANDA DE RODAMIENTO',
+    'EXCESIVO DESGASTE DE LA \nBANDA DE RODAMIENTO',
     'SEPARACION DE CUERDAS EN EL FLANCO',
     'VOLADURA DEL NEUMÁTICO',
     'RODADO A BAJA PRESIÓN',
     'FATIGA DE LA CARCASA',
     'ROTURA CIRCUNFERENCIAL',
     'SEPARACION DEL INNERLINER',
-    'DESPRENDIMIENTO DE LA BANDA DE RODAMIENTO',
-    'SEPARACION DE TELAS ESTRUCTURALES EN EL FLANCO',
-    'SEPARACION DE TELAS ESTRUCTURALES EN EL HOMBRO',
-    'FALLA DEL PARCHE POR PRESION INSUFICIENTE',
+    'DESPRENDIMIENTO DE LA BANDA \nDE RODAMIENTO',
+    'SEPARACION DE TELAS ESTRUCTURALES \nEN EL FLANCO',
+    'SEPARACION DE TELAS ESTRUCTURALES \nEN EL HOMBRO',
+    'FALLA DEL PARCHE POR PRESION \nINSUFICIENTE',
     'REPARACION INADECUADA',
     'CONTAMINACION DEL NEUMATICO',
-    'RUPTURA DE LA CARCASA POR INCRUSTACION DE OBJETO',
-    'SEPARACION DE CUERDAS EN EL AREA DE LA PESTAÑA',
+    'RUPTURA DE LA CARCASA POR \nINCRUSTACION DE OBJETO',
+    'SEPARACION DE CUERDAS EN EL \nAREA DE LA PESTAÑA',
     'EXPOSICION DE CUERDAS(OXIDADAS)'
   ];
   int motivoScrapIdselected = 1;
@@ -362,7 +411,18 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
         items: listIdTires.map((String value) {
           return DropdownMenuItem<String>(
             value: value,
-            child: Text(mapTires[value.toString()] ?? '-'),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xff212F3D),
+                borderRadius: BorderRadius.circular(5.0),
+              ),
+              padding: EdgeInsets.only(
+                  left: 30.0, bottom: 5.0, top: 5.0, right: 30.0),
+              child: Text(
+                mapTires[value.toString()] ?? '-',
+                style: TextStyle(color: Colors.white, fontSize: 16.0),
+              ),
+            ),
           );
         }).toList(),
         onChanged: (_val) {
@@ -503,14 +563,14 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
           child: pickedImageAsBytes != null
               ? Image.memory(
                   pickedImageAsBytes!,
-                  width: 200.0,
-                  height: 200.0,
+                  width: 180.0,
+                  height: 180.0,
                   fit: BoxFit.fitHeight,
                 )
               : Container(
                   decoration: BoxDecoration(color: Colors.red[200]),
-                  width: 200,
-                  height: 200,
+                  width: 180.0,
+                  height: 180.0,
                   child: Icon(
                     Icons.camera_alt,
                     color: Colors.grey[800],
@@ -546,14 +606,14 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
           child: pickedImageAsBytes2 != null
               ? Image.memory(
                   pickedImageAsBytes2!,
-                  width: 200.0,
-                  height: 200.0,
+                  width: 180.0,
+                  height: 180.0,
                   fit: BoxFit.fitHeight,
                 )
               : Container(
                   decoration: BoxDecoration(color: Colors.red[200]),
-                  width: 200,
-                  height: 200,
+                  width: 180.0,
+                  height: 180.0,
                   child: Icon(
                     Icons.camera_alt,
                     color: Colors.grey[800],

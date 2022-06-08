@@ -121,12 +121,17 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.control_point),
               title: const Text('Asignar Neumatico a Scrap'),
               onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => RecordScrapScreen(
+                //             slugDatabase: 'tenant2',
+                //           )),
+                // );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RecordScrapScreen(
-                            slugDatabase: 'tenant2',
-                          )),
+                      builder: (context) => RecordScrapScreen(_g_id_cliente)),
                 );
               },
             ),
