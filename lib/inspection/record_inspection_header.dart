@@ -146,6 +146,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              SizedBox(height: 20.0),
               Center(
                   child: Text(
                 "Registrar inspección",
@@ -168,10 +169,21 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                       labelText: 'Placa del Vehiculo',
                       border: OutlineInputBorder()),
                   // suggestionsHeight: 200.0,
-                  maxSuggestions: 20,
+                  maxSuggestions: 1000,
                   itemBuilder: (context, item) => Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(item!),
+                    padding: EdgeInsets.only(top: 7.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xff212F3D),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      padding:
+                          EdgeInsets.only(left: 30.0, bottom: 5.0, top: 5.0),
+                      child: Text(
+                        item!,
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
                   ),
                   onSearch: (String search) async => search.isEmpty
                       ? letters
@@ -199,6 +211,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                       letter == null ? 'Placa invalida o no existe' : null,
                 ),
               ),
+              SizedBox(height: 15.0),
               Container(
                 padding: EdgeInsets.all(10),
                 child: TextFormField(
@@ -222,11 +235,6 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                 padding: EdgeInsets.all(10),
                 child: RawKeyboardListener(
                   focusNode: FocusNode(),
-                  onKey: (RawKeyEvent event) {
-                    if (event.runtimeType == RawKeyDownEvent) {
-                      //validateKm();
-                    }
-                  },
                   child: TextFormField(
                     controller: _kmController,
                     keyboardType: TextInputType.number,
@@ -277,13 +285,14 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 5.0),
+                padding: EdgeInsets.only(top: 30.0),
               ),
               Center(
-                child: FlatButton(
-                  padding: EdgeInsets.all(15.0),
+                child: MaterialButton(
+                  minWidth: 150.0,
+                  height: 40.0,
                   child: Text('Siguiente'),
-                  color: Colors.green,
+                  color: Color(0xff212F3D),
                   textColor: Colors.white,
                   onPressed: () => {
                     if (!validateFormIsEmpty())
@@ -292,6 +301,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RecordInspectionDetail(
+                                      id_cliente: widget._id_cliente,
                                       title: 'Registrar inspeccion',
                                       idVehiculo: selectedId,
                                       fechaInspeccion: _dateController.text,
@@ -313,76 +323,74 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
   Future<bool> validateDate(DateTime? date) async {
     var newFormat = DateFormat("y-MM-dd");
     String updatedDt = newFormat.format(date!);
+    print("Fecha");
+    print(newFormat);
+    print(updatedDt);
 
-    var urlDate = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/vehiculos/validateFechaInspeccion");
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/vehiculos/validateFechaInspeccion"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'clienteId': widget._id_cliente,
+        'id_vehiculo': selectedId,
+        'fecha_inspeccion': updatedDt,
+      }),
+    );
 
-    var body = jsonEncode({
-      "clienteId": 5,
-      "id_vehiculo": selectedId,
-      "fecha_inspeccion": updatedDt
-    });
-    final response = await http.post(urlDate,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body);
+    print("response");
+    print(response);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 500) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var responseDecode = json.decode(response.body);
-      var error = responseDecode['error'];
-      var message = responseDecode['message'];
-      if (error == false) {
-        setState(() {
-          messageValidationDateTiresoft = "";
-        });
-        return true;
-      } else {
-        setState(() {
-          messageValidationDateTiresoft = message.toString();
-        });
-        return false;
-      }
+      var message = responseDecode['error'];
+      setState(() {
+        messageValidationDateTiresoft = message.toString();
+      });
+      return true;
     } else {
+      setState(() {
+        messageValidationDateTiresoft = "";
+      });
       return false;
     }
   }
 
   Future<bool> validateKm(String km) async {
-    var urlDate = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/vehiculos/validateKilometraje");
-
-    var body = jsonEncode({
-      "clienteId": 5,
-      "id_vehiculo": selectedId,
-      "km": km,
-    });
-    final response = await http.post(urlDate,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body);
-
-    if (response.statusCode == 200) {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/vehiculos/validateKilometraje"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'clienteId': widget._id_cliente,
+        'id_vehiculo': selectedId,
+        'km': km,
+      }),
+    );
+    print("Status");
+    print(response.statusCode);
+    if (response.statusCode == 500) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
-      var responseDecode = json.decode(response.body);
-      var error = responseDecode['error'];
-      var message = responseDecode['message'];
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      var message = _json_decode['error'];
+      // print(_json_decode);
+      // print(message);
 
-      if (error == false) {
-        setState(() {
-          messageValidationKmTiresoft = "";
-        });
-        return true;
-      } else {
-        setState(() {
-          messageValidationKmTiresoft = message.toString();
-        });
-        return false;
-      }
-    } else {
+      setState(() {
+        messageValidationKmTiresoft = message.toString();
+      });
       return false;
+    } else {
+      setState(() {
+        messageValidationKmTiresoft = "";
+      });
+      return true;
     }
   }
 }

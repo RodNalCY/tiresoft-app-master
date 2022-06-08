@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:tiresoft/widgets/custom_cart.dart';
 
 class RecordInspectionDetail extends StatefulWidget {
+  final String id_cliente;
   final int? idVehiculo;
   final int kmInspeccion;
   final String fechaInspeccion;
@@ -17,6 +18,7 @@ class RecordInspectionDetail extends StatefulWidget {
 
   const RecordInspectionDetail(
       {Key? key,
+      required this.id_cliente,
       required this.title,
       this.idVehiculo,
       required this.kmInspeccion,
@@ -43,7 +45,9 @@ class RecordInspectionDetail extends StatefulWidget {
 }
 
 enum stateEnum { Continuar, ListaParaReencauchar, ListaParaReemplazar }
+
 enum valveEnum { M, P, ST }
+
 enum valveAccesibility { YES, NO }
 
 class _RecordInspectionDetailState extends State<RecordInspectionDetail>
