@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tiresoft/inspeccion/list_inspeccion.dart';
 import 'package:tiresoft/inspection/models/tire.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
@@ -115,6 +116,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
     bool _validatePressure = false;
     var body = jsonEncode({
+      "id_cliente": widget.id_cliente,
       "id_neumaticos": tires[position].uid,
       "id_vehiculo": widget.idVehiculo,
       "km_inspeccion_parcial": widget.kmInspeccion,
@@ -182,6 +184,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         'neumaticoimg1', pickedImageAsBytes!,
         filename: 'photo.jpg'));
 
+    request.fields['id_cliente'] = widget.id_cliente;
     request.fields['id_inspeccion'] = idInspeccion.toString();
     request.fields['vehiculo'] = idVehiculo.toString();
     request.fields['serieneumatico'] = idNeumaticos.toString();
@@ -211,6 +214,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         "https://tiresoft2.lab-elsol.com/api/inspecciones/finishedInspectionSimplified");
 
     var body = jsonEncode({
+      "id_cliente": widget.id_cliente,
       "inspection_id": listIdInspections,
       "fecha_inspeccion": widget.fechaInspeccion,
       "vehiculo": widget.idVehiculo,
@@ -247,56 +251,74 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   }
 
   Future<String> getTires() async {
-    var url2 = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/inspecciones/getneumatico/" +
-            widget.idVehiculo.toString());
-    var graphResponse = await http.get(url2);
+    var response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/inspecciones/getneumatico/" +
+              widget.idVehiculo.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget.id_cliente,
+      }),
+    );
 
-    final myTires = json.decode(graphResponse.body) as List;
+    print("STATUS");
+    print(widget.idVehiculo);
+    print(response.statusCode);
 
-    for (var i = 1; i <= 10; i++) {
-      bool isfound = false;
-      for (final element in myTires) {
-        if (element['neumatico'] != null) {
-          if (element['neumatico']['posicion'] == i) {
-            tires.add(Tire(
-              uid: element['neumatico']['id'],
-              serie: element['neumatico']['num_serie'],
-              brand: element['neumatico']['marca'].toString(),
-              model: element['neumatico']['modelo'].toString(),
-              design: element['neumatico']['disenio'] != null
-                  ? element['neumatico']['disenio'].toString()
-                  : '-',
-              position: element['neumatico']['posicion'],
-              recomendedPressure: element['neumatico']['presion_recomendada'],
-              idEjes: element['neumatico']['id_ejes'],
-            ));
-            isfound = true;
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final _json_decode = jsonDecode(body);
+      final myTires = _json_decode as List;
+      print("json > ");
+      print(myTires);
+      for (var i = 1; i <= 10; i++) {
+        bool isfound = false;
+        for (final element in myTires) {
+          if (element['neumatico'] != null) {
+            if (element['neumatico']['posicion'] == i) {
+              tires.add(Tire(
+                uid: element['neumatico']['id'],
+                serie: element['neumatico']['num_serie'],
+                brand: element['neumatico']['marca'].toString(),
+                model: element['neumatico']['modelo'].toString(),
+                design: element['neumatico']['disenio'] != null
+                    ? element['neumatico']['disenio'].toString()
+                    : '-',
+                position: element['neumatico']['posicion'],
+                recomendedPressure: element['neumatico']['presion_recomendada'],
+                idEjes: element['neumatico']['id_ejes'],
+              ));
+              isfound = true;
+            }
           }
         }
+        if (!isfound) {
+          tires.add(
+            Tire(
+              uid: 0,
+              serie: '7915',
+              brand: "tmp",
+              model: "MY507",
+              design: "",
+              position: i,
+              recomendedPressure: 120,
+              vehicle: 2,
+              idEjes: 1,
+            ),
+          );
+        }
       }
-      if (!isfound) {
-        tires.add(
-          Tire(
-            uid: 0,
-            serie: '7915',
-            brand: "tmp",
-            model: "MY507",
-            design: "",
-            position: i,
-            recomendedPressure: 120,
-            vehicle: 2,
-            idEjes: 1,
-          ),
-        );
-      }
-    }
-    setState(() {});
+      setState(() {});
 
-    if (myTires.length > 0) {
-      return 'Se cargaron los neumaticos';
+      if (myTires.length > 0) {
+        return 'Se cargaron los neumaticos';
+      } else {
+        return 'Este vehiculo no tiene neumaticos';
+      }
     } else {
-      return 'Este vehiculo no tiene neumaticos';
+      throw Exception("Falló la Conexión");
     }
   }
 
@@ -342,6 +364,20 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     getTires();
     super.initState();
     nutQuantityController.text = '0';
+    print("1-Method Init()");
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+    print("4-Method dispose()");
   }
 
   Widget tireWidget(int pos) {
@@ -376,6 +412,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
   @override
   Widget build(BuildContext context) {
+    print("2-Method build()");
     return Scaffold(
       // Persistent AppBar that never scrolls
       key: homeScaffoldKey,
@@ -411,9 +448,9 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FlatButton(
-                  padding: EdgeInsets.all(15.0),
+                  padding: EdgeInsets.only(right: 30.0, left: 30.0),
                   child: Text('Guardar'),
-                  color: Colors.green,
+                  color: Color(0xff212F3D),
                   textColor: Colors.white,
                   onPressed: () => {
                         showDialog<String>(
@@ -421,7 +458,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text('Guardar inspeccion'),
                             content: const Text(
-                                'Realmente desea guardar la inspeccion de este neumatico'),
+                                'Realmente desea guardar la inspección de este neumático'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () =>
@@ -458,11 +495,25 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                     finishInspections().then((value) => {
                           if (value)
                             {
-                              Navigator.pop(context),
+                              // Navigator.of(context).pop()
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           ListInspeccion(widget.id_cliente)),
+                              // )
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ListInspeccion(widget.id_cliente)))
                             }
                         });
                   },
-                  child: Text('Terminar y Enviar'))
+                  child: Text(
+                    'Terminar y Finalizar',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ))
             ],
           ),
 
@@ -688,7 +739,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             TextFormField(
               controller: pressureController,
               keyboardType: TextInputType.number,
-              onChanged: (val) => validatePressure(int.parse(val)),
+              onChanged: (val) => validatePressure(val.toString()),
               decoration: InputDecoration(labelText: 'Presion PSI'),
             ),
           ],
@@ -1227,48 +1278,41 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   }
 
   Future<bool> validateRemanente(String right, String mid, String left) async {
-    var urlDate = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/neumaticos/validateRemanentes");
-
-    var body = jsonEncode({
-      "clienteId": 5,
-      "id_neumaticos": tires[position].uid,
-      "interior": right,
-      "exterior": left,
-      "medio": mid
-    });
-
-    print(body);
-    final response = await http.post(urlDate,
+    final response = await http.post(
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/neumaticos/validateRemanentes"),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: body);
+        body: jsonEncode({
+          "clienteId": widget.id_cliente,
+          "id_neumaticos": tires[position].uid,
+          "interior": right,
+          "exterior": left,
+          "medio": mid
+        }));
 
-    if (response.statusCode == 200) {
+    print(response.statusCode);
+    if (response.statusCode == 500) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var responseDecode = json.decode(response.body);
-      var error = responseDecode['error'];
-      var message = responseDecode['message'];
+      var message = responseDecode['error'];
 
-      if (error == false) {
-        setState(() {
-          messageValidationRemanenteTiresoft = "";
-        });
-        return true;
-      } else {
-        setState(() {
-          messageValidationRemanenteTiresoft = message.toString();
-        });
-        return false;
-      }
-    } else {
+      setState(() {
+        messageValidationRemanenteTiresoft = message.toString();
+      });
       return false;
+    } else {
+      setState(() {
+        messageValidationRemanenteTiresoft = "";
+      });
+      return true;
     }
   }
 
-  Future<bool> validatePressure(int pressure) async {
-    if (pressure >= 160) {
+  Future<bool> validatePressure(String pressure) async {
+    var presion = int.tryParse(pressure) ?? 0;
+    if (presion >= 160) {
       setState(() {
         messageValidationPressureTiresoft = "La presion debe ser menor a 160";
       });

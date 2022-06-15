@@ -65,10 +65,14 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       String body = utf8.decode(response.bodyBytes);
       final _json_decode = jsonDecode(body);
       final _lista_vehiculos = _json_decode['success']['resultado'] as List;
+      print("LISTA DEL VEHICULOS");
+      print(_lista_vehiculos);
 
       for (final element in _lista_vehiculos) {
-        letters.add(element['placa'].toString());
-        setState(() {});
+        if (element['neumaticos']) {
+          letters.add(element['placa'].toString());
+          setState(() {});
+        }
       }
       setState(() {
         vehicles = _lista_vehiculos;
@@ -279,7 +283,8 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                         firstDate: DateTime(1900),
                         initialDate: currentValue ?? DateTime.now(),
                         lastDate: DateTime(2100));
-                    validateDate(date);
+
+                    // validateDate(date);
                     return DateTimeField.tryParse(date.toString(), format);
                   },
                 ),
@@ -321,9 +326,11 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
   }
 
   Future<bool> validateDate(DateTime? date) async {
-    var newFormat = DateFormat("y-MM-dd");
+    print("Fecha 1");
+    print(date);
+    var newFormat = DateFormat("yyyy-MM-dd");
     String updatedDt = newFormat.format(date!);
-    print("Fecha");
+    print("Fecha 2 ");
     print(newFormat);
     print(updatedDt);
 
