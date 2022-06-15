@@ -80,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,23 +151,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     Center(
                       child: RaisedButton(
                         padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                        child: Text(
-                          'Ingresar',
-                          style: TextStyle(fontSize: 15.0),
-                        ),
+                        child: isLoading
+                            ? Transform.scale(
+                                scale: 0.6,
+                                child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 5.0),
+                              )
+                            : Text("Login"),
                         color: Color(0xff212F3D),
                         textColor: Colors.white,
-                        onPressed: () => {
-                          CircularProgressIndicator(),
-                          login().then((value) => {
+                        onPressed: () async => {
+                          setState(() {
+                            isLoading = true;
+                          }),
+                          login().then((value) async => {
                                 if (value == "succcess")
                                   {
+                                    print("SUCCESS API"),
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CustomerSelectionScreen()),
-                                    )
+                                    ),
+                                    setState(() {
+                                      isLoading = false;
+                                    })
+                                  }
+                                else
+                                  {
+                                    await Future.delayed(Duration(seconds: 1)),
+                                    setState(() {
+                                      isLoading = false;
+                                    })
                                   }
                               })
                         },
