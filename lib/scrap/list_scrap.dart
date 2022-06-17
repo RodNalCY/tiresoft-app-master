@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/scrap/Models/Scrapt.dart';
 import 'package:tiresoft/scrap/list_scrapt_details.dart';
 import 'dart:convert';
@@ -92,11 +93,13 @@ class _ListScrapState extends State<ListScrap> {
     return MaterialApp(
         home: Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: Text("Reporte Scrap"),
+        centerTitle: true,
         backgroundColor: Color(0xff212F3D),
         elevation: 0.0,
       ),
-      drawer: CustomDrawer(widget._id_cliente),
+      // drawer: CustomDrawer(widget._id_cliente),
+      drawer: NavigationDrawerWidget(),
       body: Container(
         child: FutureBuilder(
           future: _listadoScrap,
@@ -114,7 +117,7 @@ class _ListScrapState extends State<ListScrap> {
                       },
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
-                        hintText: 'buscar x serie',
+                        // hintText: 'buscar x serie',
                       ),
                       style: TextStyle(fontSize: 18.0),
                     ),
@@ -151,7 +154,7 @@ class _ListScrapState extends State<ListScrap> {
                   },
                   title: Text(
                     'Serie: ' + data[index].s_serie,
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    style: TextStyle(fontWeight: FontWeight.w400),
                   ),
                   subtitle: Text(data[index].s_motivo_scrap +
                       ' \n' +

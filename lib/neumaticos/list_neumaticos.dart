@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/neumaticos/list_neumatico_details.dart';
 import 'package:tiresoft/neumaticos/models/neumatico.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
@@ -67,11 +68,13 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          title: Text("Reporte Neumáticos"),
+          centerTitle: true,
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(widget._id_cliente),
+        // drawer: CustomDrawer(widget._id_cliente),
+        drawer: NavigationDrawerWidget(),
         body: Container(
           child: FutureBuilder(
             future: _listadoNeumaticos,
@@ -89,7 +92,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: 'buscar x serie',
+                          // hintText: 'buscar x serie',
                         ),
                         style: TextStyle(fontSize: 18.0),
                       ),
@@ -128,7 +131,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
                   },
                   title: Text(
                     'Serie: ' + data[index].n_serie,
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    style: TextStyle(fontWeight: FontWeight.w400),
                   ),
                   subtitle: Text(data[index].n_marca +
                       ' ' +

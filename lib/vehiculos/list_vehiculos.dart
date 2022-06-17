@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/vehiculos/list_vehiculo_details.dart';
 import 'package:tiresoft/vehiculos/models/vehiculo.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
@@ -77,11 +78,13 @@ class _ListVehiculosState extends State<ListVehiculos> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          title: Text("Reporte Vehículos"),
+          centerTitle: true,
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(widget._id_cliente),
+        // drawer: CustomDrawer(widget._id_cliente),
+        drawer: NavigationDrawerWidget(),
         body: Container(
           child: FutureBuilder(
             future: _listadoVehiculos,
@@ -99,7 +102,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: 'buscar x placa',
+                          // hintText: 'buscar x placa',
                         ),
                         style: TextStyle(fontSize: 18.0),
                       ),
@@ -141,7 +144,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
                           data[index].v_placa +
                           ' - ' +
                           data[index].v_tipo,
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      style: TextStyle(fontWeight: FontWeight.w400)),
                   subtitle: Text(data[index].v_marca +
                       ' ' +
                       data[index].v_modelo +

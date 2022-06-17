@@ -7,6 +7,7 @@ import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
 import 'dart:io';
@@ -185,13 +186,16 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
-      drawer: CustomDrawer(widget._cliente_id),
+      // drawer: CustomDrawer(widget._cliente_id),
+      drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        title: Text(""),
+        title: Text("Registro Scrap"),
+        centerTitle: true,
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
       ),
       body: Container(
+        color: Colors.white,
         padding: const EdgeInsets.all(10),
         child: Form(
             key: _formKey,
@@ -200,13 +204,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Center(
-                      child: Text(
-                    "Registrar scrap",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )),
                   Container(
-                    margin: EdgeInsets.all(25),
+                    margin: EdgeInsets.all(10),
                     child: const Center(
                         child: Text(
                             "Por favor ingrese la siguiente información",

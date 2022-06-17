@@ -7,6 +7,7 @@ import 'package:tiresoft/inspection/models/vehicle.dart';
 import 'package:tiresoft/inspection/record_inspection_detail.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'dart:convert';
 
 import 'package:tiresoft/widgets/custom_drawer.dart';
@@ -111,53 +112,27 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final header = Container(
-      height: 80,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: [
-          Colors.deepOrangeAccent,
-          Colors.redAccent,
-        ],
-        begin: FractionalOffset(0.0, 0.0),
-        end: FractionalOffset(0.7, 0.0),
-        stops: [0.0, 1.0],
-        tileMode: TileMode.clamp,
-      )),
-      padding: EdgeInsets.only(left: 50.0),
-      child: Text(
-        "Pokemon",
-        style: TextStyle(
-            color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.w300),
-        textAlign: TextAlign.center,
-      ),
-      alignment: Alignment(-0.9, 0.4),
-    );
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
-      drawer: CustomDrawer(widget._id_cliente),
+      // drawer: CustomDrawer(widget._id_cliente),
+      drawer: NavigationDrawerWidget(),
       appBar: AppBar(
-        title: Text(""),
+        title: Text("Registrar Inspección"),
+        centerTitle: true,
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
       ),
       body: Container(
+        color: Colors.white,
         padding: EdgeInsets.all(10),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 20.0),
-              Center(
-                  child: Text(
-                "Registrar inspección",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              )),
               Container(
-                margin: EdgeInsets.all(25),
+                margin: EdgeInsets.only(top: 10.0, bottom: 30.0),
                 child: Center(
                     child: Text("Por favor ingrese la siguiente información",
                         style: TextStyle(fontSize: 14))),
@@ -165,7 +140,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: SimpleAutocompleteFormField<String>(
-                  suggestionsHeight: 150,
+                  suggestionsHeight: 220,
                   decoration: InputDecoration(
                       errorText: _validateVehicle
                           ? 'Debe seleccionar un vehiculo'

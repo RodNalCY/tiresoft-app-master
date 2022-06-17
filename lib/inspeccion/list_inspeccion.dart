@@ -4,6 +4,7 @@ import 'package:tiresoft/inspeccion/list_inspeccion_details.dart';
 import 'dart:convert';
 
 import 'package:tiresoft/inspeccion/models/Inspeccion.dart';
+import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListInspeccion extends StatefulWidget {
@@ -62,11 +63,13 @@ class _ListInspeccionState extends State<ListInspeccion> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text(""),
+          title: Text("Reporte Inspección"),
+          centerTitle: true,
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(widget._id_cliente),
+        // drawer: CustomDrawer(widget._id_cliente),
+        drawer: NavigationDrawerWidget(),
         body: Container(
           child: FutureBuilder(
             future: _listadoInspeccion,
@@ -85,7 +88,7 @@ class _ListInspeccionState extends State<ListInspeccion> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          hintText: 'buscar x placa / identificador',
+                          // hintText: 'buscar x placa / identificador',
                         ),
                         style: TextStyle(fontSize: 18.0),
                       ),
@@ -126,7 +129,7 @@ class _ListInspeccionState extends State<ListInspeccion> {
                                 data[index].i_identificador)))
                   },
                   title: Text('Placa: ' + data[index].i_placa,
-                      style: TextStyle(fontWeight: FontWeight.w500)),
+                      style: TextStyle(fontWeight: FontWeight.w400)),
                   subtitle: Text('km: ' +
                       data[index].i_km_inspeccion +
                       ' Fecha: ' +

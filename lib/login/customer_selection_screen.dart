@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/home.dart';
 import 'dart:convert';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/models/cliente.dart';
@@ -20,7 +21,6 @@ class CustomerSelectionScreen extends StatefulWidget {
 class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _slugDatabase = "CONCREMAX";
   String _global_id_cliente = "";
 
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
@@ -155,15 +155,22 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           color: Color(0xff212F3D),
                           textColor: Colors.white,
                           onPressed: () => {
-                                print("Cliente Id: " + _global_id_cliente),
+                                print("Send Id: " + _global_id_cliente),
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          RecordInspectionHeader(
+                                      builder: (context) => Home(
                                             _global_id_cliente,
                                           )),
                                 )
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) =>
+                                //           RecordInspectionHeader(
+                                //             _global_id_cliente,
+                                //           )),
+                                // )
 
                                 // Navigator.push(
                                 //   context,
