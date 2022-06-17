@@ -36,7 +36,7 @@ class _ListScrapState extends State<ListScrap> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print(jsonData['success']['resultado']);
+      // print(jsonData['success']['resultado']);
 
       for (var item in jsonData['success']['resultado']) {
         var _img_ruta_uno = "-";
@@ -96,7 +96,7 @@ class _ListScrapState extends State<ListScrap> {
         backgroundColor: Color(0xff212F3D),
         elevation: 0.0,
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(widget._id_cliente),
       body: Container(
         child: FutureBuilder(
           future: _listadoScrap,

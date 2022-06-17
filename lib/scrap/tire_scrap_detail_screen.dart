@@ -6,10 +6,12 @@ import 'dart:convert';
 
 class TireScrapDetailScreen extends StatefulWidget {
   final int neumaticoId;
+  final String global_id_cliente;
 
   const TireScrapDetailScreen({
     Key? key,
     required this.neumaticoId,
+    required this.global_id_cliente,
   }) : super(key: key);
   @override
   _TireScrapDetailScreenState createState() => _TireScrapDetailScreenState();
@@ -61,7 +63,7 @@ class _TireScrapDetailScreenState extends State<TireScrapDetailScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget.global_id_cliente),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(

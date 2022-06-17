@@ -65,8 +65,8 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       String body = utf8.decode(response.bodyBytes);
       final _json_decode = jsonDecode(body);
       final _lista_vehiculos = _json_decode['success']['resultado'] as List;
-      print("LISTA DEL VEHICULOS");
-      print(_lista_vehiculos);
+      // print("LISTA DEL VEHICULOS");
+      // print(_lista_vehiculos);
 
       for (final element in _lista_vehiculos) {
         if (element['neumaticos']) {
@@ -137,7 +137,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(widget._id_cliente),
       appBar: AppBar(
         title: Text(""),
         elevation: 0.0,

@@ -36,8 +36,8 @@ class _ListInspeccionState extends State<ListInspeccion> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print("JSON INSPECCION:");
-      print(jsonData['success']['resultado']);
+      // print("JSON INSPECCION:");
+      // print(jsonData['success']['resultado']);
 
       for (var item in jsonData['success']['resultado']) {
         var str_identificador = item["identificador"].toString();
@@ -66,7 +66,7 @@ class _ListInspeccionState extends State<ListInspeccion> {
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget._id_cliente),
         body: Container(
           child: FutureBuilder(
             future: _listadoInspeccion,

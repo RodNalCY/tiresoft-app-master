@@ -263,16 +263,16 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       }),
     );
 
-    print("STATUS");
-    print(widget.idVehiculo);
-    print(response.statusCode);
+    // print("STATUS");
+    // print(widget.idVehiculo);
+    // print(response.statusCode);
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final _json_decode = jsonDecode(body);
       final myTires = _json_decode as List;
-      print("json > ");
-      print(myTires);
+      // print("json > ");
+      // print(myTires);
       for (var i = 1; i <= 10; i++) {
         bool isfound = false;
         for (final element in myTires) {
@@ -1292,7 +1292,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           "medio": mid
         }));
 
-    print(response.statusCode);
+    // print(response.statusCode);
     if (response.statusCode == 500) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var responseDecode = json.decode(response.body);

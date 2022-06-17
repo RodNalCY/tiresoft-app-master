@@ -71,7 +71,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget._id_cliente),
         body: Container(
           child: FutureBuilder(
             future: _listadoNeumaticos,

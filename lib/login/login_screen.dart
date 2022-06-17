@@ -181,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           login().then((value) async => {
                                 if (value == "succcess")
                                   {
-                                    print("SUCCESS LOGIN"),
+                                    // print("SUCCESS LOGIN"),
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

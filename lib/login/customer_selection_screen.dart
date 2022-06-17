@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/models/cliente.dart';
+import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
   final String title = 'Seleccionar cliente';
-  final String _global_id_cliente = '5';
   List<Cliente> _cliente;
 
   CustomerSelectionScreen(this._cliente, {Key? key}) : super(key: key);
@@ -21,12 +21,33 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _slugDatabase = "CONCREMAX";
+  String _global_id_cliente = "";
 
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   // Toggles the password show status
 
+  Map<String, String> listarClienteMap = {};
+  String _dropdownFirsValue = "";
+
+  void cargarMapClientes() {
+    // print("cargarMapClientes()");
+    for (var item in widget._cliente) {
+      listarClienteMap[item.c_id.toString()] = item.c_razon_social;
+    }
+    _dropdownFirsValue =
+        listarClienteMap[widget._cliente[0].c_id.toString()].toString();
+  }
+
+  String obtenerIdCliente() {
+    var usdKey = listarClienteMap.keys.firstWhere(
+        (K) => listarClienteMap[K] == _dropdownFirsValue,
+        orElse: () => "");
+    return usdKey;
+  }
+
   @override
   void initState() {
+    cargarMapClientes();
     super.initState();
 
     SystemChrome.setPreferredOrientations([
@@ -39,10 +60,9 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("DEMO");
-    for (var n in widget._cliente) {
-      print(n.c_razon_social);
-    }
+    _global_id_cliente = obtenerIdCliente();
+    // print("Cod: " + _global_id_cliente);
+
     return Scaffold(
         key: homeScaffoldKey,
         body: NotificationListener<OverscrollIndicatorNotification>(
@@ -98,25 +118,32 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           color: Colors.black12,
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Center(
-                        child: DropdownButton<String>(
-                          value: _slugDatabase.toString(),
-                          items: <String>['CONCREMAX', 'CONCRETERAS']
-                              .map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value,
-                                  style: TextStyle(
-                                      color: Color(0xff2874A6),
-                                      fontWeight: FontWeight.bold)),
-                            );
-                          }).toList(),
-                          onChanged: (_val) {
-                            setState(() {
-                              _slugDatabase = _val.toString();
-                            });
-                          },
+                          child: DropdownButton<String>(
+                        value: _dropdownFirsValue,
+                        icon: const Icon(Icons.unfold_more,
+                            color: Color(0xff2874A6)),
+                        elevation: 16,
+                        style: const TextStyle(
+                            color: Color(0xff2874A6),
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
+                        underline: Container(
+                          height: 1,
+                          color: Color(0xff2874A6),
                         ),
-                      ),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _dropdownFirsValue = newValue!;
+                          });
+                        },
+                        items: listarClienteMap.values
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      )),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 15.0),
@@ -128,14 +155,21 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           color: Color(0xff212F3D),
                           textColor: Colors.white,
                           onPressed: () => {
-                                print("Seleccion pressed"),
-                                print(_slugDatabase)
+                                print("Cliente Id: " + _global_id_cliente),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RecordInspectionHeader(
+                                            _global_id_cliente,
+                                          )),
+                                )
+
                                 // Navigator.push(
                                 //   context,
                                 //   MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           RecordInspectionHeader(
-                                //             widget._global_id_cliente,
+                                //       builder: (context) => CustomDrawer(
+                                //             _global_id_cliente,
                                 //           )),
                                 // )
                               }),

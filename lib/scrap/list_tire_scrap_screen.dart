@@ -63,7 +63,7 @@ class _ListTireScrapScreenState extends State<ListTireScrapScreen> {
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget._id_cliente),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
@@ -115,8 +115,9 @@ class _ListTireScrapScreenState extends State<ListTireScrapScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            TireScrapDetailScreen(neumaticoId: scrap['id'])),
+                        builder: (context) => TireScrapDetailScreen(
+                            neumaticoId: scrap['id'],
+                            global_id_cliente: widget._id_cliente)),
                   )
                 },
               )),

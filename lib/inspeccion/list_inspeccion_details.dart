@@ -40,8 +40,8 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print("JSON INSPECCION DETAILS:");
-      print(jsonData['success']['resultado']);
+      // print("JSON INSPECCION DETAILS:");
+      // print(jsonData['success']['resultado']);
 
       for (var item in jsonData['success']['resultado']) {
         _inspeccion_details.add(InspeccionDetails(

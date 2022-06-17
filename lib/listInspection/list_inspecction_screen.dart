@@ -7,9 +7,9 @@ import 'dart:convert';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListInspectionScreen extends StatefulWidget {
-  final String _id_cliente;
+  final String global_id_cliente;
 
-  ListInspectionScreen(this._id_cliente, {Key? key}) : super(key: key);
+  ListInspectionScreen(this.global_id_cliente, {Key? key}) : super(key: key);
 
   @override
   _ListInspectionScreenState createState() => _ListInspectionScreenState();
@@ -28,7 +28,7 @@ class _ListInspectionScreenState extends State<ListInspectionScreen> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'id_cliente': widget._id_cliente,
+        'id_cliente': widget.global_id_cliente,
       }),
     );
 
@@ -62,7 +62,7 @@ class _ListInspectionScreenState extends State<ListInspectionScreen> {
           elevation: 0.0,
           backgroundColor: Color(0xff212F3D),
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget.global_id_cliente),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
@@ -114,7 +114,8 @@ class _ListInspectionScreenState extends State<ListInspectionScreen> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => ListInspectionDetailScreen(
-                            inspectionId: inspection['identificador'])),
+                            inspectionId: inspection['identificador'],
+                            global_id_cliente: widget.global_id_cliente)),
                   )
                 },
               )),

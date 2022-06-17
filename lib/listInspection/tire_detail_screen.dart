@@ -6,10 +6,12 @@ import 'dart:convert';
 class TireDetailScreen extends StatefulWidget {
   final int inspectionId;
   final String numSerie;
+  final String global_id_cliente;
   const TireDetailScreen({
     Key? key,
     required this.numSerie,
     required this.inspectionId,
+    required this.global_id_cliente,
   }) : super(key: key);
   @override
   _TireDetailScreenState createState() => _TireDetailScreenState();
@@ -50,7 +52,7 @@ class _TireDetailScreenState extends State<TireDetailScreen> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget.global_id_cliente),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(

@@ -6,10 +6,12 @@ import 'dart:convert';
 
 class ListInspectionDetailScreen extends StatefulWidget {
   final int inspectionId;
+  final String global_id_cliente;
 
   const ListInspectionDetailScreen({
     Key? key,
     required this.inspectionId,
+    required this.global_id_cliente,
   }) : super(key: key);
   @override
   _ListInspectionDetailScreenState createState() =>
@@ -55,7 +57,7 @@ class _ListInspectionDetailScreenState
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget.global_id_cliente),
         body: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: SingleChildScrollView(
@@ -105,7 +107,8 @@ class _ListInspectionDetailScreenState
                     MaterialPageRoute(
                         builder: (context) => TireDetailScreen(
                             numSerie: inspection['serie_neumatico'].toString(),
-                            inspectionId: inspection['id'])),
+                            inspectionId: inspection['id'],
+                            global_id_cliente: widget.global_id_cliente)),
                   )
                 },
               )),

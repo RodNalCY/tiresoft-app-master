@@ -185,7 +185,7 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(widget._cliente_id),
       appBar: AppBar(
         title: Text(""),
         elevation: 0.0,

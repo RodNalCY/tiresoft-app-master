@@ -34,8 +34,8 @@ class _ListVehiculosState extends State<ListVehiculos> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print("JSON:");
-      print(jsonData['success']['resultado']);
+      // print("JSON:");
+      // print(jsonData['success']['resultado']);
 
       String str_f_fabricacion = "-";
       String str_tipo = "-";
@@ -81,7 +81,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
           backgroundColor: Color(0xff212F3D),
           elevation: 0.0,
         ),
-        drawer: CustomDrawer(),
+        drawer: CustomDrawer(widget._id_cliente),
         body: Container(
           child: FutureBuilder(
             future: _listadoVehiculos,

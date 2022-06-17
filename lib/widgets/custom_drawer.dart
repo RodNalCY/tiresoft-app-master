@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tiresoft/inspeccion/list_inspeccion.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/listInspection/list_inspecction_screen.dart';
@@ -9,12 +12,20 @@ import 'package:tiresoft/scrap/record_scrap_screen.dart';
 import 'package:tiresoft/vehiculos/list_vehiculos.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final String _g_id_cliente = "5";
+  final String _g_id_cliente;
 
-  // const CustomDrawer(this._g_id_cliente, {Key? key}) : super(key: key);
+  const CustomDrawer(this._g_id_cliente, {Key? key}) : super(key: key);
+  void closeApp() {
+    if (Platform.isAndroid) {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else {
+      exit(0);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    print("My Id Cliente: " + _g_id_cliente);
     return Drawer(
       child: Container(
         color: Colors.white,
@@ -165,14 +176,17 @@ class CustomDrawer extends StatelessWidget {
             width: double.infinity,
             color: Color(0xff212F3D),
             child: ListTile(
-              leading: const Icon(
-                Icons.exit_to_app,
-                color: Colors.white,
-              ),
-              title: const Text('Cerrar',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
+                leading: const Icon(
+                  Icons.exit_to_app,
+                  color: Colors.white,
+                ),
+                title: const Text('Cerrar',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                onTap: () {
+                  // SystemNavigator.pop();
+                  closeApp();
+                }),
           ),
         ]),
       ),
