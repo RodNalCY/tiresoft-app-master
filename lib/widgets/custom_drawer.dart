@@ -56,12 +56,12 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.control_point),
               title: const Text('Registrar Inspección'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          RecordInspectionHeader(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) =>
+                //           RecordInspectionHeader(_g_id_cliente)),
+                // );
               },
             ),
           ),
@@ -81,11 +81,11 @@ class CustomDrawer extends StatelessWidget {
                 //           ListInspectionScreen(_g_id_cliente)),
                 // );
 
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListInspeccion(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ListInspeccion(_g_id_cliente)),
+                // );
               },
             ),
           ),
@@ -98,11 +98,11 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.toys),
               title: const Text('Reporte Vehiculos'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListVehiculos(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ListVehiculos(_g_id_cliente)),
+                // );
               },
             ),
           ),
@@ -115,11 +115,11 @@ class CustomDrawer extends StatelessWidget {
               leading: const Icon(Icons.data_saver_off),
               title: const Text('Reporte Neumáticos'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListNeumaticos(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ListNeumaticos(_g_id_cliente)),
+                // );
               },
             ),
           ),
@@ -139,11 +139,11 @@ class CustomDrawer extends StatelessWidget {
                 //             slugDatabase: 'tenant2',
                 //           )),
                 // );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => RecordScrapScreen(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => RecordScrapScreen(_g_id_cliente)),
+                // );
               },
             ),
           ),
@@ -161,11 +161,11 @@ class CustomDrawer extends StatelessWidget {
                 //   MaterialPageRoute(
                 //       builder: (context) => ListTireScrapScreen(_g_id_cliente)),
                 // );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListScrap(_g_id_cliente)),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => ListScrap(_g_id_cliente)),
+                // );
               },
             ),
           ),

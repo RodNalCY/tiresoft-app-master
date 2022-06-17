@@ -7,6 +7,7 @@ import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
@@ -17,8 +18,10 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 class RecordScrapScreen extends StatefulWidget {
   final String title = 'Registration';
   final String _cliente_id;
+  final List<User> _user;
 
-  const RecordScrapScreen(this._cliente_id, {Key? key}) : super(key: key);
+  const RecordScrapScreen(this._cliente_id, this._user, {Key? key})
+      : super(key: key);
   State<StatefulWidget> createState() => _RecordScrapScreenState();
 }
 
@@ -187,7 +190,7 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._cliente_id),
-      drawer: NavigationDrawerWidget(),
+      drawer: NavigationDrawerWidget(widget._user),
       appBar: AppBar(
         title: Text("Registro Scrap"),
         centerTitle: true,
@@ -668,8 +671,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ListScrap("5"))); // RDX - DEFINIR ID CLIENTE
+              builder: (context) => ListScrap(widget._cliente_id,
+                  widget._user))); // RDX - DEFINIR ID CLIENTE
     } else {
       onError();
       // Si la llamada no fue exitosa, lanza un error.

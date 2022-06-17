@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/vehiculos/list_vehiculo_details.dart';
 import 'package:tiresoft/vehiculos/models/vehiculo.dart';
@@ -8,8 +9,9 @@ import 'dart:convert';
 
 class ListVehiculos extends StatefulWidget {
   final String _id_cliente;
+  final List<User> _user;
 
-  ListVehiculos(this._id_cliente, {Key? key}) : super(key: key);
+  ListVehiculos(this._id_cliente, this._user, {Key? key}) : super(key: key);
 
   @override
   State<ListVehiculos> createState() => _ListVehiculosState();
@@ -84,7 +86,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
           elevation: 0.0,
         ),
         // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(),
+        drawer: NavigationDrawerWidget(widget._user),
         body: Container(
           child: FutureBuilder(
             future: _listadoVehiculos,

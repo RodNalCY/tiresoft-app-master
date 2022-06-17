@@ -13,6 +13,7 @@ import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/customer_selection_screen.dart';
 import 'package:tiresoft/login/models/cliente.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:tiresoft/login/models/user.dart';
 
 class LoginScreen extends StatefulWidget {
   final String title = 'Registration';
@@ -38,6 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var vehicles = [];
   final List<String> letters = [];
   List<Cliente> _cliente = [];
+  List<User> _user = [];
 
   var data;
 
@@ -77,14 +79,23 @@ class _LoginScreenState extends State<LoginScreen> {
       final SharedPreferences prefs = await _prefs;
       prefs.setInt('role', jsonData['success']['role']);
       prefs.setInt('userId', jsonData['success']['userId']);
+      print(jsonData['success']['nombres']);
+
+      _user.add(User(
+          jsonData['success']['userId'],
+          jsonData['success']['nombres'],
+          jsonData['success']['apellidos'],
+          jsonData['success']['email'],
+          jsonData['success']['telefono'],
+          jsonData['success']['role'].toString(),
+          jsonData['success']['role_name'].toString(),
+          "https://cdn-icons-png.flaticon.com/512/219/219986.png",
+          jsonData['success']['img_firma'],
+          jsonData['success']['created_at']));
 
       for (var item in jsonData['success']['clientes']) {
         _cliente.add(Cliente(item["id"], item["ruc"], item["razon_social"]));
       }
-      // print("Cliente");
-      // for (var n in _cliente) {
-      //   print(n.c_razon_social);
-      // }
       onSuccess();
       return 'succcess';
     } else {
@@ -159,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(labelText: 'Contraseña'),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 15.0),
+                      padding: EdgeInsets.only(top: 35.0),
                     ),
                     Center(
                       child: RaisedButton(
@@ -187,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               CustomerSelectionScreen(
-                                                  _cliente)),
+                                                  _user, _cliente)),
                                     ),
                                     setState(() {
                                       isLoading = false;
@@ -206,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Center(
                       child: Padding(
-                          padding: EdgeInsets.only(top: 25.0),
+                          padding: EdgeInsets.only(top: 5.0),
                           child: TextButton(
                               style: ButtonStyle(
                                 overlayColor:

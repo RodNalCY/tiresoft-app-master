@@ -6,13 +6,16 @@ import 'package:tiresoft/home.dart';
 import 'dart:convert';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/models/cliente.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
   final String title = 'Seleccionar cliente';
   List<Cliente> _cliente;
+  List<User> _user;
 
-  CustomerSelectionScreen(this._cliente, {Key? key}) : super(key: key);
+  CustomerSelectionScreen(this._user, this._cliente, {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomerSelectionScreenState();
@@ -161,6 +164,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                                   MaterialPageRoute(
                                       builder: (context) => Home(
                                             _global_id_cliente,
+                                            widget._user,
                                           )),
                                 )
                                 // Navigator.push(

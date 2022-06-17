@@ -4,13 +4,15 @@ import 'package:tiresoft/inspeccion/list_inspeccion_details.dart';
 import 'dart:convert';
 
 import 'package:tiresoft/inspeccion/models/Inspeccion.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListInspeccion extends StatefulWidget {
   final String _id_cliente;
+  final List<User> _user;
 
-  ListInspeccion(this._id_cliente, {Key? key}) : super(key: key);
+  ListInspeccion(this._id_cliente, this._user, {Key? key}) : super(key: key);
 
   @override
   State<ListInspeccion> createState() => _ListInspeccionState();
@@ -69,7 +71,7 @@ class _ListInspeccionState extends State<ListInspeccion> {
           elevation: 0.0,
         ),
         // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(),
+        drawer: NavigationDrawerWidget(widget._user),
         body: Container(
           child: FutureBuilder(
             future: _listadoInspeccion,

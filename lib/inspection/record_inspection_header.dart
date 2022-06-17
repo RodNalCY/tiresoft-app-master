@@ -7,6 +7,7 @@ import 'package:tiresoft/inspection/models/vehicle.dart';
 import 'package:tiresoft/inspection/record_inspection_detail.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'dart:convert';
 
@@ -15,8 +16,9 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 class RecordInspectionHeader extends StatefulWidget {
   final String title = 'Registration';
   final String _id_cliente;
-
-  RecordInspectionHeader(this._id_cliente, {Key? key}) : super(key: key);
+  final List<User> _user;
+  RecordInspectionHeader(this._id_cliente, this._user, {Key? key})
+      : super(key: key);
 
   State<StatefulWidget> createState() => _RecordInspectionHeaderState();
 }
@@ -116,7 +118,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._id_cliente),
-      drawer: NavigationDrawerWidget(),
+      drawer: NavigationDrawerWidget(widget._user),
       appBar: AppBar(
         title: Text("Registrar Inspección"),
         centerTitle: true,
@@ -282,6 +284,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                             MaterialPageRoute(
                                 builder: (context) => RecordInspectionDetail(
                                       id_cliente: widget._id_cliente,
+                                      my_user: widget._user,
                                       title: 'Registrar inspeccion',
                                       idVehiculo: selectedId,
                                       fechaInspeccion: _dateController.text,

@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tiresoft/inspeccion/list_inspeccion.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/login_screen.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/header_drawer_page.dart';
 import 'package:tiresoft/navigation/models/navigation_item_model.dart';
 import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
@@ -13,7 +17,8 @@ import 'package:tiresoft/vehiculos/list_vehiculos.dart';
 
 class Home extends StatefulWidget {
   String _global_cliente_id;
-  Home(this._global_cliente_id, {Key? key}) : super(key: key);
+  List<User> _user;
+  Home(this._global_cliente_id, this._user, {Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -28,27 +33,66 @@ class _HomeState extends State<Home> {
   Widget buildPagesApp() {
     // widget._global_cliente_id = "5";
     print(">id: " + widget._global_cliente_id);
+    print("> User:");
+    for (var element in widget._user) {
+      print(element.u_firma);
+    }
+
     final provider = Provider.of<NavigationChangeProvider>(context);
     final navigationItem = provider.navigationItemModel;
     switch (navigationItem) {
       case NavigationItemModel.header:
-        return HeaderDrawerPage();
+        return HeaderDrawerPage(widget._user);
       case NavigationItemModel.registro_inspeccion:
-        return RecordInspectionHeader(widget._global_cliente_id);
+        return RecordInspectionHeader(widget._global_cliente_id, widget._user);
       case NavigationItemModel.reporte_inspeccion:
-        return ListInspeccion(widget._global_cliente_id);
+        return ListInspeccion(widget._global_cliente_id, widget._user);
       case NavigationItemModel.reporte_vehiculo:
-        return ListVehiculos(widget._global_cliente_id);
+        return ListVehiculos(widget._global_cliente_id, widget._user);
       case NavigationItemModel.reporte_neumatico:
-        return ListNeumaticos(widget._global_cliente_id);
+        return ListNeumaticos(widget._global_cliente_id, widget._user);
       case NavigationItemModel.asignar_neumatico_scrap:
-        return RecordScrapScreen(widget._global_cliente_id);
+        return RecordScrapScreen(widget._global_cliente_id, widget._user);
       case NavigationItemModel.reporte_scrap:
-        return ListScrap(widget._global_cliente_id);
+        return ListScrap(widget._global_cliente_id, widget._user);
       case NavigationItemModel.login:
         return LoginScreen();
       case NavigationItemModel.salir:
-        return LoginScreen();
+        return closeApp();
+    }
+  }
+
+  Widget closeApp() {
+    if (Platform.isAndroid) {
+      SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      return Container(
+        color: Colors.white,
+        child: Container(
+          color: Color(0xff212F3D),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  backgroundColor: Colors.blueGrey[100],
+                ),
+                SizedBox(height: 20.0),
+                Text(
+                  "...Cerrando...",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                    decoration: TextDecoration.none,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      exit(0);
     }
   }
 }

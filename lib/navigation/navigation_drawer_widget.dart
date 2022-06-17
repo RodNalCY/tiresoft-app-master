@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/models/navigation_item_model.dart';
 import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
-  const NavigationDrawerWidget({Key? key}) : super(key: key);
+class NavigationDrawerWidget extends StatefulWidget {
+  final List<User> _user;
+  const NavigationDrawerWidget(this._user, {Key? key}) : super(key: key);
 
   static final _padding = EdgeInsets.symmetric(horizontal: 5.0);
 
-  final name = "RodNal CY";
-  final email = "rcabello@...";
-  final urlImage =
-      "https://blogs.elespectador.com/wp-content/uploads/2018/11/John-Freddy-Vega-Cofundador-Platzi.jpg";
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  String _name = "";
+  String _email = "";
+  String _urlLogo = "";
 
   @override
   Widget build(BuildContext context) {
     print("Drawer >>>");
+    _name = (widget._user[0].u_name + " " + widget._user[0].u_lastname)
+            .substring(0, 15) +
+        "...";
+    _email = (widget._user[0].u_email).substring(0, 27) + "...";
+    _urlLogo = widget._user[0].u_img_logo;
+
     return ChangeNotifierProvider(
       create: (context) => NavigationChangeProvider(),
       child: Drawer(
@@ -24,9 +36,9 @@ class NavigationDrawerWidget extends StatelessWidget {
             child: ListView(
               children: [
                 buildHeader(context,
-                    urlImage: urlImage, name: name, email: email),
+                    urlImage: _urlLogo, name: _name, email: _email),
                 Container(
-                  padding: _padding,
+                  padding: NavigationDrawerWidget._padding,
                   child: Column(children: [
                     const SizedBox(height: 24.0),
                     buildOneMenuItem(context,
@@ -58,9 +70,8 @@ class NavigationDrawerWidget extends StatelessWidget {
                         text: 'Reporte de Scrap',
                         item: NavigationItemModel.reporte_scrap,
                         icon: Icons.format_list_bulleted),
-                    const SizedBox(height: 24.0),
+                    const SizedBox(height: 150.0),
                     Divider(color: Colors.white70),
-                    const SizedBox(height: 24.0),
                     buildOneMenuItem(context,
                         text: 'Cerrar',
                         item: NavigationItemModel.salir,
@@ -106,34 +117,45 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   Widget buildHeader(BuildContext context,
       {required String urlImage, required String name, required String email}) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => selectedItemMenuView(context, NavigationItemModel.header),
-        child: Container(
-          padding: _padding.add(EdgeInsets.symmetric(vertical: 40.0)),
-          child: Row(children: [
-            CircleAvatar(radius: 30.0, backgroundImage: NetworkImage(urlImage)),
-            SizedBox(width: 20.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                ),
-                const SizedBox(height: 4.0),
-                Text(email,
-                    style: TextStyle(fontSize: 14.0, color: Colors.white)),
-              ],
-            ),
-            // Spacer(),
-            // CircleAvatar(
-            //   radius: 30.0,
-            //   backgroundColor: Color.fromRGBO(30, 60, 168, 1),
-            //   child: Icon(Icons.add_comment_outlined, color: Colors.white),
-            // )
-          ]),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/tiresoft-background.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () =>
+              selectedItemMenuView(context, NavigationItemModel.header),
+          child: Container(
+            padding: NavigationDrawerWidget._padding
+                .add(EdgeInsets.symmetric(vertical: 40.0)),
+            child: Row(children: [
+              CircleAvatar(
+                  radius: 30.0, backgroundImage: NetworkImage(urlImage)),
+              SizedBox(width: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Text(email,
+                      style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                ],
+              ),
+              // Spacer(),
+              // CircleAvatar(
+              //   radius: 30.0,
+              //   backgroundColor: Color.fromRGBO(30, 60, 168, 1),
+              //   child: Icon(Icons.add_comment_outlined, color: Colors.white),
+              // )
+            ]),
+          ),
         ),
       ),
     );

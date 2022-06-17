@@ -8,6 +8,7 @@ import 'package:tiresoft/inspection/models/tire.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
 class RecordInspectionDetail extends StatefulWidget {
@@ -16,10 +17,12 @@ class RecordInspectionDetail extends StatefulWidget {
   final int kmInspeccion;
   final String fechaInspeccion;
   final String? codigoInspeccion;
+  final List<User> my_user;
 
   const RecordInspectionDetail(
       {Key? key,
       required this.id_cliente,
+      required this.my_user,
       required this.title,
       this.idVehiculo,
       required this.kmInspeccion,
@@ -505,8 +508,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          ListInspeccion(widget.id_cliente)))
+                                      builder: (context) => ListInspeccion(
+                                          widget.id_cliente, widget.my_user)))
                             }
                         });
                   },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/scrap/Models/Scrapt.dart';
 import 'package:tiresoft/scrap/list_scrapt_details.dart';
@@ -9,8 +10,8 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListScrap extends StatefulWidget {
   final String _id_cliente;
-
-  ListScrap(this._id_cliente, {Key? key}) : super(key: key);
+  final List<User> _user;
+  ListScrap(this._id_cliente, this._user, {Key? key}) : super(key: key);
 
   @override
   State<ListScrap> createState() => _ListScrapState();
@@ -99,7 +100,7 @@ class _ListScrapState extends State<ListScrap> {
         elevation: 0.0,
       ),
       // drawer: CustomDrawer(widget._id_cliente),
-      drawer: NavigationDrawerWidget(),
+      drawer: NavigationDrawerWidget(widget._user),
       body: Container(
         child: FutureBuilder(
           future: _listadoScrap,

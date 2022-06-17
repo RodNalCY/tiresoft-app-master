@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/neumaticos/list_neumatico_details.dart';
 import 'package:tiresoft/neumaticos/models/neumatico.dart';
@@ -8,8 +9,9 @@ import 'dart:convert';
 
 class ListNeumaticos extends StatefulWidget {
   final String _id_cliente;
+  final List<User> _user;
 
-  ListNeumaticos(this._id_cliente, {Key? key}) : super(key: key);
+  ListNeumaticos(this._id_cliente, this._user, {Key? key}) : super(key: key);
 
   @override
   State<ListNeumaticos> createState() => _ListNeumaticosState();
@@ -74,7 +76,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
           elevation: 0.0,
         ),
         // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(),
+        drawer: NavigationDrawerWidget(widget._user),
         body: Container(
           child: FutureBuilder(
             future: _listadoNeumaticos,
