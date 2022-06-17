@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/customer_selection_screen.dart';
+import 'package:tiresoft/login/models/cliente.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final format = DateFormat("yyyy-MM-dd");
   var vehicles = [];
   final List<String> letters = [];
+  List<Cliente> _cliente = [];
 
   var data;
 
@@ -51,27 +53,38 @@ class _LoginScreenState extends State<LoginScreen> {
       DeviceOrientation.portraitDown,
     ]);
     //_pageController = PageController();
-    _emailController.text = "acampos@gestorestecnologicos.com";
+    _emailController.text = "rcabello@gestorestecnologicos.com";
     // _passwordController.text = "123456";
     setState(() {});
   }
 
-  var url = Uri.parse(
-      "https://tiresoft2.lab-elsol.com/api/login/authenticateSimplified");
   Future<String> login() async {
-    var body = jsonEncode(
-        {"email": _emailController.text, "password": _passwordController.text});
-    final response = await http.post(url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body);
-    final bodyResponse = json.decode(response.body);
-    if (bodyResponse['error'] == null) {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/login/authenticateSimplified"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
       final SharedPreferences prefs = await _prefs;
-      // set value
-      prefs.setInt('role', bodyResponse['role']);
-      prefs.setInt('userId', bodyResponse['userId']);
+      prefs.setInt('role', jsonData['success']['role']);
+      prefs.setInt('userId', jsonData['success']['userId']);
+
+      for (var item in jsonData['success']['clientes']) {
+        _cliente.add(Cliente(item["id"], item["ruc"], item["razon_social"]));
+      }
+      // print("Cliente");
+      // for (var n in _cliente) {
+      //   print(n.c_razon_social);
+      // }
       onSuccess();
       return 'succcess';
     } else {
@@ -168,12 +181,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           login().then((value) async => {
                                 if (value == "succcess")
                                   {
-                                    print("SUCCESS API"),
+                                    print("SUCCESS LOGIN"),
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              CustomerSelectionScreen()),
+                                              CustomerSelectionScreen(
+                                                  _cliente)),
                                     ),
                                     setState(() {
                                       isLoading = false;

@@ -4,11 +4,16 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
+import 'package:tiresoft/login/models/cliente.dart';
 
 class CustomerSelectionScreen extends StatefulWidget {
   final String title = 'Seleccionar cliente';
   final String _global_id_cliente = '5';
+  List<Cliente> _cliente;
 
+  CustomerSelectionScreen(this._cliente, {Key? key}) : super(key: key);
+
+  @override
   State<StatefulWidget> createState() => _CustomerSelectionScreenState();
 }
 
@@ -34,6 +39,10 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("DEMO");
+    for (var n in widget._cliente) {
+      print(n.c_razon_social);
+    }
     return Scaffold(
         key: homeScaffoldKey,
         body: NotificationListener<OverscrollIndicatorNotification>(
@@ -119,14 +128,16 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           color: Color(0xff212F3D),
                           textColor: Colors.white,
                           onPressed: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          RecordInspectionHeader(
-                                            widget._global_id_cliente,
-                                          )),
-                                )
+                                print("Seleccion pressed"),
+                                print(_slugDatabase)
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) =>
+                                //           RecordInspectionHeader(
+                                //             widget._global_id_cliente,
+                                //           )),
+                                // )
                               }),
                     ),
                   ],
