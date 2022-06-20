@@ -82,6 +82,7 @@ flutter:
     - assets/ic_logo.png
     - assets/ic_logo-2.png
     - assets/tiresoft-background.jpg
+    - assets/persona.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

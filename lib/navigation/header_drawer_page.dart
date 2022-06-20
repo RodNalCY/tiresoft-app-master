@@ -11,9 +11,6 @@ class HeaderDrawerPage extends StatefulWidget {
 }
 
 class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
-  final urlImage =
-      "https://blogs.elespectador.com/wp-content/uploads/2018/11/John-Freddy-Vega-Cofundador-Platzi.jpg";
-
   @override
   Widget build(BuildContext context) {
     print(widget.info_user[0].u_firma);

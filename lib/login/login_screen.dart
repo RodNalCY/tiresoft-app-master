@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
           jsonData['success']['telefono'],
           jsonData['success']['role'].toString(),
           jsonData['success']['role_name'].toString(),
-          "https://cdn-icons-png.flaticon.com/512/219/219986.png",
+          "assets/persona.png",
           jsonData['success']['img_firma'],
           jsonData['success']['created_at']));
 

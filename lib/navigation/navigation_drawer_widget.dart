@@ -16,17 +16,31 @@ class NavigationDrawerWidget extends StatefulWidget {
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _name = "";
+  String _name_length = "";
   String _email = "";
+  String _email_length = "";
   String _urlLogo = "";
 
   @override
   Widget build(BuildContext context) {
     print("Drawer >>>");
-    _name = (widget._user[0].u_name + " " + widget._user[0].u_lastname)
-            .substring(0, 15) +
-        "...";
-    _email = (widget._user[0].u_email).substring(0, 27) + "...";
+    _name_length = widget._user[0].u_name + " " + widget._user[0].u_lastname;
+    _email_length = widget._user[0].u_email;
     _urlLogo = widget._user[0].u_img_logo;
+
+    if (_name_length.length > 15) {
+      _name = (widget._user[0].u_name + " " + widget._user[0].u_lastname)
+              .substring(0, 15) +
+          "...";
+    } else {
+      _name = _name_length;
+    }
+
+    if (_email_length.length > 27) {
+      _email = (widget._user[0].u_email).substring(0, 27) + "...";
+    } else {
+      _email = _email_length;
+    }
 
     return ChangeNotifierProvider(
       create: (context) => NavigationChangeProvider(),
@@ -102,7 +116,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         leading: Icon(icon, color: _color),
         title: Text(
           text,
-          style: TextStyle(color: _color, fontSize: 16.0),
+          style: TextStyle(color: _color, fontSize: 15.0),
         ),
         onTap: () => selectedItemMenuView(context, item),
       ),
@@ -133,20 +147,26 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             padding: NavigationDrawerWidget._padding
                 .add(EdgeInsets.symmetric(vertical: 40.0)),
             child: Row(children: [
-              CircleAvatar(
-                  radius: 30.0, backgroundImage: NetworkImage(urlImage)),
+              CircleAvatar(radius: 30.0, backgroundImage: AssetImage(urlImage)),
               SizedBox(width: 20.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(fontSize: 20.0, color: Colors.white),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Text(email,
-                      style: TextStyle(fontSize: 14.0, color: Colors.white)),
-                ],
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.black38,
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                padding: EdgeInsets.only(
+                    top: 4.0, bottom: 4.0, right: 7.0, left: 7.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(fontSize: 20.0, color: Colors.white),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(email,
+                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                  ],
+                ),
               ),
               // Spacer(),
               // CircleAvatar(
