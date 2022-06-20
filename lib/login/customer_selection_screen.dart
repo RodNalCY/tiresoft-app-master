@@ -62,6 +62,18 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
   Widget build(BuildContext context) {
     _global_id_cliente = obtenerIdCliente();
     // print("Cod: " + _global_id_cliente);

@@ -20,7 +20,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _email = "";
   String _email_length = "";
   String _urlLogo = "";
-
   @override
   Widget build(BuildContext context) {
     print("Drawer >>>");

@@ -41,11 +41,25 @@ class ValidationSessionScreen extends StatefulWidget {
 class _ValidationSessionScreenState extends State<ValidationSessionScreen> {
   @override
   void initState() {
+    print("1-Method initState()");
     super.initState();
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print("2-Method build()");
     return LoginScreen();
   }
 }

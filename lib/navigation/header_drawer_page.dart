@@ -12,6 +12,18 @@ class HeaderDrawerPage extends StatefulWidget {
 
 class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
   @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
   Widget build(BuildContext context) {
     print(widget.info_user[0].u_firma);
 
@@ -43,7 +55,7 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
                   CircleAvatar(
                       radius: 90.0,
                       backgroundImage:
-                          NetworkImage(widget.info_user[0].u_img_logo)),
+                          AssetImage(widget.info_user[0].u_img_logo)),
                   const SizedBox(height: 24.0),
                   Divider(color: Colors.white70),
                   buildDetailUser(context,
