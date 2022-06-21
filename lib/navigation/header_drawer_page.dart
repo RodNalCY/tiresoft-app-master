@@ -25,8 +25,16 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.info_user[0].u_firma);
+    String link_firma = "";
 
+    if (widget.info_user[0].u_firma != "") {
+      link_firma =
+          "https://tiresoft2.lab-elsol.com/" + widget.info_user[0].u_firma;
+    } else {
+      link_firma =
+          "https://bitsofco.de/content/images/2018/12/Screenshot-2018-12-16-at-21.06.29.png";
+    }
+    print(link_firma);
     return Scaffold(
       drawer: NavigationDrawerWidget(widget.info_user),
       appBar: AppBar(
@@ -56,7 +64,7 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
                       radius: 90.0,
                       backgroundImage:
                           AssetImage(widget.info_user[0].u_img_logo)),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 20.0),
                   Divider(color: Colors.white70),
                   buildDetailUser(context,
                       text: widget.info_user[0].u_role_name,
@@ -75,7 +83,31 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
                   buildDetailUser(context,
                       text: widget.info_user[0].u_created, icon: Icons.today),
                   Divider(color: Colors.white70),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 20.0),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 8,
+                        ),
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Firma",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Image.network(
+                          link_firma,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                        ),
+                        Text(
+                          "Firma",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
                 ]),
               )
             ],
@@ -86,17 +118,14 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
   Widget buildDetailUser(BuildContext context,
       {required String text, required IconData icon}) {
     final _color = Colors.white;
-    return Material(
-      color: Colors.transparent,
-      child: ListTile(
-        selectedTileColor: Colors.white24,
-        leading: Icon(icon, color: _color),
-        title: Text(
-          text,
-          style: TextStyle(color: _color, fontSize: 16.0),
-        ),
-        onTap: () {},
+    return ListTile(
+      selectedTileColor: Colors.white24,
+      leading: Icon(icon, color: _color),
+      title: Text(
+        text,
+        style: TextStyle(color: _color, fontSize: 16.0),
       ),
+      onTap: () {},
     );
   }
 }
