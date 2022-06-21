@@ -8,7 +8,7 @@ class NavigationDrawerWidget extends StatefulWidget {
   final List<User> _user;
   const NavigationDrawerWidget(this._user, {Key? key}) : super(key: key);
 
-  static final _padding = EdgeInsets.symmetric(horizontal: 5.0);
+  static final _padding = EdgeInsets.symmetric(horizontal: 2.0);
 
   @override
   State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
@@ -53,7 +53,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                 Container(
                   padding: NavigationDrawerWidget._padding,
                   child: Column(children: [
-                    const SizedBox(height: 24.0),
+                    const SizedBox(height: 20.0),
                     buildOneMenuItem(context,
                         text: 'Registrar Inspección',
                         item: NavigationItemModel.registro_inspeccion,
@@ -83,7 +83,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         text: 'Reporte de Scrap',
                         item: NavigationItemModel.reporte_scrap,
                         icon: Icons.format_list_bulleted),
-                    const SizedBox(height: 150.0),
+                    const SizedBox(height: 165.0),
                     Divider(color: Colors.white70),
                     buildOneMenuItem(context,
                         text: 'Cerrar',

@@ -26,6 +26,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return buildPagesApp();
   }
