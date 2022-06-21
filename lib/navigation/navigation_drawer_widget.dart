@@ -20,9 +20,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _email = "";
   String _email_length = "";
   String _urlLogo = "";
+
   @override
   Widget build(BuildContext context) {
     print("Drawer >>>");
+
+    final safeArea =
+        EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
+
     _name_length = widget._user[0].u_name + " " + widget._user[0].u_lastname;
     _email_length = widget._user[0].u_email;
     _urlLogo = widget._user[0].u_img_logo;
@@ -41,61 +46,57 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       _email = _email_length;
     }
 
-    return ChangeNotifierProvider(
-      create: (context) => NavigationChangeProvider(),
-      child: Drawer(
-        child: Container(
-            color: Color(0xff212F3D),
-            child: ListView(
-              children: [
-                buildHeader(context,
-                    urlImage: _urlLogo, name: _name, email: _email),
-                Container(
-                  padding: NavigationDrawerWidget._padding,
-                  child: Column(children: [
-                    const SizedBox(height: 20.0),
-                    buildOneMenuItem(context,
-                        text: 'Registrar Inspección',
-                        item: NavigationItemModel.registro_inspeccion,
-                        icon: Icons.control_point),
-                    const SizedBox(height: 16.0),
-                    buildOneMenuItem(context,
-                        text: 'Reporte Inspección',
-                        item: NavigationItemModel.reporte_inspeccion,
-                        icon: Icons.format_list_bulleted),
-                    const SizedBox(height: 16.0),
-                    buildOneMenuItem(context,
-                        text: 'Reporte Vehiculos',
-                        item: NavigationItemModel.reporte_vehiculo,
-                        icon: Icons.toys),
-                    const SizedBox(height: 16.0),
-                    buildOneMenuItem(context,
-                        text: 'Reporte Neumáticos',
-                        item: NavigationItemModel.reporte_neumatico,
-                        icon: Icons.data_saver_off),
-                    const SizedBox(height: 16.0),
-                    buildOneMenuItem(context,
-                        text: 'Asignar Neumático a Scrap',
-                        item: NavigationItemModel.asignar_neumatico_scrap,
-                        icon: Icons.control_point),
-                    const SizedBox(height: 16.0),
-                    buildOneMenuItem(context,
-                        text: 'Reporte de Scrap',
-                        item: NavigationItemModel.reporte_scrap,
-                        icon: Icons.format_list_bulleted),
-                    const SizedBox(height: 165.0),
-                    Divider(color: Colors.white70),
-                    buildOneMenuItem(context,
-                        text: 'Cerrar',
-                        item: NavigationItemModel.salir,
-                        icon: Icons.exit_to_app),
-                    const SizedBox(height: 24.0),
-                  ]),
-                )
-              ],
-            )),
+    return Container(
+        child: Drawer(
+            child: Container(
+      color: Color(0xff212F3D),
+      child: Column(
+        children: [
+          Container(
+              padding: safeArea,
+              width: double.infinity,
+              child: buildHeader(context,
+                  urlImage: _urlLogo, name: _name, email: _email)),
+          const SizedBox(height: 20.0),
+          buildOneMenuItem(context,
+              text: 'Registrar Inspección',
+              item: NavigationItemModel.registro_inspeccion,
+              icon: Icons.control_point),
+          const SizedBox(height: 16.0),
+          buildOneMenuItem(context,
+              text: 'Reporte Inspección',
+              item: NavigationItemModel.reporte_inspeccion,
+              icon: Icons.format_list_bulleted),
+          const SizedBox(height: 16.0),
+          buildOneMenuItem(context,
+              text: 'Reporte Vehiculos',
+              item: NavigationItemModel.reporte_vehiculo,
+              icon: Icons.toys),
+          const SizedBox(height: 16.0),
+          buildOneMenuItem(context,
+              text: 'Reporte Neumáticos',
+              item: NavigationItemModel.reporte_neumatico,
+              icon: Icons.data_saver_off),
+          const SizedBox(height: 16.0),
+          buildOneMenuItem(context,
+              text: 'Asignar Neumático a Scrap',
+              item: NavigationItemModel.asignar_neumatico_scrap,
+              icon: Icons.control_point),
+          const SizedBox(height: 16.0),
+          buildOneMenuItem(context,
+              text: 'Reporte de Scrap',
+              item: NavigationItemModel.reporte_scrap,
+              icon: Icons.format_list_bulleted),
+          Spacer(),
+          const SizedBox(height: 24.0),
+          Divider(color: Colors.white70),
+          buildOneMenuItem(context,
+              text: 'Cerrar',
+              item: NavigationItemModel.salir,
+              icon: Icons.exit_to_app),
+        ],
       ),
-    );
+    )));
   }
 
   Widget buildOneMenuItem(BuildContext context,
