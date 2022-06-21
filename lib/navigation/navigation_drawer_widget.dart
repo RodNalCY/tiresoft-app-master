@@ -6,7 +6,9 @@ import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
   final List<User> _user;
-  const NavigationDrawerWidget(this._user, {Key? key}) : super(key: key);
+  final String _global_client_name;
+  const NavigationDrawerWidget(this._user, this._global_client_name, {Key? key})
+      : super(key: key);
 
   static final _padding = EdgeInsets.symmetric(horizontal: 2.0);
 
@@ -16,10 +18,9 @@ class NavigationDrawerWidget extends StatefulWidget {
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _name = "";
-  String _name_length = "";
   String _email = "";
-  String _email_length = "";
-  String _urlLogo = "";
+  String _cliente = "";
+  String _logo_url = "";
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +28,27 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
+    _logo_url = widget._user[0].u_img_logo;
 
-    _name_length = widget._user[0].u_name + " " + widget._user[0].u_lastname;
-    _email_length = widget._user[0].u_email;
-    _urlLogo = widget._user[0].u_img_logo;
-
-    if (_name_length.length > 15) {
+    if ((widget._user[0].u_name + " " + widget._user[0].u_lastname).length >
+        15) {
       _name = (widget._user[0].u_name + " " + widget._user[0].u_lastname)
               .substring(0, 15) +
           "...";
     } else {
-      _name = _name_length;
+      _name = widget._user[0].u_name + " " + widget._user[0].u_lastname;
     }
 
-    if (_email_length.length > 27) {
-      _email = (widget._user[0].u_email).substring(0, 27) + "...";
+    if (widget._user[0].u_email.length > 25) {
+      _email = (widget._user[0].u_email).substring(0, 25) + "...";
     } else {
-      _email = _email_length;
+      _email = widget._user[0].u_email;
+    }
+
+    if (widget._global_client_name.length > 25) {
+      _cliente = (widget._global_client_name).substring(0, 25) + "...";
+    } else {
+      _cliente = widget._global_client_name;
     }
 
     return Container(
@@ -56,7 +61,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               padding: safeArea,
               width: double.infinity,
               child: buildHeader(context,
-                  urlImage: _urlLogo, name: _name, email: _email)),
+                  urlImage: _logo_url,
+                  name: _name,
+                  email: _email,
+                  client: _cliente)),
           const SizedBox(height: 20.0),
           buildOneMenuItem(context,
               text: 'Registrar Inspección',
@@ -130,7 +138,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildHeader(BuildContext context,
-      {required String urlImage, required String name, required String email}) {
+      {required String urlImage,
+      required String name,
+      required String email,
+      required String client}) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -147,24 +158,27 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             padding: NavigationDrawerWidget._padding
                 .add(EdgeInsets.symmetric(vertical: 40.0)),
             child: Row(children: [
-              CircleAvatar(radius: 30.0, backgroundImage: AssetImage(urlImage)),
-              SizedBox(width: 20.0),
+              CircleAvatar(radius: 35.0, backgroundImage: AssetImage(urlImage)),
+              SizedBox(width: 10.0),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.black38,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 padding: EdgeInsets.only(
-                    top: 4.0, bottom: 4.0, right: 7.0, left: 7.0),
+                    top: 5.0, bottom: 5.0, right: 10.0, left: 10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       name,
-                      style: TextStyle(fontSize: 20.0, color: Colors.white),
+                      style: TextStyle(fontSize: 18.0, color: Colors.white),
                     ),
-                    const SizedBox(height: 4.0),
+                    const SizedBox(height: 1.0),
                     Text(email,
-                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                        style: TextStyle(fontSize: 13.0, color: Colors.white)),
+                    const SizedBox(height: 7.0),
+                    Text(client,
+                        style: TextStyle(fontSize: 13.0, color: Colors.white)),
                   ],
                 ),
               ),

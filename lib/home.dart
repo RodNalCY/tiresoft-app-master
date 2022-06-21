@@ -17,8 +17,11 @@ import 'package:tiresoft/vehiculos/list_vehiculos.dart';
 
 class Home extends StatefulWidget {
   String _global_cliente_id;
+  String _global_cliente_name;
   List<User> _user;
-  Home(this._global_cliente_id, this._user, {Key? key}) : super(key: key);
+  Home(this._global_cliente_id, this._user, this._global_cliente_name,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -44,7 +47,8 @@ class _HomeState extends State<Home> {
 
   Widget buildPagesApp() {
     // widget._global_cliente_id = "5";
-    print(">id: " + widget._global_cliente_id);
+    print("> id: " + widget._global_cliente_id);
+    print("> Name: " + widget._global_cliente_name);
     print("> User:");
     for (var element in widget._user) {
       print(element.u_firma);
@@ -54,19 +58,25 @@ class _HomeState extends State<Home> {
     final navigationItem = provider.navigationItemModel;
     switch (navigationItem) {
       case NavigationItemModel.header:
-        return HeaderDrawerPage(widget._user);
+        return HeaderDrawerPage(widget._user, widget._global_cliente_name);
       case NavigationItemModel.registro_inspeccion:
-        return RecordInspectionHeader(widget._global_cliente_id, widget._user);
+        return RecordInspectionHeader(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.reporte_inspeccion:
-        return ListInspeccion(widget._global_cliente_id, widget._user);
+        return ListInspeccion(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.reporte_vehiculo:
-        return ListVehiculos(widget._global_cliente_id, widget._user);
+        return ListVehiculos(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.reporte_neumatico:
-        return ListNeumaticos(widget._global_cliente_id, widget._user);
+        return ListNeumaticos(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.asignar_neumatico_scrap:
-        return RecordScrapScreen(widget._global_cliente_id, widget._user);
+        return RecordScrapScreen(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.reporte_scrap:
-        return ListScrap(widget._global_cliente_id, widget._user);
+        return ListScrap(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
       case NavigationItemModel.login:
         return LoginScreen();
       case NavigationItemModel.salir:

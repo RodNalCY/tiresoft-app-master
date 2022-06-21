@@ -16,8 +16,10 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 class RecordInspectionHeader extends StatefulWidget {
   final String title = 'Registration';
   final String _id_cliente;
+  final String _name_cliente;
   final List<User> _user;
-  RecordInspectionHeader(this._id_cliente, this._user, {Key? key})
+  RecordInspectionHeader(this._id_cliente, this._user, this._name_cliente,
+      {Key? key})
       : super(key: key);
 
   State<StatefulWidget> createState() => _RecordInspectionHeaderState();
@@ -118,7 +120,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._id_cliente),
-      drawer: NavigationDrawerWidget(widget._user),
+      drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
       appBar: AppBar(
         title: Text("Registrar Inspección"),
         centerTitle: true,
@@ -284,6 +286,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                             MaterialPageRoute(
                                 builder: (context) => RecordInspectionDetail(
                                       id_cliente: widget._id_cliente,
+                                      name_cliente: widget._name_cliente,
                                       my_user: widget._user,
                                       title: 'Registrar inspeccion',
                                       idVehiculo: selectedId,

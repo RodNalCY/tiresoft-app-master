@@ -9,9 +9,11 @@ import 'dart:convert';
 
 class ListNeumaticos extends StatefulWidget {
   final String _id_cliente;
+  final String _name_cliente;
   final List<User> _user;
 
-  ListNeumaticos(this._id_cliente, this._user, {Key? key}) : super(key: key);
+  ListNeumaticos(this._id_cliente, this._user, this._name_cliente, {Key? key})
+      : super(key: key);
 
   @override
   State<ListNeumaticos> createState() => _ListNeumaticosState();
@@ -76,7 +78,7 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
           elevation: 0.0,
         ),
         // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(widget._user),
+        drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
         body: Container(
           child: FutureBuilder(
             future: _listadoNeumaticos,

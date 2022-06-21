@@ -13,6 +13,7 @@ import 'package:tiresoft/widgets/custom_cart.dart';
 
 class RecordInspectionDetail extends StatefulWidget {
   final String id_cliente;
+  final String name_cliente;
   final int? idVehiculo;
   final int kmInspeccion;
   final String fechaInspeccion;
@@ -22,6 +23,7 @@ class RecordInspectionDetail extends StatefulWidget {
   const RecordInspectionDetail(
       {Key? key,
       required this.id_cliente,
+      required this.name_cliente,
       required this.my_user,
       required this.title,
       this.idVehiculo,
@@ -509,7 +511,9 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ListInspeccion(
-                                          widget.id_cliente, widget.my_user)))
+                                          widget.id_cliente,
+                                          widget.my_user,
+                                          widget.name_cliente)))
                             }
                         });
                   },

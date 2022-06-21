@@ -18,9 +18,11 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 class RecordScrapScreen extends StatefulWidget {
   final String title = 'Registration';
   final String _cliente_id;
+  final String _cliente_name;
   final List<User> _user;
 
-  const RecordScrapScreen(this._cliente_id, this._user, {Key? key})
+  const RecordScrapScreen(this._cliente_id, this._user, this._cliente_name,
+      {Key? key})
       : super(key: key);
   State<StatefulWidget> createState() => _RecordScrapScreenState();
 }
@@ -190,7 +192,7 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._cliente_id),
-      drawer: NavigationDrawerWidget(widget._user),
+      drawer: NavigationDrawerWidget(widget._user, widget._cliente_name),
       appBar: AppBar(
         title: Text("Registro Scrap"),
         centerTitle: true,
@@ -370,7 +372,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                         if (!validateFormIsEmpty()) {createScrap()}
                       },
                     ),
-                  )
+                  ),
+                  SizedBox(height: 25.0),
                 ],
               ),
             )),
@@ -671,8 +674,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ListScrap(widget._cliente_id,
-                  widget._user))); // RDX - DEFINIR ID CLIENTE
+              builder: (context) => ListScrap(widget._cliente_id, widget._user,
+                  widget._cliente_name))); // RDX - DEFINIR ID CLIENTE
     } else {
       onError();
       // Si la llamada no fue exitosa, lanza un error.

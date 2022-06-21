@@ -10,8 +10,10 @@ import 'package:tiresoft/widgets/custom_drawer.dart';
 
 class ListScrap extends StatefulWidget {
   final String _id_cliente;
+  final String _name_cliente;
   final List<User> _user;
-  ListScrap(this._id_cliente, this._user, {Key? key}) : super(key: key);
+  ListScrap(this._id_cliente, this._user, this._name_cliente, {Key? key})
+      : super(key: key);
 
   @override
   State<ListScrap> createState() => _ListScrapState();
@@ -100,7 +102,7 @@ class _ListScrapState extends State<ListScrap> {
         elevation: 0.0,
       ),
       // drawer: CustomDrawer(widget._id_cliente),
-      drawer: NavigationDrawerWidget(widget._user),
+      drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
       body: Container(
         child: FutureBuilder(
           future: _listadoScrap,

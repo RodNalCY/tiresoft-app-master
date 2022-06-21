@@ -4,7 +4,9 @@ import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 
 class HeaderDrawerPage extends StatefulWidget {
   final List<User> info_user;
-  const HeaderDrawerPage(this.info_user, {Key? key}) : super(key: key);
+  final String _global_cliente_name;
+  const HeaderDrawerPage(this.info_user, this._global_cliente_name, {Key? key})
+      : super(key: key);
 
   @override
   State<HeaderDrawerPage> createState() => _HeaderDrawerPageState();
@@ -36,7 +38,8 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
     }
     print(link_firma);
     return Scaffold(
-      drawer: NavigationDrawerWidget(widget.info_user),
+      drawer:
+          NavigationDrawerWidget(widget.info_user, widget._global_cliente_name),
       appBar: AppBar(
         backgroundColor: Color(0xff212F3D),
         title: Row(
@@ -59,13 +62,15 @@ class _HeaderDrawerPageState extends State<HeaderDrawerPage> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                 child: Column(children: [
-                  const SizedBox(height: 50.0),
+                  const SizedBox(height: 20.0),
                   CircleAvatar(
-                      radius: 90.0,
+                      radius: 75.0,
                       backgroundImage:
                           AssetImage(widget.info_user[0].u_img_logo)),
                   const SizedBox(height: 20.0),
                   Divider(color: Colors.white70),
+                  buildDetailUser(context,
+                      text: widget._global_cliente_name, icon: Icons.home_work),
                   buildDetailUser(context,
                       text: widget.info_user[0].u_role_name,
                       icon: Icons.fingerprint),

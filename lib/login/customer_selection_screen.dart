@@ -171,13 +171,14 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           textColor: Colors.white,
                           onPressed: () => {
                                 print("Send Id: " + _global_id_cliente),
+                                print("Send NAME: " + _dropdownFirsValue),
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Home(
-                                            _global_id_cliente,
-                                            widget._user,
-                                          )),
+                                          _global_id_cliente,
+                                          widget._user,
+                                          _dropdownFirsValue)),
                                 )
                                 // Navigator.push(
                                 //   context,
