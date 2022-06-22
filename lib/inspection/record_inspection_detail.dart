@@ -500,20 +500,20 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                     finishInspections().then((value) => {
                           if (value)
                             {
-                              // Navigator.of(context).pop()
+                              Navigator.of(context).pop()
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
                               //       builder: (context) =>
                               //           ListInspeccion(widget.id_cliente)),
                               // )
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ListInspeccion(
-                                          widget.id_cliente,
-                                          widget.my_user,
-                                          widget.name_cliente)))
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => ListInspeccion(
+                              //             widget.id_cliente,
+                              //             widget.my_user,
+                              //             widget.name_cliente)))
                             }
                         });
                   },

@@ -116,10 +116,10 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       String body = utf8.decode(response.bodyBytes);
       final _json_decode = jsonDecode(body);
       final myTires = _json_decode as List;
-      print(
-          "JSON--------------------------------------------------------------");
-      print(selectedVehiculoId.toString());
-      print(myTires);
+      // print(
+      //     "JSON--------------------------------------------------------------");
+      // print(selectedVehiculoId.toString());
+      // print(myTires);
 
       bool isfound = false;
       List<String> tmp = [];
@@ -185,6 +185,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     });
     return false;
   }
+
+  bool isLoadingSave = false;
 
   @override
   Widget build(BuildContext context) {
@@ -320,7 +322,31 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                   ),
                   Container(
                       padding: EdgeInsets.all(10),
-                      child: motivoScrapWidgetList()),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Motivo de Scrap",
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.black54),
+                          ),
+                          SizedBox(height: 5.0),
+                          motivoScrapWidgetList(),
+                        ],
+                      )),
+                  SizedBox(height: 10.0),
+                  Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Motivo de Retiro",
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.black54),
+                          ),
+                          SizedBox(height: 5.0),
+                          motivoRetiroWidgetList(),
+                        ],
+                      )),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: DateTimeField(
@@ -362,14 +388,32 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                   SizedBox(height: 25.0),
                   Center(
                     child: MaterialButton(
-                      minWidth: 150.0,
-                      height: 40.0,
-                      padding: EdgeInsets.all(15.0),
-                      child: Text('Siguiente'),
+                      padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                      child: isLoadingSave
+                          ? Transform.scale(
+                              scale: 0.5,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 1),
+                                child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 5.0),
+                              ),
+                            )
+                          : Text(
+                              'Guardar',
+                              style: TextStyle(fontSize: 15.0),
+                            ),
                       color: Color(0xff212F3D),
                       textColor: Colors.white,
-                      onPressed: () => {
-                        if (!validateFormIsEmpty()) {createScrap()}
+                      onPressed: () async => {
+                        print("Finalizado I"),
+                        if (!validateFormIsEmpty())
+                          {
+                            setState(() {
+                              isLoadingSave = true;
+                            }),
+                            createScrap()
+                          }
                       },
                     ),
                   ),
@@ -407,6 +451,16 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   ];
   int motivoScrapIdselected = 1;
   int selectedTireId = 0;
+
+  List<String> motivoRetiroList = [
+    'POR REENCAUCHE',
+    'POR REPARACIÓN',
+    'POR ROTACIÓN',
+    'POR DESGASTE FINAL',
+    'POR FALLA'
+  ];
+  int motivoRetiroIdselected = 1;
+
   Widget tiresAvailable() {
     if (!listIdTires.isNotEmpty) {
       return Text('Seleccione un vehiculo');
@@ -474,6 +528,23 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       onChanged: (_val) {
         setState(() {
           motivoScrapIdselected = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  Widget motivoRetiroWidgetList() {
+    return DropdownButton<String>(
+      value: motivoRetiroIdselected.toString(),
+      items: <String>['1', '2', '3', '4', '5'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(motivoRetiroList[int.parse(value) - 1]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          motivoRetiroIdselected = int.parse(_val.toString());
         });
       },
     );
@@ -630,13 +701,28 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   }
 
   Future<void> createScrap() async {
-    var url = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/scrap/registroScrapSimplified");
-    var request = await http.MultipartRequest("POST", url);
-
     final SharedPreferences prefs = await _prefs;
     int? userId = prefs.getInt('userId');
     userId ?? 10;
+
+    print("createScrap()");
+    print("ID-CLIENTE > " + widget._cliente_id.toString());
+    print("ID-VEHICULO > " + selectedVehiculoId.toString());
+    print("ID-NEUMATICO > " + selectedTireId.toString());
+
+    print("r limite > " + _remanenteLimiteController.text.toString());
+    print("r final > " + _remanenteFinalController.text.toString());
+    print("_kmController > " + _kmController.text.toString());
+
+    print("SCRAP > " + motivoScrapIdselected.toString());
+    print("RETIRO > " + motivoRetiroIdselected.toString());
+    print("fecha > " + _dateController.text);
+    print("user > " + userId.toString());
+
+    var url = Uri.parse(
+        "https://tiresoft2.lab-elsol.com/api/registroScrapxNeumaticosInstalados");
+    var request = await http.MultipartRequest("POST", url);
+
     if (pickedImageAsBytes != null) {
       request.files.add(http.MultipartFile.fromBytes(
           'imgneumaticomalestado1', pickedImageAsBytes!,
@@ -649,37 +735,42 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
           filename: 'photo2.jpg'));
     }
 
-    request.fields['clienteId'] = '5';
+    request.fields['id_cliente'] = widget._cliente_id.toString();
     request.fields['id_vehiculo'] = selectedVehiculoId.toString();
-    request.fields['id_neumaticos'] = selectedTireId.toString();
-    request.fields['id_motivo_scrap'] = motivoScrapIdselected.toString();
-    request.fields['rem_limite'] = _remanenteLimiteController.text.toString();
     request.fields['kmrecorr'] = _kmController.text.toString();
+    request.fields['id_motivo_retiro'] = motivoRetiroIdselected.toString();
+    request.fields['id_neumaticos'] = selectedTireId.toString();
     request.fields['rem_final'] = _remanenteFinalController.text.toString();
-    request.fields['fecha_scrap'] = _dateController.text;
-    request.fields['userId'] = userId.toString();
+    request.fields['rem_limite'] = _remanenteLimiteController.text.toString();
+    request.fields['id_motivo_scrap'] = motivoScrapIdselected.toString();
+    request.fields['fecha_scrap'] = _dateController.text; // CORREGIS BD
+    request.fields['id_usuario'] = userId.toString();
 
     var responseAttachmentSTR = await request.send();
 
     //response
     String x = await responseAttachmentSTR.stream.bytesToString();
-    print('Show here2 ${x}');
+    print('Response: ${x}');
 
     if (responseAttachmentSTR.statusCode == 200) {
       setState(() {
         pickedImageAsBytes = null;
         pickedImageAsBytes2 = null;
+        isLoadingSave = false;
       });
+
       onSuccess();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ListScrap(widget._cliente_id, widget._user,
-                  widget._cliente_name))); // RDX - DEFINIR ID CLIENTE
+      print("Finalizado II");
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => ListScrap(widget._cliente_id, widget._user,
+      //             widget._cliente_name))); // RDX - DEFINIR ID CLIENTE
     } else {
       onError();
-      // Si la llamada no fue exitosa, lanza un error.
-
+      setState(() {
+        isLoadingSave = false;
+      });
     }
   }
 

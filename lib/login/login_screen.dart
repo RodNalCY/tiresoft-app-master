@@ -30,9 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   String _userEmail = "";
-
   bool _obscureText = true;
-
   String? selectedLetter;
   int? selectedId;
   final format = DateFormat("yyyy-MM-dd");
