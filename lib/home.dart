@@ -13,6 +13,7 @@ import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
 import 'package:tiresoft/neumaticos/list_neumaticos.dart';
 import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/record_scrap_screen.dart';
+import 'package:tiresoft/scrap/scrap_register_home.dart';
 import 'package:tiresoft/vehiculos/list_vehiculos.dart';
 
 class Home extends StatefulWidget {
@@ -71,8 +72,10 @@ class _HomeState extends State<Home> {
       case NavigationItemModel.reporte_neumatico:
         return ListNeumaticos(widget._global_cliente_id, widget._user,
             widget._global_cliente_name);
-      case NavigationItemModel.asignar_neumatico_scrap:
-        return RecordScrapScreen(widget._global_cliente_id, widget._user,
+      case NavigationItemModel.register_scrap_home:
+        // return RecordScrapScreen(widget._global_cliente_id, widget._user,
+        //     widget._global_cliente_name);
+        return ScrapRegisterHome(widget._global_cliente_id, widget._user,
             widget._global_cliente_name);
       case NavigationItemModel.reporte_scrap:
         return ListScrap(widget._global_cliente_id, widget._user,

@@ -11,6 +11,7 @@ import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/scrap/list_scrap.dart';
 import 'package:tiresoft/scrap/list_tire_scrap_screen.dart';
+import 'package:tiresoft/scrap_directo/register_scrap_directo.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:tiresoft/widgets/custom_drawer.dart';
@@ -190,13 +191,14 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("REGISTRO SCRAP NEUMATICO INSTALADO");
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._cliente_id),
       drawer: NavigationDrawerWidget(widget._user, widget._cliente_name),
       appBar: AppBar(
-        title: Text("Registro Scrap"),
+        title: Text("Neumático Instalado"),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
@@ -784,5 +786,17 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Ocurrio un error")),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
   }
 }
