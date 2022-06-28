@@ -85,12 +85,12 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
       for (final element in my_vehicles) {
         if (element['neumaticos']) {
           letters.add(element['placa'].toString());
-          setState(() {});
+          // setState(() {});
         }
       }
-      setState(() {
-        vehicles = my_vehicles;
-      });
+      //setState(() {
+      vehicles = my_vehicles;
+      //});
     } else {
       throw Exception("Falló la Conexión");
     }
@@ -188,6 +188,18 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   }
 
   bool isLoadingSave = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("4-Method dispose()");
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    print("3-Method deactivate()");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -786,17 +798,5 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Ocurrio un error")),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print("4-Method dispose()");
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    print("3-Method deactivate()");
   }
 }

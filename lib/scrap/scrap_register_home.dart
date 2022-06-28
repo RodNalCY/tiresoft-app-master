@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
-import 'package:tiresoft/scrap/demo_view.dart';
 import 'package:tiresoft/scrap/record_scrap_screen.dart';
 import 'package:tiresoft/scrap_directo/register_scrap_directo.dart';
 

@@ -87,7 +87,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               icon: Icons.data_saver_off),
           const SizedBox(height: 16.0),
           buildOneMenuItem(context,
-              text: 'Asignar Neumático a Scrap',
+              text: 'Registrar Scrap',
               item: NavigationItemModel.register_scrap_home,
               icon: Icons.control_point),
           const SizedBox(height: 16.0),
