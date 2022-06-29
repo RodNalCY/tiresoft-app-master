@@ -88,9 +88,9 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
           // setState(() {});
         }
       }
-      //setState(() {
-      vehicles = my_vehicles;
-      //});
+      setState(() {
+        vehicles = my_vehicles;
+      });
     } else {
       throw Exception("Falló la Conexión");
     }
@@ -790,13 +790,13 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
 
   void onSuccess() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Scrap creado con exito")),
+      const SnackBar(content: Text("Scrap creado con exito el scrap")),
     );
   }
 
   void onError() {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Ocurrio un error")),
+      const SnackBar(content: Text("Ocurrio un error en registro de scrap")),
     );
   }
 }

@@ -1,5 +1,7 @@
+import 'dart:typed_data';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:http/http.dart' as http;
@@ -50,6 +52,72 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
   final TextEditingController _txtEdFechaScrap = TextEditingController();
   bool _validatetxtEdFechaScrap = false;
   final txtDateFormat = DateFormat("yyyy-MM-dd");
+
+  List? neuMarcaList;
+  String? _myIdMarca;
+
+  List? neuMedidaList;
+  String? _myIdMedida;
+
+  Future<void> _getMarcasList() async {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/detalleScrapDirectoNeumaticos"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': '5',
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      // print("JSON 1:");
+      // print("Marca");
+      // print(jsonData['success']['resultado']['marca']);
+      // print("Medida");
+      // print(jsonData['success']['resultado']['medida']);
+
+      setState(() {
+        neuMarcaList = jsonData['success']['resultado']['marca'];
+        neuMedidaList = jsonData['success']['resultado']['medida'];
+      });
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  List? neuModeloList;
+  String? _myIdModelo;
+
+  Future<void> _getModelosList() async {
+    print("_getModelosList");
+    final response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/neumaticos/getmodelos/" +
+          _myIdMarca.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'clienteId': '5',
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      // print("JSON 2:");
+      // print(jsonData['success']['resultado']);
+
+      setState(() {
+        neuModeloList = jsonData['success']['resultado'];
+      });
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
 
   List<String> listaTipoMonedaName = ['SOLES (S/)', 'DOLARES (\$)'];
   int tipoMonedaIdselected = 1;
@@ -117,42 +185,47 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
   ];
   int motivoScrapIdselected = 1;
   Widget motivoScrapWidgetList() {
-    return DropdownButton<String>(
-      value: motivoScrapIdselected.toString(),
-      items: <String>[
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22'
-      ].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(listaMotivoScrap[int.parse(value) - 1]),
-        );
-      }).toList(),
-      onChanged: (_val) {
-        setState(() {
-          motivoScrapIdselected = int.parse(_val.toString());
-        });
-      },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        DropdownButton<String>(
+          value: motivoScrapIdselected.toString(),
+          items: <String>[
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            '13',
+            '14',
+            '15',
+            '16',
+            '17',
+            '18',
+            '19',
+            '20',
+            '21',
+            '22'
+          ].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(listaMotivoScrap[int.parse(value) - 1]),
+            );
+          }).toList(),
+          onChanged: (_val) {
+            setState(() {
+              motivoScrapIdselected = int.parse(_val.toString());
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -238,6 +311,13 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
   }
 
   @override
+  void initState() {
+    _getMarcasList();
+    // _getModelosList();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     super.dispose();
     print("4-Method dispose()");
@@ -252,6 +332,7 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
   @override
   Widget build(BuildContext context) {
     print("REGISTRO SCRAP DIRECTO");
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       drawer: NavigationDrawerWidget(widget._user, widget._cliente_name),
@@ -321,6 +402,7 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                     Container(
                         padding: EdgeInsets.all(10),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Tipo de Moneda:",
@@ -334,9 +416,10 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                     Container(
                         padding: EdgeInsets.all(10),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Condición Neumático:",
+                              "Condición: ",
                               style: TextStyle(
                                   fontSize: 16.0, color: Colors.black54),
                             ),
@@ -345,42 +428,14 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                           ],
                         )),
                     Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Marca Neumático:",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.black54),
-                            ),
-                            SizedBox(width: 15.0),
-                          ],
-                        )),
+                        padding: EdgeInsets.all(10.0),
+                        child: dropDownMarcaWidget()),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Modelo Neumático:",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.black54),
-                            ),
-                            SizedBox(width: 15.0),
-                          ],
-                        )),
+                        child: dropDownModeloWidget()),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Medida Neumático:",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.black54),
-                            ),
-                            SizedBox(width: 15.0),
-                          ],
-                        )),
-                    SizedBox(height: 15.0),
+                        child: dropDownMedidaWidget()),
                     Center(
                       child: Container(
                         margin: EdgeInsets.all(10.0),
@@ -550,6 +605,14 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                         },
                       ),
                     ),
+                    Container(
+                      padding: EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [addPhotoWidgetOne(), addPhotoWidgetTwo()],
+                      ),
+                    ),
+                    SizedBox(height: 30.0),
                     Center(
                       child: MaterialButton(
                         padding: EdgeInsets.only(right: 45.0, left: 45.0),
@@ -589,26 +652,371 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
 
   Future<void> createScrapDirecto() async {
     print("createScrapDirecto()");
-    print("ID-CLIENTE > " + widget._cliente_id.toString());
-    print("ID-NumeroCliente > " + _txtEdNumSerie.text.toString());
-    print("ID-DOT > " + _txtEdDOT.text.toString());
-    print("ID-CostoSinIGV > " + _txtEdCostoSnIGV.text.toString());
-    print("TIPO-MONEDA > " + tipoMonedaIdselected.toString());
-    print("CONDICION NEUMATICOS> " + condicionNeumaticoIdselected.toString());
+    print("1 ID-CLIENTE > " + widget._cliente_id.toString());
+    print("2 ID-NumeroCliente > " + _txtEdNumSerie.text.toString());
+    print("3 ID-DOT > " + _txtEdDOT.text.toString());
+    print("4 ID-CostoSinIGV > " + _txtEdCostoSnIGV.text.toString());
+    print("5 TIPO-MONEDA > " + tipoMonedaIdselected.toString());
+    print("6 CONDICION NEUMATICOS> " + condicionNeumaticoIdselected.toString());
 
-    print("R-Original > " + _txtEdRemOriginal.text.toString());
-    print("R-Final > " + _txtEdRemFinal.text.toString());
-    print("R-Limite > " + _txtEdRemLimite.text.toString());
+    print("7 R-Original > " + _txtEdRemOriginal.text.toString());
+    print("8 R-Final > " + _txtEdRemFinal.text.toString());
+    print("9 R-Limite > " + _txtEdRemLimite.text.toString());
 
-    print("km-Inicial > " + _txtEdKmInicial.text.toString());
-    print("km-Final > " + _txtEdKmFinal.text.toString());
+    print("10 km-Inicial > " + _txtEdKmInicial.text.toString());
+    print("11 km-Final > " + _txtEdKmFinal.text.toString());
 
-    print("MOTIVO SCRAP > " + motivoScrapIdselected.toString());
+    print("12 MOTIVO SCRAP > " + motivoScrapIdselected.toString());
 
-    print("Fecha Scrap> " + _txtEdFechaScrap.text.toString());
+    print("13 Fecha Scrap> " + _txtEdFechaScrap.text.toString());
 
-    setState(() {
-      isLoadingSave = false;
-    });
+    print("14 Id Marca > " + _myIdMarca.toString());
+    print("15 Id Modelo > " + _myIdModelo.toString());
+    print("16 Id Medida > " + _myIdMedida.toString());
+
+    print("17 Photo One");
+    print(pickedImageAsBytesOne);
+    print("18 Photo Two");
+    print(pickedImageAsBytesTwo);
+    print("19 User Id > " + widget._user[0].u_id.toString());
+
+    var request = await http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/registroScrapDirectoNeumaticos"));
+
+    request.fields['id_cliente'] = widget._cliente_id.toString();
+    request.fields['num_serie'] = _txtEdNumSerie.text.toString();
+    request.fields['dot'] = _txtEdDOT.text.toString();
+    request.fields['precio'] = _txtEdCostoSnIGV.text.toString();
+    request.fields['tipo_moneda'] = tipoMonedaIdselected.toString();
+    request.fields['nuevo'] = condicionNeumaticoIdselected.toString();
+
+    request.fields['cantidad_reencauche'] = "";
+    request.fields['id_disenio'] = "";
+    request.fields['id_empresa'] = "";
+
+    request.fields['id_marca'] = _myIdMarca.toString();
+    request.fields['id_modelo'] = _myIdModelo.toString();
+    request.fields['id_medida'] = _myIdMedida.toString();
+    request.fields['remanente_original'] = _txtEdRemOriginal.text.toString();
+    request.fields['remanente_final'] = _txtEdRemFinal.text.toString();
+    request.fields['remanente_limite'] = _txtEdRemLimite.text.toString();
+    request.fields['km_inicial'] = _txtEdKmInicial.text.toString();
+    request.fields['km_final'] = _txtEdKmFinal.text.toString();
+    request.fields['id_motivo_scrap'] = motivoScrapIdselected.toString();
+    request.fields['fecha_scrap'] = _txtEdFechaScrap.text.toString();
+    request.fields['id_usuario'] = widget._user[0].u_id.toString();
+
+    //Adjuntamos Imagenes al POST
+    if (pickedImageAsBytesOne != null) {
+      request.files.add(http.MultipartFile.fromBytes(
+          'imgneumaticomalestado1', pickedImageAsBytesOne!,
+          filename: 'photo.jpg'));
+    }
+
+    if (pickedImageAsBytesTwo != null) {
+      request.files.add(http.MultipartFile.fromBytes(
+          'imgneumaticomalestado2', pickedImageAsBytesTwo!,
+          filename: 'photo2.jpg'));
+    }
+
+    //Response HTTP
+    var response = await request.send();
+    String parse_response = await response.stream.bytesToString();
+    print('Response: ${parse_response}');
+
+    if (response.statusCode == 200) {
+      setState(() {
+        pickedImageAsBytesOne = null;
+        pickedImageAsBytesTwo = null;
+        isLoadingSave = false;
+      });
+      onSuccess();
+      print("Finalizado II");
+    } else {
+      onError();
+      setState(() {
+        isLoadingSave = false;
+      });
+    }
+  }
+
+  void onSuccess() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Scrap creado con exito el scrap")),
+    );
+  }
+
+  void onError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Ocurrio un error en registro de scrap")),
+    );
+  }
+
+  Uint8List? pickedImageAsBytesTwo;
+  final ImagePicker _pickerImageTwo = ImagePicker();
+  XFile? pickedXFileImageTwo;
+
+  void _pickImageFunctionTwo() async {
+    final imageSource = await showDialog<ImageSource>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                "Seleccione el origen de la foto",
+                style: TextStyle(fontSize: 14),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text("Camara"),
+                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                MaterialButton(
+                  child: Text("Galeria"),
+                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                )
+              ],
+            ));
+
+    if (imageSource != null) {
+      final XFile? file = await _pickerImageTwo.pickImage(source: imageSource);
+
+      if (file != null) {
+        file.readAsBytes().then((x) {
+          setState(() => {pickedImageAsBytesTwo = x});
+        });
+        setState(() => {pickedXFileImageTwo = file});
+      }
+    }
+  }
+
+  Widget addPhotoWidgetTwo() {
+    return Column(
+      children: [
+        TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered))
+                    return Colors.blue.withOpacity(0.04);
+                  if (states.contains(MaterialState.focused) ||
+                      states.contains(MaterialState.pressed))
+                    return Colors.blue.withOpacity(0.12);
+                  return null; // Defer to the widget's default.
+                },
+              ),
+            ),
+            onPressed: () {
+              _pickImageFunctionTwo();
+            },
+            child: const Text('Adjuntar foto 2')),
+        Container(
+          child: pickedImageAsBytesTwo != null
+              ? Image.memory(
+                  pickedImageAsBytesTwo!,
+                  width: 190.0,
+                  height: 190.0,
+                  fit: BoxFit.fitHeight,
+                )
+              : Container(
+                  decoration: BoxDecoration(color: Colors.red[200]),
+                  width: 190.0,
+                  height: 190.0,
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.grey[800],
+                  ),
+                ),
+        )
+      ],
+    );
+  }
+
+  Uint8List? pickedImageAsBytesOne;
+  final ImagePicker _pickerImageOne = ImagePicker();
+  XFile? pickedXFileImageOne;
+
+  void _pickImageFunctionOne() async {
+    final imageSource = await showDialog<ImageSource>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                "Seleccione el origen de la foto",
+                style: TextStyle(fontSize: 14),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text("Camara"),
+                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                MaterialButton(
+                  child: Text("Galeria"),
+                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                )
+              ],
+            ));
+
+    if (imageSource != null) {
+      final XFile? file = await _pickerImageOne.pickImage(source: imageSource);
+
+      if (file != null) {
+        file.readAsBytes().then((x) {
+          setState(() => {pickedImageAsBytesOne = x});
+        });
+        setState(() => {pickedXFileImageOne = file});
+      }
+    }
+  }
+
+  Widget addPhotoWidgetOne() {
+    return Column(
+      children: [
+        TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered))
+                    return Colors.blue.withOpacity(0.04);
+                  if (states.contains(MaterialState.focused) ||
+                      states.contains(MaterialState.pressed))
+                    return Colors.blue.withOpacity(0.12);
+                  return null; // Defer to the widget's default.
+                },
+              ),
+            ),
+            onPressed: () {
+              _pickImageFunctionOne();
+            },
+            child: const Text('Adjuntar foto 1')),
+        Container(
+          child: pickedImageAsBytesOne != null
+              ? Image.memory(
+                  pickedImageAsBytesOne!,
+                  width: 190.0,
+                  height: 190.0,
+                  fit: BoxFit.fitHeight,
+                )
+              : Container(
+                  decoration: BoxDecoration(color: Colors.red[200]),
+                  width: 190.0,
+                  height: 190.0,
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.grey[800],
+                  ),
+                ),
+        )
+      ],
+    );
+  }
+
+  Widget dropDownMedidaWidget() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text("Medida: ",
+              style: TextStyle(fontSize: 16.0, color: Colors.black54)),
+          ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButton<String>(
+              value: _myIdMedida,
+              iconSize: 30,
+              icon: (null),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+              hint: Text('Seleccione Medida'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _myIdMedida = newValue;
+                  print("Id Medida");
+                  print(_myIdMedida);
+                });
+              },
+              items: neuMedidaList?.map((item) {
+                    return new DropdownMenuItem(
+                      child: new Text(item['descripcion']),
+                      value: item['id'].toString(),
+                    );
+                  })?.toList() ??
+                  [],
+            ),
+          ),
+        ]);
+  }
+
+  Widget dropDownModeloWidget() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text("Modelo: ",
+              style: TextStyle(fontSize: 16.0, color: Colors.black54)),
+          ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButton<String>(
+              value: _myIdModelo,
+              iconSize: 30,
+              icon: (null),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+              ),
+              hint: Text('Seleccione Modelo'),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _myIdModelo = newValue;
+                  print("Id Modelo");
+                  print(_myIdModelo);
+                });
+              },
+              items: neuModeloList?.map((item) {
+                    return new DropdownMenuItem(
+                      child: new Text(item['descripcion']),
+                      value: item['id_modelo'].toString(),
+                    );
+                  })?.toList() ??
+                  [],
+            ),
+          ),
+        ]);
+  }
+
+  Widget dropDownMarcaWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text("Marca: ",
+            style: TextStyle(fontSize: 16.0, color: Colors.black54)),
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton<String>(
+            value: _myIdMarca,
+            iconSize: 30.0,
+            icon: null,
+            style: TextStyle(color: Colors.black, fontSize: 16.0),
+            onChanged: (String? newValue) {
+              setState(() {
+                _myIdModelo = null;
+                neuModeloList = [];
+                _myIdMarca = newValue;
+                _getModelosList();
+                print("Marca Id");
+                print(_myIdMarca);
+              });
+            },
+            hint: Text('Seleccione Marca'),
+            items: neuMarcaList?.map((item) {
+                  return new DropdownMenuItem(
+                      child: new Text(item['descripcion']),
+                      value: item['id'].toString());
+                })?.toList() ??
+                [],
+          ),
+        )
+      ],
+    );
   }
 }
