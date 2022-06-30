@@ -7,6 +7,7 @@ import 'package:tiresoft/inspeccion/list_inspeccion.dart';
 import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/login_screen.dart';
 import 'package:tiresoft/login/models/user.dart';
+import 'package:tiresoft/mal_estado/list_mal_estado.dart';
 import 'package:tiresoft/navigation/header_drawer_page.dart';
 import 'package:tiresoft/navigation/models/navigation_item_model.dart';
 import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
@@ -73,12 +74,13 @@ class _HomeState extends State<Home> {
         return ListNeumaticos(widget._global_cliente_id, widget._user,
             widget._global_cliente_name);
       case NavigationItemModel.register_scrap_home:
-        // return RecordScrapScreen(widget._global_cliente_id, widget._user,
-        //     widget._global_cliente_name);
         return ScrapRegisterHome(widget._global_cliente_id, widget._user,
             widget._global_cliente_name);
       case NavigationItemModel.reporte_scrap:
         return ListScrap(widget._global_cliente_id, widget._user,
+            widget._global_cliente_name);
+      case NavigationItemModel.reporte_neumatico_mal_estado:
+        return ListMalEstado(widget._global_cliente_id, widget._user,
             widget._global_cliente_name);
       case NavigationItemModel.login:
         return LoginScreen();

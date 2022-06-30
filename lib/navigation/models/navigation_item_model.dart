@@ -7,5 +7,6 @@ enum NavigationItemModel {
   reporte_neumatico,
   register_scrap_home,
   reporte_scrap,
+  reporte_neumatico_mal_estado,
   salir,
 }

@@ -7,6 +7,7 @@ import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:tiresoft/scrap_directo/models/disenio.dart';
 
 class RegisterScrapDirecto extends StatefulWidget {
   final String _cliente_id;
@@ -67,7 +68,7 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'id_cliente': '5',
+        'id_cliente': widget._cliente_id,
       }),
     );
 
@@ -154,6 +155,7 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
       onChanged: (_val) {
         setState(() {
           condicionNeumaticoIdselected = int.parse(_val.toString());
+          verifyStatus();
         });
       },
     );
@@ -310,10 +312,139 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
     return false;
   }
 
+  List<String> listaCantidadReencauches = [
+    'Uno',
+    'Dos',
+    'Tres',
+    'Cuatro',
+    'Cinco',
+    'Seis'
+  ];
+  int cantidadReenIdSelected = 1;
+
+  Widget cantidadReencauchesoWidgetList() {
+    return Container(
+      padding: EdgeInsets.only(right: 15.0),
+      child: DropdownButton<String>(
+        elevation: 16,
+        icon: const Icon(Icons.unfold_more, color: Color(0xff2874A6)),
+        value: cantidadReenIdSelected.toString(),
+        items: <String>['1', '2', '3', '4', '5', '6'].map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(listaCantidadReencauches[int.parse(value) - 1]),
+          );
+        }).toList(),
+        onChanged: (_val) {
+          setState(() {
+            cantidadReenIdSelected = int.parse(_val.toString());
+          });
+        },
+      ),
+    );
+  }
+
+  late Future<List<Disenio>> neuDisenioList;
+  late String _dropdownFirstDisenioValue;
+  late String _dropdownFirstIdDisenioValue;
+
+  Future<List<Disenio>> _getDisenioList() async {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/detalleScrapDirectoNeumaticos"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._cliente_id,
+      }),
+    );
+    List<Disenio> _disenio = [];
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+
+      for (var item in jsonData['success']['resultado']['disenios']) {
+        _disenio.add(Disenio(item['id'], item['nombre']));
+      }
+
+      _dropdownFirstDisenioValue =
+          jsonData['success']['resultado']['disenios'][0]["nombre"];
+      _dropdownFirstIdDisenioValue =
+          jsonData['success']['resultado']['disenios'][0]["id"].toString();
+      return _disenio;
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  late Future<List> empresasReenList;
+  late String _dropdownFirstEmpresaValue;
+  late String _dropdownFirstIdEmpresaValue;
+
+  Future<List> _getEmpresaReencauchadora() async {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/detalleScrapDirectoNeumaticos"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._cliente_id,
+      }),
+    );
+
+    List _empresas = [];
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      // print("Empresas");
+      // print(jsonData['success']['resultado']['empresas']);
+      _empresas = jsonData['success']['resultado']['empresas'];
+
+      _dropdownFirstEmpresaValue =
+          jsonData['success']['resultado']['empresas'][0]["razon_social"];
+      _dropdownFirstIdEmpresaValue =
+          jsonData['success']['resultado']['empresas'][0]["id"].toString();
+      return _empresas;
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  late bool statusInputs;
+  Widget dropDownBloqueado() {
+    return Container(
+      padding: EdgeInsets.only(right: 15.0),
+      child: DropdownButton<String>(
+          icon: const Icon(
+            Icons.unfold_more,
+          ),
+          hint: Text("Bloqueado"),
+          onChanged: null,
+          items: []),
+    );
+  }
+
+  verifyStatus() {
+    if (condicionNeumaticoIdselected == 1) {
+      setState(() {
+        statusInputs = false;
+      });
+    } else {
+      setState(() {
+        statusInputs = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     _getMarcasList();
-    // _getModelosList();
+    neuDisenioList = _getDisenioList();
+    empresasReenList = _getEmpresaReencauchadora();
+    verifyStatus();
     super.initState();
   }
 
@@ -427,6 +558,137 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                             condicionNeumaticoWidgetList(),
                           ],
                         )),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Cantidad de Reencauche: ",
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Colors.black54),
+                            ),
+                            statusInputs
+                                ? cantidadReencauchesoWidgetList()
+                                : dropDownBloqueado(),
+                          ]),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Disenio de Banda: ",
+                              style: TextStyle(
+                                  fontSize: 16.0, color: Colors.black54),
+                            ),
+                            FutureBuilder<List<Disenio>>(
+                              future: neuDisenioList,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  final error = snapshot.error;
+                                  return Text("$error");
+                                } else if (snapshot.hasData) {
+                                  return statusInputs
+                                      ? DropdownButton<String>(
+                                          value: _dropdownFirstDisenioValue,
+                                          icon: const Icon(Icons.unfold_more,
+                                              color: Color(0xff2874A6)),
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17.0),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              _dropdownFirstDisenioValue =
+                                                  newValue!;
+                                            });
+                                          },
+                                          items: snapshot.data!
+                                              .map((fc) =>
+                                                  DropdownMenuItem<String>(
+                                                    onTap: () {
+                                                      _dropdownFirstIdDisenioValue =
+                                                          fc.v_id.toString();
+                                                    },
+                                                    child: Text(fc.v_disenio),
+                                                    value: fc.v_disenio,
+                                                  ))
+                                              .toList())
+                                      : dropDownBloqueado();
+                                } else {
+                                  return const SizedBox(
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.0,
+                                    ),
+                                    height: 30.0,
+                                    width: 30.0,
+                                  );
+                                }
+                              },
+                            ),
+                          ]),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Empresa Reencauchadora ",
+                            style: TextStyle(
+                                fontSize: 16.0, color: Colors.black54),
+                          ),
+                          SizedBox(height: 20.0),
+                          FutureBuilder<List>(
+                            future: empresasReenList,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                final error = snapshot.error;
+                                return Text("$error");
+                              } else if (snapshot.hasData) {
+                                return Center(
+                                  child: statusInputs
+                                      ? DropdownButton<String>(
+                                          icon: const Icon(Icons.unfold_more,
+                                              color: Color(0xff2874A6)),
+                                          value: _dropdownFirstEmpresaValue,
+                                          onChanged: (String? newValueTwo) {
+                                            setState(() {
+                                              _dropdownFirstEmpresaValue =
+                                                  newValueTwo!;
+                                            });
+                                          },
+                                          items: snapshot.data!
+                                              .map((eprn) =>
+                                                  DropdownMenuItem<String>(
+                                                    onTap: () {
+                                                      _dropdownFirstIdEmpresaValue =
+                                                          eprn["id"].toString();
+                                                    },
+                                                    child: Text(
+                                                        eprn["razon_social"]
+                                                            .toString()),
+                                                    value: eprn["razon_social"]
+                                                        .toString(),
+                                                  ))
+                                              .toList())
+                                      : dropDownBloqueado(),
+                                );
+                              } else {
+                                return const SizedBox(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.0,
+                                  ),
+                                  height: 30.0,
+                                  width: 30.0,
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                     Container(
                         padding: EdgeInsets.all(10.0),
                         child: dropDownMarcaWidget()),
@@ -680,6 +942,20 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
     print(pickedImageAsBytesTwo);
     print("19 User Id > " + widget._user[0].u_id.toString());
 
+    print("STATUS > $statusInputs");
+    String _temp_cantidad_reencauches = cantidadReenIdSelected.toString();
+    String _temp_disenio_neumatico = _dropdownFirstIdDisenioValue;
+    String _temp_empresa_reencauchadora = _dropdownFirstIdEmpresaValue;
+    if (!statusInputs) {
+      _temp_cantidad_reencauches = "";
+      _temp_disenio_neumatico = "";
+      _temp_empresa_reencauchadora = "";
+    }
+
+    print("Cantidad Reencauches > " + _temp_cantidad_reencauches);
+    print("Disenio de Banda > " + _temp_disenio_neumatico);
+    print("Empresa Reencauchadora > " + _temp_empresa_reencauchadora);
+
     var request = await http.MultipartRequest(
         "POST",
         Uri.parse(
@@ -707,6 +983,10 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
     request.fields['id_motivo_scrap'] = motivoScrapIdselected.toString();
     request.fields['fecha_scrap'] = _txtEdFechaScrap.text.toString();
     request.fields['id_usuario'] = widget._user[0].u_id.toString();
+
+    request.fields['cantidad_reencauche'] = _temp_cantidad_reencauches;
+    request.fields['id_disenio'] = _temp_disenio_neumatico;
+    request.fields['id_empresa'] = _temp_empresa_reencauchadora;
 
     //Adjuntamos Imagenes al POST
     if (pickedImageAsBytesOne != null) {
