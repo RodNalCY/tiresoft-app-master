@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tiresoft/inspeccion/edit_inspeccion.dart';
 import 'package:tiresoft/inspeccion/models/Inspeccion.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -167,15 +168,20 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
           return data[index].idt_serie.contains(searchString)
               ? ListTile(
                   onTap: () => {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Serie: " + data[index].idt_serie)))
+                    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    //     content: Text("Serie: " + data[index].idt_serie)))
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditInspeccion(
+                                widget._id_cliente, data[index])))
                   },
                   title: Text('Serie: ' + data[index].idt_serie,
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   leading: CircleAvatar(
                       child: Text("P-" + data[index].idt_posicion.toString(),
                           style: TextStyle(fontSize: 14.0))),
-                  trailing: Icon(Icons.data_usage),
+                  trailing: Icon(Icons.edit),
                 )
               : Container();
         });

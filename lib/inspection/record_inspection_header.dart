@@ -328,8 +328,8 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       }),
     );
 
-    print("response");
-    print(response);
+    // print("response");
+    // print(response);
 
     if (response.statusCode == 500) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
