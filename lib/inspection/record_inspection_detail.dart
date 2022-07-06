@@ -85,7 +85,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   int _fallaFlanco = 0;
   int _paraReparar = 0;
   int _estadoTuerca = 1;
-  int _motivoInnacesibilidad = 1;
+  int _motivoInnacesibilidad = 0;
   int _desgIrregular = 0;
   String messageValidationPressureTiresoft = "";
   List<Tire> tires = [];
@@ -113,6 +113,19 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       tireIsSaved();
       return 'Ya fue guardado';
     }
+
+    var accesibilidad_temporal =
+        _valveAccesibility.toString() == 'valveAccesibility.YES' ? 1 : 0;
+
+    String valvula_temporal = "";
+    if (_valve.toString() == "valveEnum.M") {
+      valvula_temporal = "M";
+    } else if (_valve.toString() == "valveEnum.P") {
+      valvula_temporal = "P";
+    } else {
+      valvula_temporal = "ST";
+    }
+
     var url = Uri.parse(
         "https://tiresoft2.lab-elsol.com/api/inspecciones/storeInspeccion");
 
@@ -130,10 +143,10 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       "interior": rightRemaindeController.text,
       "posicion": tires[position].position,
       "id_ejes": tires[position].idEjes,
-      "tipo_presion": 1,
+      "tipo_presion": "PSI",
       "presion": pressureController.text,
-      "valvula": _valve.toString(),
-      "accesibilidad": _valveAccesibility.toString() == 'YES' ? 1 : 0,
+      "valvula": valvula_temporal,
+      "accesibilidad": accesibilidad_temporal,
       "motivo_inaccesibilidad": _motivoInnacesibilidad,
       "separaciond": 0,
       "desgirregular0": _desgIrregular,
@@ -164,6 +177,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       var tmpId = newInspectionCreated['inspeccion_actual'];
       listIdInspections.add(tmpId);
       print('TMPiD  ${tmpId} ');
+      print("Valvula");
+      print(_valve.toString());
 
       tires[position].brand = 'tmp';
       onSuccess();
@@ -209,7 +224,6 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       return 'succcess';
     } else {
       onError();
-      // Si la llamada no fue exitosa, lanza un error.
       return 'error';
     }
   }
@@ -233,6 +247,12 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           'Content-Type': 'application/json',
         },
         body: body);
+
+    // print("Status");
+    // print(response.statusCode);
+    // print('Response: ${response.bodyBytes}');
+    // print('Response: ${response.request}');
+    // print('Response: ${response.body}');
 
     if (response.statusCode != 200) {
       onError();
@@ -942,14 +962,15 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   ];
 
   List<String> motivoInnacesibilidadList = [
-    'Accesible',
+    'Seleccionar',
     'Válvula corta',
     'Hand hole',
     'Requiere extensión',
     'Valvula deteriorada',
     'Valvula inadecuada',
     'Tapa de valvula pegada',
-    'Obstruida'
+    'Obstruida',
+    'Malograda'
   ];
 
   Widget fallasFlancoWidgetList() {
@@ -991,11 +1012,11 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   Widget motivoInnacesibilidadWidgetList() {
     return DropdownButton<String>(
       value: _motivoInnacesibilidad.toString(),
-      items:
-          <String>['1', '2', '3', '4', '5', '6', '7', '8'].map((String value) {
+      items: <String>['0', '1', '2', '3', '4', '5', '6', '7', '8']
+          .map((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(motivoInnacesibilidadList[int.parse(value) - 1]),
+          child: Text(motivoInnacesibilidadList[int.parse(value)]),
         );
       }).toList(),
       onChanged: (_val) {
@@ -1160,6 +1181,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
               onChanged: (valveAccesibility? value) {
                 setState(() {
                   _valveAccesibility = value;
+                  _motivoInnacesibilidad = 0;
                 });
               },
             ),
