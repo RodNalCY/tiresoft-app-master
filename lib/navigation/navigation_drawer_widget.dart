@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/models/navigation_item_model.dart';
@@ -21,6 +22,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _email = "";
   String _cliente = "";
   String _logo_url = "";
+
+  @override
+  void initState() {
+    // WidgetsFlutterBinding.ensureInitialized();
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+    //     overlays: [SystemUiOverlay.top]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

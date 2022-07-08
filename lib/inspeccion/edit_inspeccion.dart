@@ -63,6 +63,38 @@ class _EditInspeccionState extends State<EditInspeccion> {
                         padding: EdgeInsets.all(10),
                         child: presionCardWidget(),
                       ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: tapaPitonWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: profundidadRodadoWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: dualesMalHermanadosWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: separacionDualesWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: observacionesWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: estadoWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: estadoTuercasWidget(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: recomendacionWidget(),
+                      ),
                       SizedBox(height: 10.0),
                       MaterialButton(
                         padding: EdgeInsets.only(right: 45.0, left: 45.0),
@@ -81,9 +113,60 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
+  Future<void> updateInspeccionNeumatico() async {
+    print("createScrapDirecto()");
+    print("PSI > " + _ctrlr_PSI.text.toString());
+    print("P.Actual > " + _ctrlr_presion_actual.text.toString());
+  }
+
   Widget presionCardWidget() {
     return CustomCart(
       'Presión',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              "alert - message",
+              style: TextStyle(color: Colors.redAccent),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: _ctrlr_PSI,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Tipo de Presión'),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    controller: _ctrlr_presion_actual,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Presión Actual'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget tapaPitonWidget() {
+    return CustomCart(
+      'Tapa de Pitón',
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -91,17 +174,25 @@ class _EditInspeccionState extends State<EditInspeccion> {
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
               readOnly: true,
-              controller: _ctrlr_PSI,
+              controller: null,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Tipo de Presión'),
+              decoration: InputDecoration(labelText: 'Tapa'),
             ),
           ),
           Container(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
-              controller: _ctrlr_presion_actual,
+              controller: null,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Presión Actual'),
+              decoration: InputDecoration(labelText: 'Accesibilidad'),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Motivo'),
             ),
           ),
         ],
@@ -109,9 +200,199 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
-  Future<void> updateInspeccionNeumatico() async {
-    print("createScrapDirecto()");
-    print("PSI > " + _ctrlr_PSI.text.toString());
-    print("P.Actual > " + _ctrlr_presion_actual.text.toString());
+  Widget profundidadRodadoWidget() {
+    return CustomCart(
+        'Profundidad de rodado MM',
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Text(
+                "alert - message",
+                style: TextStyle(color: Colors.redAccent),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      onChanged: (val) => {},
+                      controller: null,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Exterior'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      onChanged: (val) => {},
+                      controller: null,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Medio'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: TextFormField(
+                      onChanged: (val) => {},
+                      controller: null,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Interior'),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ));
+  }
+
+  Widget dualesMalHermanadosWidget() {
+    return CustomCart(
+      'Duales mal Hermanados',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              readOnly: true,
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Ok'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget separacionDualesWidget() {
+    return CustomCart(
+      'Separación entre duales',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              readOnly: true,
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Descripción'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget observacionesWidget() {
+    return CustomCart(
+      'Observaciones',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              readOnly: true,
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Observaciones'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget estadoWidget() {
+    return CustomCart(
+      'Estado',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              readOnly: true,
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'optimizar'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget estadoTuercasWidget() {
+    return CustomCart(
+      'Estado de Tuercas',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: null,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(labelText: 'Estado de tuercas'),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    readOnly: true,
+                    controller: null,
+                    keyboardType: TextInputType.number,
+                    decoration:
+                        InputDecoration(labelText: 'Cantidad de tuercas'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget recomendacionWidget() {
+    return CustomCart(
+      'Recomendación',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.0),
+            child: TextFormField(
+              readOnly: true,
+              controller: null,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Descripción'),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
