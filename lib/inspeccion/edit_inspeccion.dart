@@ -27,6 +27,106 @@ class _EditInspeccionState extends State<EditInspeccion> {
     super.initState();
   }
 
+  List<String> listaTapaPiton = [
+    'Tapa válvula Metálica',
+    'Tapa válvula Plastico',
+    'Sin tapa válvula'
+  ];
+  int tapaPitonIdselected = 1;
+
+  Widget tapaPitonWidgetList() {
+    return DropdownButton<String>(
+      value: tapaPitonIdselected.toString(),
+      items: <String>['1', '2', '3'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(listaTapaPiton[int.parse(value) - 1]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          tapaPitonIdselected = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> accesibilidadTapaPiton = ['NO', 'SI'];
+  int accesibilidadIdselected = 1;
+
+  Widget accesibilidadtapaPitonWidgetList() {
+    return DropdownButton<String>(
+      value: accesibilidadIdselected.toString(),
+      items: <String>['0', '1'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(accesibilidadTapaPiton[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          accesibilidadIdselected = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> motivoInnacesibilidadList = [
+    'Seleccionar',
+    'Válvula corta',
+    'Hand hole',
+    'Requiere extensión',
+    'Valvula deteriorada',
+    'Valvula inadecuada',
+    'Tapa de valvula pegada',
+    'Obstruida',
+    'Malograda'
+  ];
+  int _motivoInnacesibilidadId = 0;
+  Widget motivoInnacesibilidadWidgetList() {
+    return DropdownButton<String>(
+      value: _motivoInnacesibilidadId.toString(),
+      items: <String>['0', '1', '2', '3', '4', '5', '6', '7', '8']
+          .map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(motivoInnacesibilidadList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _motivoInnacesibilidadId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> estadoTuercaList = [
+    'OK',
+    'Tuerca Robada',
+    'Tuerca Floja',
+    'Falta Tuerca',
+    'Cambiar \nEspárrago',
+    'Huacha Floja'
+  ];
+  int _estadoTuercaId = 1;
+  Widget estadoTuercaWidgetList() {
+    return DropdownButton<String>(
+      value: _estadoTuercaId.toString(),
+      items: <String>['1', '2', '3', '4', '5', '6'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(estadoTuercaList[int.parse(value) - 1]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _estadoTuercaId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,6 +217,11 @@ class _EditInspeccionState extends State<EditInspeccion> {
     print("createScrapDirecto()");
     print("PSI > " + _ctrlr_PSI.text.toString());
     print("P.Actual > " + _ctrlr_presion_actual.text.toString());
+    print("Tapa Piton Id > " + tapaPitonIdselected.toString());
+
+    print("Inaccesibilidad SI NO > " + accesibilidadIdselected.toString());
+    print("Inaccesibilidad Id > " + _motivoInnacesibilidadId.toString());
+    print("Tuerca Estado Id > " + _estadoTuercaId.toString());
   }
 
   Widget presionCardWidget() {
@@ -167,35 +272,52 @@ class _EditInspeccionState extends State<EditInspeccion> {
   Widget tapaPitonWidget() {
     return CustomCart(
       'Tapa de Pitón',
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Tapa'),
+      Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tapa",
+                          style: TextStyle(color: Colors.black45),
+                        ),
+                        tapaPitonWidgetList(),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          Text("Accesibilidad",
+                              style: TextStyle(color: Colors.black45)),
+                          accesibilidadtapaPitonWidgetList(),
+                        ],
+                      )),
+                ),
+              ],
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Accesibilidad'),
+            Container(
+                padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                child: Text("Motivo Inaccesibilidad",
+                    style: TextStyle(color: Colors.black45))),
+            Container(
+              padding: EdgeInsets.only(left: 25.0),
+              child: motivoInnacesibilidadWidgetList(),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Motivo'),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -347,15 +469,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
+                flex: 1,
                 child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: TextFormField(
-                    readOnly: true,
-                    controller: null,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Estado de tuercas'),
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: 10.0, top: 25.0),
+                    child: estadoTuercaWidgetList()),
               ),
               Expanded(
                 child: Container(
