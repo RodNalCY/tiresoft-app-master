@@ -22,11 +22,33 @@ class _EditInspeccionState extends State<EditInspeccion> {
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
   late TextEditingController _ctrlr_PSI;
   late TextEditingController _ctrlr_presion_actual;
+  late TextEditingController _ctrlr_cantidad_tuerca;
+  late TextEditingController _ctrlr_recomendacion;
+
+  late TextEditingController _ctrlr_rm_exterior;
+  late TextEditingController _ctrlr_rm_medio;
+  late TextEditingController _ctrlr_rm_interior;
+
+  String messageValidationPresion = "";
+  String messageValidationMMRemanente = "";
+
   @override
   void initState() {
     _ctrlr_PSI = new TextEditingController(text: 'PSI');
+
     _ctrlr_presion_actual = new TextEditingController(
         text: widget._global_insp_dtail.idt_posicion.toString());
+
+    _ctrlr_cantidad_tuerca = new TextEditingController(text: '1');
+
+    _ctrlr_recomendacion = new TextEditingController(text: 'Operativo II');
+
+    _ctrlr_rm_exterior = new TextEditingController(text: '5');
+    _ctrlr_rm_medio = new TextEditingController(text: '5');
+    _ctrlr_rm_interior = new TextEditingController(text: '5');
+
+    // _validateMMRemanente("8", "5", "15");
+
     super.initState();
   }
 
@@ -56,6 +78,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   List<String> accesibilidadTapaPiton = ['NO', 'SI'];
   int accesibilidadIdselected = 1;
+  bool statusAccesibilidadNO = false;
 
   Widget accesibilidadtapaPitonWidgetList() {
     return DropdownButton<String>(
@@ -69,8 +92,22 @@ class _EditInspeccionState extends State<EditInspeccion> {
       onChanged: (_val) {
         setState(() {
           accesibilidadIdselected = int.parse(_val.toString());
+          if (accesibilidadIdselected == 0) {
+            statusAccesibilidadNO = true;
+          } else {
+            statusAccesibilidadNO = false;
+            _motivoInnacesibilidadId = 0;
+          }
         });
       },
+    );
+  }
+
+  Widget dropDownBloqueado() {
+    return Container(
+      padding: EdgeInsets.only(right: 15.0),
+      child: DropdownButton<String>(
+          hint: Text("Bloqueado"), onChanged: null, items: []),
     );
   }
 
@@ -147,8 +184,170 @@ class _EditInspeccionState extends State<EditInspeccion> {
   String str_image_view =
       "https://cdn2.atraccion360.com/media/aa/cegjmxouuaajzve.jpg";
 
+  // Radio Buttons separacion entre duales
+  int _value_estado_separcion_dual = 1;
+
+  // Checkboxes Observaciones
+  bool _isActivateDesgIrregular = false;
+  bool _isActivateParReparar = false;
+  bool _isActivateAroDefectuoso = false;
+  bool _isActivateFallFlanco = false;
+
+  List<String> desgasteIrregularList = [
+    'SIN DESGASTE IRREGULAR',
+    'DESGASTE ONDULADO',
+    'DESGASTE TIPO DIENTES DE SIERRA',
+    'DESGASTE EN LOS HOMBROS',
+    'DESGASTE TIPO RIVERA',
+    'DESGASTE UNILATERAL',
+    'DESGASTE DIAGONAL',
+    'DESGASTE EXCENTRICO',
+    'DESGASTE DE UN SOLO HOMBRO',
+    'DESGASTE TIPO DEPRESION INTERMITENTE',
+    'DESGASTE EN ESCALON',
+    'DESGASTE PUNTA Y TALON',
+    'DESGASTE ALTERNADO DE TACOS',
+    'DESGASTE LOCALIZADO',
+    'DESGASTE CENTRAL',
+    'DESGASTE TIPO ISLA',
+    'CHIPPING',
+    'CHUNKING',
+    'DESGASTE DE RIBETE(S)'
+  ];
+  int _desgIrregularId = 0;
+  Widget desgasteIrregularOptionWidgetList() {
+    return DropdownButton<String>(
+      isExpanded: true,
+      value: _desgIrregularId.toString(),
+      items: <String>[
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18'
+      ].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(desgasteIrregularList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _desgIrregularId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> paraRepararList = [
+    'NO NECESITA REPARACION',
+    'BANDA DE RODAMIENTO',
+    'HOMBRO',
+    'FLANCO',
+    'PESTAÑA'
+  ];
+  int _paraRepararId = 0;
+  Widget paraRepararOptionWidgetList() {
+    return DropdownButton<String>(
+      value: _paraRepararId.toString(),
+      items: <String>['0', '1', '2', '3', '4'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(paraRepararList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _paraRepararId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> fallasFlancoList = [
+    'SIN FALLAS EN EL FLANCO',
+    'RODURA RADIAL',
+    'ROTURA DIAGONAL',
+    'CORTE LATERAL',
+    'EXPOSICION DE CUERDAS',
+    'PROTUBERANCIA',
+    'RESEQUEDAD',
+    'DAÑO UNIFORME DEL CAUCHO POR ROZAMINETO',
+    'IMPACTO LATERAL'
+  ];
+  int _fallaFlancoId = 0;
+  Widget fallasFlancoOptionWidgetList() {
+    return DropdownButton<String>(
+      isExpanded: true,
+      value: _fallaFlancoId.toString(),
+      items: <String>['0', '1', '2', '3', '4', '5', '6', '7', '8']
+          .map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(fallasFlancoList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _fallaFlancoId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  // Consultas Future Validate
+  Future<void> _validateMMRemanente(
+      String exterior, String medio, String interior) async {
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/neumaticos/validateRemanentes"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'clienteId': widget._global_id_cliente,
+        "id_neumaticos": "1292",
+        "exterior": exterior,
+        "medio": medio,
+        "interior": interior,
+      }),
+    );
+    String body;
+    final jsonData;
+    if (response.statusCode == 200) {
+      body = utf8.decode(response.bodyBytes);
+      jsonData = jsonDecode(body);
+      setState(() {
+        messageValidationMMRemanente = "";
+      });
+    } else if (response.statusCode == 500) {
+      body = utf8.decode(response.bodyBytes);
+      jsonData = jsonDecode(body);
+      setState(() {
+        messageValidationMMRemanente = jsonData["error"].toString();
+      });
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Id > " + widget._global_insp_dtail.idt_id.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text("Serie: " + widget._global_insp_dtail.idt_serie),
@@ -195,10 +394,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
                         padding: EdgeInsets.all(10),
                         child: dualesMalHermanadosWidget(),
                       ),
-                      // Container(
-                      //   padding: EdgeInsets.all(10),
-                      //   child: separacionDualesWidget(),
-                      // ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: separacionDualesWidget(),
+                      ),
                       Container(
                         padding: EdgeInsets.all(10),
                         child: observacionesWidget(),
@@ -239,7 +438,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
     print("P.Actual > " + _ctrlr_presion_actual.text.toString());
     print("Tapa Piton Id > " + tapaPitonIdselected.toString());
 
-    print("Inaccesibilidad SI NO > " + accesibilidadIdselected.toString());
+    print(
+        "Inaccesibilidad SI(1) NO(0) > " + accesibilidadIdselected.toString());
     print("Inaccesibilidad Id > " + _motivoInnacesibilidadId.toString());
     print("Tuerca Estado Id > " + _estadoTuercaId.toString());
 
@@ -253,6 +453,21 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
     print("Estado > " + _value_estado.toString());
     print("Image Edit > " + pickedImageAsBytesEdit.toString());
+    print("Separacion entre duales Id > " +
+        _value_estado_separcion_dual.toString());
+    print("Desgaste Irregular > " + _isActivateDesgIrregular.toString());
+    print("Desgaste Irregular Option > " + _desgIrregularId.toString());
+    print("Para Reparar > " + _isActivateParReparar.toString());
+    print("Para Reparar Option > " + _paraRepararId.toString());
+    print("Aro Defectuoso > " + _isActivateAroDefectuoso.toString());
+    print("Falla Flanco > " + _isActivateFallFlanco.toString());
+    print("Falla Flanco Option > " + _fallaFlancoId.toString());
+
+    print("Cantidad Tuerca > " + _ctrlr_cantidad_tuerca.text.toString());
+    print("Recomendacion > " + _ctrlr_recomendacion.text.toString());
+    print("RM Exterior > " + _ctrlr_rm_exterior.text.toString());
+    print("RM Medio > " + _ctrlr_rm_medio.text.toString());
+    print("RM Interior > " + _ctrlr_rm_interior.text.toString());
   }
 
   Widget presionCardWidget() {
@@ -261,10 +476,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(left: 10),
+          Container(
             child: Text(
-              "alert - message",
+              messageValidationPresion,
               style: TextStyle(color: Colors.redAccent),
             ),
           ),
@@ -289,6 +503,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: TextFormField(
                     controller: _ctrlr_presion_actual,
                     keyboardType: TextInputType.number,
+                    onChanged: (val) => validatePresion(val.toString()),
                     decoration: InputDecoration(labelText: 'Presión Actual'),
                   ),
                 ),
@@ -298,6 +513,22 @@ class _EditInspeccionState extends State<EditInspeccion> {
         ],
       ),
     );
+  }
+
+  Future<bool> validatePresion(String pressure) async {
+    var presion = int.tryParse(pressure) ?? 0;
+    print("PSI > " + presion.toString());
+    if (presion > 160) {
+      setState(() {
+        messageValidationPresion = "La presion debe ser menor a 160";
+      });
+      return true;
+    } else {
+      setState(() {
+        messageValidationPresion = "";
+      });
+      return false;
+    }
   }
 
   Widget tapaPitonWidget() {
@@ -345,7 +576,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
                     style: TextStyle(color: Colors.black45))),
             Container(
               padding: EdgeInsets.only(left: 25.0),
-              child: motivoInnacesibilidadWidgetList(),
+              child: statusAccesibilidadNO
+                  ? motivoInnacesibilidadWidgetList()
+                  : dropDownBloqueado(),
             ),
           ],
         ),
@@ -362,7 +595,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
             Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text(
-                "alert - message",
+                messageValidationMMRemanente,
                 style: TextStyle(color: Colors.redAccent),
               ),
             ),
@@ -374,10 +607,11 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      onChanged: (val) => {},
-                      controller: null,
+                      controller: _ctrlr_rm_exterior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Exterior'),
+                      onChanged: (value) => _validateMMRemanente(
+                          value, _ctrlr_rm_medio.text, _ctrlr_rm_interior.text),
                     ),
                   ),
                 ),
@@ -385,10 +619,13 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      onChanged: (val) => {},
-                      controller: null,
+                      controller: _ctrlr_rm_medio,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Medio'),
+                      onChanged: (value) => _validateMMRemanente(
+                          _ctrlr_rm_exterior.text,
+                          value,
+                          _ctrlr_rm_interior.text),
                     ),
                   ),
                 ),
@@ -396,10 +633,11 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      onChanged: (val) => {},
-                      controller: null,
+                      controller: _ctrlr_rm_interior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Interior'),
+                      onChanged: (value) => _validateMMRemanente(
+                          _ctrlr_rm_exterior.text, _ctrlr_rm_medio.text, value),
                     ),
                   ),
                 ),
@@ -499,14 +737,65 @@ class _EditInspeccionState extends State<EditInspeccion> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Descripción'),
-            ),
+          Row(
+            children: [
+              Radio(
+                value: 1,
+                groupValue: _value_estado_separcion_dual,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado_separcion_dual = value as int;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Ok")
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                value: 2,
+                groupValue: _value_estado_separcion_dual,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado_separcion_dual = value as int;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Muy Juntos")
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                value: 3,
+                groupValue: _value_estado_separcion_dual,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado_separcion_dual = value as int;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Muy Separados")
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                value: 4,
+                groupValue: _value_estado_separcion_dual,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado_separcion_dual = value as int;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("No Aplica")
+            ],
           ),
         ],
       ),
@@ -519,15 +808,77 @@ class _EditInspeccionState extends State<EditInspeccion> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Observaciones'),
-            ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateDesgIrregular,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateDesgIrregular = value as bool;
+                      _desgIrregularId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Desgaste Irregular"),
+            ],
           ),
+          _isActivateDesgIrregular
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: desgasteIrregularOptionWidgetList())
+              : Container(child: null),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateParReparar,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateParReparar = value as bool;
+                      _paraRepararId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Para Reparar")
+            ],
+          ),
+          _isActivateParReparar
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: paraRepararOptionWidgetList())
+              : Container(child: null),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateAroDefectuoso,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateAroDefectuoso = value as bool;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Aro Defectuoso")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateFallFlanco,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateFallFlanco = value as bool;
+                      _fallaFlancoId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Fallas en el Flanco")
+            ],
+          ),
+          _isActivateFallFlanco
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: fallasFlancoOptionWidgetList(),
+                )
+              : Container(child: null),
         ],
       ),
     );
@@ -703,8 +1054,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 child: Container(
                   padding: EdgeInsets.all(10.0),
                   child: TextFormField(
-                    readOnly: true,
-                    controller: null,
+                    // readOnly: true,
+                    controller: _ctrlr_cantidad_tuerca,
                     keyboardType: TextInputType.number,
                     decoration:
                         InputDecoration(labelText: 'Cantidad de tuercas'),
@@ -759,9 +1110,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
           Container(
             padding: EdgeInsets.all(10.0),
             child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
+              // readOnly: true,
+              controller: _ctrlr_recomendacion,
+              keyboardType: TextInputType.text,
               decoration: InputDecoration(labelText: 'Descripción'),
             ),
           ),
