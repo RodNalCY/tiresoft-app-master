@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -127,6 +130,23 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
+  // Radio Buttons Estado
+  int _value_estado = 1;
+  bool _point_edit = false;
+  Uint8List? pickedImageAsBytesEdit;
+  final ImagePicker _imagePicker = ImagePicker();
+  XFile? pickedImageXFile;
+  // Checkboxes Duales mal hermanados
+  bool _isActivateDisenio = false;
+  bool _isActivateTamanio = false;
+  bool _isActivateTipoConstruccion = false;
+  bool _isActivateMedidaNeumatico = false;
+  bool _isActivateNoAplica = false;
+
+  // Link Imagen Edit
+  String str_image_view =
+      "https://cdn2.atraccion360.com/media/aa/cegjmxouuaajzve.jpg";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +175,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                       ),
                       IconButton(
                         icon: Image.asset('assets/llanta2.jpg'),
-                        iconSize: 80,
+                        iconSize: 100,
                         onPressed: () {},
                       ),
                       SizedBox(height: 10.0),
@@ -175,10 +195,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
                         padding: EdgeInsets.all(10),
                         child: dualesMalHermanadosWidget(),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: separacionDualesWidget(),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.all(10),
+                      //   child: separacionDualesWidget(),
+                      // ),
                       Container(
                         padding: EdgeInsets.all(10),
                         child: observacionesWidget(),
@@ -222,6 +242,17 @@ class _EditInspeccionState extends State<EditInspeccion> {
     print("Inaccesibilidad SI NO > " + accesibilidadIdselected.toString());
     print("Inaccesibilidad Id > " + _motivoInnacesibilidadId.toString());
     print("Tuerca Estado Id > " + _estadoTuercaId.toString());
+
+    print("_isActivateDisenio > " + _isActivateDisenio.toString());
+    print("_isActivateTamanio > " + _isActivateTamanio.toString());
+    print("_isActivateTipoConstruccion > " +
+        _isActivateTipoConstruccion.toString());
+    print("_isActivateMedidaNeumatico > " +
+        _isActivateMedidaNeumatico.toString());
+    print("_isActivateNoAplica > " + _isActivateNoAplica.toString());
+
+    print("Estado > " + _value_estado.toString());
+    print("Image Edit > " + pickedImageAsBytesEdit.toString());
   }
 
   Widget presionCardWidget() {
@@ -384,14 +415,78 @@ class _EditInspeccionState extends State<EditInspeccion> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Ok'),
-            ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateDisenio,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateDisenio = value as bool;
+                      _isActivateNoAplica = false;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Diseño")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateTamanio,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateTamanio = value as bool;
+                      _isActivateNoAplica = false;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Tamaño")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateTipoConstruccion,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateTipoConstruccion = value as bool;
+                      _isActivateNoAplica = false;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Tipo de Construcción")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateMedidaNeumatico,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateMedidaNeumatico = value as bool;
+                      _isActivateNoAplica = false;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Medida de Neumático")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateNoAplica,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateNoAplica = value as bool;
+                      _isActivateDisenio = false;
+                      _isActivateTamanio = false;
+                      _isActivateTipoConstruccion = false;
+                      _isActivateMedidaNeumatico = false;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("No Aplica")
+            ],
           ),
         ],
       ),
@@ -444,14 +539,144 @@ class _EditInspeccionState extends State<EditInspeccion> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: EdgeInsets.all(10.0),
-            child: TextFormField(
-              readOnly: true,
-              controller: null,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'optimizar'),
+          Row(
+            children: [
+              Radio(
+                value: 1,
+                groupValue: _value_estado,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado = value as int;
+                    pickedImageAsBytesEdit = null;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Continuar en Operación")
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                value: 2,
+                groupValue: _value_estado,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado = value as int;
+                    pickedImageAsBytesEdit = null;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Lista para Reencauchar")
+            ],
+          ),
+          Row(
+            children: [
+              Radio(
+                value: 3,
+                groupValue: _value_estado,
+                onChanged: (value) {
+                  setState(() {
+                    _value_estado = value as int;
+                  });
+                },
+              ),
+              SizedBox(width: 10.0),
+              Text("Lista para Reemplazar")
+            ],
+          ),
+          _value_estado.toInt() == 3 ? calcularPhoto() : Text(""),
+        ],
+      ),
+    );
+  }
+
+  Widget calcularPhoto() {
+    if (_point_edit == true) {
+      return camaraUploadEditPhoto();
+    } else {
+      return showImageEdit();
+    }
+  }
+
+  Widget showImageEdit() {
+    return Center(
+      child: Column(
+        children: [
+          Image.network(
+            str_image_view,
+            width: MediaQuery.of(context).size.width * 0.6,
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 14.0),
             ),
+            onPressed: () {
+              print("Button Editar Activate");
+              setState(() {
+                _point_edit = true;
+              });
+            },
+            child: const Text('Editar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget camaraUploadEditPhoto() {
+    return Center(
+      child: Column(
+        children: [
+          TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.hovered))
+                      return Colors.blue.withOpacity(0.04);
+                    if (states.contains(MaterialState.focused) ||
+                        states.contains(MaterialState.pressed))
+                      return Colors.blue.withOpacity(0.12);
+                    return null; // Defer to the widget's default.
+                  },
+                ),
+              ),
+              onPressed: () {
+                _pickImageOpenCamara();
+              },
+              child: const Text('Adjuntar foto 1')),
+          Container(
+            child: pickedImageAsBytesEdit != null
+                ? Image.memory(
+                    pickedImageAsBytesEdit!,
+                    width: 200.0,
+                    height: 200.0,
+                    fit: BoxFit.fitHeight,
+                  )
+                : Container(
+                    decoration: BoxDecoration(color: Colors.red[200]),
+                    width: 200,
+                    height: 200,
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: const TextStyle(fontSize: 14.0),
+            ),
+            onPressed: () {
+              print("Button Editar Desactivate");
+              setState(() {
+                _point_edit = false;
+                pickedImageAsBytesEdit = null;
+              });
+            },
+            child: const Text('Cancelar'),
           ),
         ],
       ),
@@ -491,6 +716,38 @@ class _EditInspeccionState extends State<EditInspeccion> {
         ],
       ),
     );
+  }
+
+  void _pickImageOpenCamara() async {
+    final imageSource = await showDialog<ImageSource>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                "Seleccione el origen de la foto",
+                style: TextStyle(fontSize: 14),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text("Camara"),
+                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                MaterialButton(
+                  child: Text("Galeria"),
+                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                )
+              ],
+            ));
+
+    if (imageSource != null) {
+      final XFile? file = await _imagePicker.pickImage(source: imageSource);
+
+      if (file != null) {
+        file.readAsBytes().then((x) {
+          setState(() => {pickedImageAsBytesEdit = x});
+        });
+        setState(() => {pickedImageXFile = file});
+      }
+    }
   }
 
   Widget recomendacionWidget() {
