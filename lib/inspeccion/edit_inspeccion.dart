@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/inspeccion/models/inspeccion_neumatico_edit.dart';
 import 'dart:convert';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
@@ -34,6 +35,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   @override
   void initState() {
+    _edit_neumatico = _getShowInspEditNeumatico();
     _ctrlr_PSI = new TextEditingController(text: 'PSI');
 
     _ctrlr_presion_actual = new TextEditingController(
@@ -309,7 +311,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
-  // Consultas Future Validate
+  // Consultas Future API's
   Future<void> _validateMMRemanente(
       String exterior, String medio, String interior) async {
     final response = await http.post(
@@ -340,6 +342,59 @@ class _EditInspeccionState extends State<EditInspeccion> {
       setState(() {
         messageValidationMMRemanente = jsonData["error"].toString();
       });
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  late Future<List<InspeccionNeumaticoEdit>> _edit_neumatico;
+
+  Future<List<InspeccionNeumaticoEdit>> _getShowInspEditNeumatico() async {
+    String id_inspeccion = widget._global_insp_dtail.idt_id.toString();
+    final response = await http.post(
+      Uri.parse(
+          "https://tiresoft2.lab-elsol.com/api/inspecciones/getOneInspeccionSimplified/" +
+              id_inspeccion),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': widget._global_id_cliente,
+      }),
+    );
+
+    List<InspeccionNeumaticoEdit> _insp_edit_neumatico = [];
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsdta = jsonDecode(body);
+      print("JSON INSPECCION NEUMATICO:");
+      print(jsdta);
+      print(jsdta["km_proyectado"]);
+      _insp_edit_neumatico.add(InspeccionNeumaticoEdit(
+          jsdta['id_neumaticos'],
+          widget._global_insp_dtail.idt_serie,
+          widget._global_insp_dtail.idt_posicion.toString(),
+          "PSI",
+          jsdta['presion'].toString(),
+          jsdta['valvula'],
+          jsdta['accesibilidad'],
+          jsdta['motivo_inaccesibilidad'],
+          jsdta['exterior'],
+          jsdta['medio'] != null ? jsdta['medio'] : "-",
+          jsdta['interior'],
+          jsdta['sep_duales'],
+          jsdta['estado'],
+          jsdta['neumaticoimgruta1'] != null
+              ? "https://tiresoft2.lab-elsol.com/" + jsdta['neumaticoimgruta1']
+              : "https://cdn-icons-png.flaticon.com/512/48/48639.png",
+          jsdta['tuercaestado'].toString(),
+          jsdta['tuercacantidad'] != null
+              ? jsdta['tuercacantidad'].toString()
+              : "-",
+          jsdta['recomendacion']));
+
+      return _insp_edit_neumatico;
     } else {
       throw Exception("Falló la Conexión");
     }
