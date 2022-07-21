@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/login/models/user.dart';
 import 'dart:convert';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
 class EditInspeccion extends StatefulWidget {
   String _global_id_cliente;
   InspeccionDetails _global_insp_dtail;
+  final List<User> _user;
 
-  EditInspeccion(this._global_id_cliente, this._global_insp_dtail, {Key? key})
+  EditInspeccion(this._global_id_cliente, this._global_insp_dtail, this._user,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -21,6 +24,7 @@ class EditInspeccion extends StatefulWidget {
 class _EditInspeccionState extends State<EditInspeccion> {
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
   late String str_id_neumatico;
+  late String id_inspeccion;
   late TextEditingController _ctrlr_PSI;
   late String str_psi_tipo;
   late TextEditingController _ctrlr_presion_actual;
@@ -336,7 +340,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
   late Future<List> _edit_neumatico;
 
   Future<List> _getShowInspEditNeumatico() async {
-    String id_inspeccion = widget._global_insp_dtail.idt_id.toString();
+    id_inspeccion = widget._global_insp_dtail.idt_id.toString();
+
     final response = await http.post(
       Uri.parse(
           "https://tiresoft2.lab-elsol.com/api/inspecciones/getOneInspeccionSimplified/" +
@@ -736,7 +741,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
         _isActivateMedidaNeumatico.toString());
     print("_isActivateNoAplica > " + _isActivateNoAplica.toString());
 
-    print("Estado > " + _value_estado.toString());
+    print("Estado Neumatico > " + _value_estado.toString());
     print("Image Edit > " + pickedImageAsBytesEdit.toString());
     print("Separacion entre duales Id > " +
         _value_estado_separcion_dual.toString());
@@ -753,6 +758,99 @@ class _EditInspeccionState extends State<EditInspeccion> {
     print("RM Exterior > " + _ctrlr_rm_exterior.text.toString());
     print("RM Medio > " + _ctrlr_rm_medio.text.toString());
     print("RM Interior > " + _ctrlr_rm_interior.text.toString());
+
+    // // POST > ACTUALIZAR INSPECCION
+    var request = await http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/inspecciones/updateInspeccion"));
+
+    request.fields['id'] = id_inspeccion;
+    request.fields['id_cliente'] = widget._global_id_cliente.toString();
+    request.fields['id_usuario'] = widget._user[0].u_id.toString();
+    request.fields['posicion'] =
+        widget._global_insp_dtail.idt_posicion.toString();
+    request.fields['tipo_presion'] = _ctrlr_PSI.text.toString();
+    request.fields['presion'] = _ctrlr_presion_actual.text.toString();
+
+    // TIPO DE VALVULA
+    late String temp_tapa_valvula;
+    switch (tapaPitonIdselected.toString()) {
+      case "1":
+        temp_tapa_valvula = "M";
+        break;
+      case "2":
+        temp_tapa_valvula = "P";
+        break;
+      case "3":
+        temp_tapa_valvula = "ST";
+        break;
+    }
+
+    request.fields['valvula'] = temp_tapa_valvula;
+    request.fields['accesibilidad'] = accesibilidadIdselected.toString();
+    request.fields['motivo_inaccesibilidad'] =
+        _motivoInnacesibilidadId.toString();
+
+    request.fields['exterior'] = _ctrlr_rm_exterior.text.toString();
+    request.fields['medio'] = _ctrlr_rm_medio.text.toString();
+    request.fields['interior'] = _ctrlr_rm_interior.text.toString();
+
+    // DUALES MAL HERMANADOS
+    String duales_mal_hermanados = "";
+
+    if (_isActivateDisenio) {
+      duales_mal_hermanados += "Diseño,";
+    }
+    if (_isActivateTamanio) {
+      duales_mal_hermanados += "Tamaño,";
+    }
+    if (_isActivateTipoConstruccion) {
+      duales_mal_hermanados += "Tipo de Construcción,";
+    }
+    if (_isActivateMedidaNeumatico) {
+      duales_mal_hermanados += "Medida de Neumático";
+    }
+    if (_isActivateNoAplica) {
+      duales_mal_hermanados = "No Aplica";
+    }
+    request.fields['resultado5'] = duales_mal_hermanados;
+
+    // OBSERVACIONES
+
+    // ESTADO DEL NEUMATICO
+    String temp_estado_neumatico = "";
+    switch (_value_estado.toString()) {
+      case "1":
+        temp_estado_neumatico = "Continuar en Operación";
+        break;
+      case "2":
+        temp_estado_neumatico = "Lista para Reencauchar";
+        break;
+      case "3":
+        temp_estado_neumatico = "Lista para Reemplazar";
+        break;
+    }
+
+    // IMAGEN - FALTA EN EL API
+    if (pickedImageAsBytesEdit != null) {
+      request.files.add(http.MultipartFile.fromBytes(
+          'imgneumaticomalestado1', pickedImageAsBytesEdit!,
+          filename: 'photo.jpg'));
+    }
+    request.fields['estado'] = temp_estado_neumatico;
+
+    // ESTADO TUERCAS
+    request.fields['tuercaestado'] = _estadoTuercaId.toString();
+    request.fields['tuercacantidad'] = _ctrlr_cantidad_tuerca.text.toString();
+    // RECOMENDACION
+    request.fields['recomendacion'] = _ctrlr_recomendacion.text.toString();
+
+    // Enviar el POST
+    var response = await request.send();
+    String parse_response = await response.stream.bytesToString();
+    print('Status: ${response.statusCode}');
+    print('Response: ${parse_response}');
   }
 
   Widget presionCardWidget() {

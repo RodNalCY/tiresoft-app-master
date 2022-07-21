@@ -131,7 +131,8 @@ class _ListInspeccionState extends State<ListInspeccion> {
                             builder: (context) => ListInspeccionDetails(
                                 widget._id_cliente,
                                 data[index],
-                                data[index].i_identificador)))
+                                data[index].i_identificador,
+                                this.widget._user)))
                   },
                   title: Text('Placa: ' + data[index].i_placa,
                       style: TextStyle(fontWeight: FontWeight.w400)),

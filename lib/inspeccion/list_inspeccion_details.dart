@@ -5,13 +5,16 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
+import 'package:tiresoft/login/models/user.dart';
 
 class ListInspeccionDetails extends StatefulWidget {
   Inspeccion _inspeccion;
   String _identificador;
   String _id_cliente;
+  final List<User> _user;
 
-  ListInspeccionDetails(this._id_cliente, this._inspeccion, this._identificador,
+  ListInspeccionDetails(
+      this._id_cliente, this._inspeccion, this._identificador, this._user,
       {Key? key})
       : super(key: key);
 
@@ -174,7 +177,7 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => EditInspeccion(
-                                widget._id_cliente, data[index])))
+                                widget._id_cliente, data[index], widget._user)))
                   },
                   title: Text('Serie: ' + data[index].idt_serie,
                       style: TextStyle(fontWeight: FontWeight.w500)),
