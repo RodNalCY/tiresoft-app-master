@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
 import 'package:http/http.dart' as http;
-import 'package:tiresoft/inspeccion/models/inspeccion_neumatico_edit.dart';
 import 'dart:convert';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
@@ -21,45 +20,33 @@ class EditInspeccion extends StatefulWidget {
 
 class _EditInspeccionState extends State<EditInspeccion> {
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
+  late String str_id_neumatico;
   late TextEditingController _ctrlr_PSI;
+  late String str_psi_tipo;
   late TextEditingController _ctrlr_presion_actual;
+  late String str_psi_actual;
+
   late TextEditingController _ctrlr_cantidad_tuerca;
+  late String str_cantidad_tuerca;
   late TextEditingController _ctrlr_recomendacion;
+  late String str_recomendacion;
 
   late TextEditingController _ctrlr_rm_exterior;
+  late String str_rm_exterior;
   late TextEditingController _ctrlr_rm_medio;
+  late String str_rm_medio;
   late TextEditingController _ctrlr_rm_interior;
+  late String str_rm_interior;
 
   String messageValidationPresion = "";
   String messageValidationMMRemanente = "";
-
-  @override
-  void initState() {
-    _edit_neumatico = _getShowInspEditNeumatico();
-    _ctrlr_PSI = new TextEditingController(text: 'PSI');
-
-    _ctrlr_presion_actual = new TextEditingController(
-        text: widget._global_insp_dtail.idt_posicion.toString());
-
-    _ctrlr_cantidad_tuerca = new TextEditingController(text: '1');
-
-    _ctrlr_recomendacion = new TextEditingController(text: 'Operativo II');
-
-    _ctrlr_rm_exterior = new TextEditingController(text: '5');
-    _ctrlr_rm_medio = new TextEditingController(text: '5');
-    _ctrlr_rm_interior = new TextEditingController(text: '5');
-
-    // _validateMMRemanente("8", "5", "15");
-
-    super.initState();
-  }
 
   List<String> listaTapaPiton = [
     'Tapa válvula Metálica',
     'Tapa válvula Plastico',
     'Sin tapa válvula'
   ];
-  int tapaPitonIdselected = 1;
+  late int tapaPitonIdselected;
 
   Widget tapaPitonWidgetList() {
     return DropdownButton<String>(
@@ -79,8 +66,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
   }
 
   List<String> accesibilidadTapaPiton = ['NO', 'SI'];
-  int accesibilidadIdselected = 1;
-  bool statusAccesibilidadNO = false;
+  late int accesibilidadIdselected;
+  late bool statusAccesibilidadNO;
 
   Widget accesibilidadtapaPitonWidgetList() {
     return DropdownButton<String>(
@@ -124,7 +111,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     'Obstruida',
     'Malograda'
   ];
-  int _motivoInnacesibilidadId = 0;
+  late int _motivoInnacesibilidadId;
   Widget motivoInnacesibilidadWidgetList() {
     return DropdownButton<String>(
       value: _motivoInnacesibilidadId.toString(),
@@ -170,30 +157,29 @@ class _EditInspeccionState extends State<EditInspeccion> {
   }
 
   // Radio Buttons Estado
-  int _value_estado = 1;
+  late int _value_estado;
   bool _point_edit = false;
   Uint8List? pickedImageAsBytesEdit;
   final ImagePicker _imagePicker = ImagePicker();
   XFile? pickedImageXFile;
   // Checkboxes Duales mal hermanados
-  bool _isActivateDisenio = false;
-  bool _isActivateTamanio = false;
-  bool _isActivateTipoConstruccion = false;
-  bool _isActivateMedidaNeumatico = false;
-  bool _isActivateNoAplica = false;
+  late bool _isActivateDisenio;
+  late bool _isActivateTamanio;
+  late bool _isActivateTipoConstruccion;
+  late bool _isActivateMedidaNeumatico;
+  late bool _isActivateNoAplica;
 
   // Link Imagen Edit
-  String str_image_view =
-      "https://cdn2.atraccion360.com/media/aa/cegjmxouuaajzve.jpg";
+  late String str_image_view;
 
   // Radio Buttons separacion entre duales
-  int _value_estado_separcion_dual = 1;
+  late int _value_estado_separcion_dual;
 
   // Checkboxes Observaciones
-  bool _isActivateDesgIrregular = false;
-  bool _isActivateParReparar = false;
-  bool _isActivateAroDefectuoso = false;
-  bool _isActivateFallFlanco = false;
+  late bool _isActivateDesgIrregular;
+  late bool _isActivateParReparar;
+  late bool _isActivateAroDefectuoso;
+  late bool _isActivateFallFlanco;
 
   List<String> desgasteIrregularList = [
     'SIN DESGASTE IRREGULAR',
@@ -216,7 +202,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     'CHUNKING',
     'DESGASTE DE RIBETE(S)'
   ];
-  int _desgIrregularId = 0;
+  late int _desgIrregularId;
   Widget desgasteIrregularOptionWidgetList() {
     return DropdownButton<String>(
       isExpanded: true,
@@ -262,7 +248,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     'FLANCO',
     'PESTAÑA'
   ];
-  int _paraRepararId = 0;
+  late int _paraRepararId;
   Widget paraRepararOptionWidgetList() {
     return DropdownButton<String>(
       value: _paraRepararId.toString(),
@@ -291,7 +277,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     'DAÑO UNIFORME DEL CAUCHO POR ROZAMINETO',
     'IMPACTO LATERAL'
   ];
-  int _fallaFlancoId = 0;
+  late int _fallaFlancoId;
   Widget fallasFlancoOptionWidgetList() {
     return DropdownButton<String>(
       isExpanded: true,
@@ -347,9 +333,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
     }
   }
 
-  late Future<List<InspeccionNeumaticoEdit>> _edit_neumatico;
+  late Future<List> _edit_neumatico;
 
-  Future<List<InspeccionNeumaticoEdit>> _getShowInspEditNeumatico() async {
+  Future<List> _getShowInspEditNeumatico() async {
     String id_inspeccion = widget._global_insp_dtail.idt_id.toString();
     final response = await http.post(
       Uri.parse(
@@ -363,7 +349,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
       }),
     );
 
-    List<InspeccionNeumaticoEdit> _insp_edit_neumatico = [];
+    List _insp_edit_neumatico = [];
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -371,33 +357,259 @@ class _EditInspeccionState extends State<EditInspeccion> {
       print("JSON INSPECCION NEUMATICO:");
       print(jsdta);
       print(jsdta["km_proyectado"]);
-      _insp_edit_neumatico.add(InspeccionNeumaticoEdit(
-          jsdta['id_neumaticos'],
-          widget._global_insp_dtail.idt_serie,
-          widget._global_insp_dtail.idt_posicion.toString(),
-          "PSI",
-          jsdta['presion'].toString(),
-          jsdta['valvula'],
-          jsdta['accesibilidad'],
-          jsdta['motivo_inaccesibilidad'],
-          jsdta['exterior'],
-          jsdta['medio'] != null ? jsdta['medio'] : "-",
-          jsdta['interior'],
-          jsdta['sep_duales'],
-          jsdta['estado'],
-          jsdta['neumaticoimgruta1'] != null
-              ? "https://tiresoft2.lab-elsol.com/" + jsdta['neumaticoimgruta1']
-              : "https://cdn-icons-png.flaticon.com/512/48/48639.png",
-          jsdta['tuercaestado'].toString(),
-          jsdta['tuercacantidad'] != null
-              ? jsdta['tuercacantidad'].toString()
-              : "-",
-          jsdta['recomendacion']));
+
+      // Cargamos y validamos Datos
+      str_id_neumatico = jsdta['id_neumaticos'].toString();
+      str_psi_tipo = "PSI";
+      str_psi_actual = jsdta['presion'].toString();
+      str_cantidad_tuerca = jsdta['tuercacantidad'] != null
+          ? jsdta['tuercacantidad'].toString()
+          : "0";
+      str_recomendacion = jsdta['recomendacion'] != null
+          ? jsdta['recomendacion'].toString()
+          : "-";
+      str_rm_exterior = jsdta['exterior'] != null ? jsdta['exterior'] : "";
+      str_rm_medio = jsdta['medio'] != null ? jsdta['medio'] : "";
+      str_rm_interior = jsdta['interior'] != null ? jsdta['interior'] : "";
+
+      // Cargamos los Texting
+      _ctrlr_PSI = new TextEditingController(text: str_psi_tipo);
+      _ctrlr_presion_actual = new TextEditingController(text: str_psi_actual);
+      _ctrlr_cantidad_tuerca =
+          new TextEditingController(text: str_cantidad_tuerca);
+      _ctrlr_recomendacion = new TextEditingController(text: str_recomendacion);
+
+      _ctrlr_rm_exterior = new TextEditingController(text: str_rm_exterior);
+      _ctrlr_rm_medio = new TextEditingController(text: str_rm_medio);
+      _ctrlr_rm_interior = new TextEditingController(text: str_rm_interior);
+
+      String sw_valvula =
+          jsdta['valvula'] != null ? jsdta['valvula'].toString() : "ST";
+      switch (sw_valvula) {
+        case "M":
+          tapaPitonIdselected = 1;
+          break;
+        case "P":
+          tapaPitonIdselected = 2;
+          break;
+        case "ST":
+          tapaPitonIdselected = 3;
+          break;
+        default:
+          tapaPitonIdselected = 3;
+          break;
+      }
+
+      String sw_accesibilidad = jsdta['accesibilidad'] != null
+          ? jsdta['accesibilidad'].toString()
+          : "1";
+      switch (sw_accesibilidad) {
+        case "0":
+          accesibilidadIdselected = 0;
+          statusAccesibilidadNO = true;
+          break;
+        case "1":
+          accesibilidadIdselected = 1;
+          statusAccesibilidadNO = false;
+          break;
+      }
+
+      String sw_motivo_inaccesible = jsdta['motivo_inaccesibilidad'] != null
+          ? jsdta['motivo_inaccesibilidad'].toString()
+          : "0";
+      switch (sw_motivo_inaccesible) {
+        case "0":
+          _motivoInnacesibilidadId = 0;
+          break;
+        case "1":
+          _motivoInnacesibilidadId = 1;
+          break;
+        case "2":
+          _motivoInnacesibilidadId = 2;
+          break;
+        case "3":
+          _motivoInnacesibilidadId = 3;
+          break;
+        case "4":
+          _motivoInnacesibilidadId = 4;
+          break;
+        case "5":
+          _motivoInnacesibilidadId = 5;
+          break;
+        case "6":
+          _motivoInnacesibilidadId = 6;
+          break;
+        case "7":
+          _motivoInnacesibilidadId = 7;
+          break;
+        case "8":
+          _motivoInnacesibilidadId = 8;
+          break;
+      }
+
+      String str_sep_duales =
+          jsdta['sep_duales'] != null ? jsdta['sep_duales'].toString() : "4";
+      switch (str_sep_duales) {
+        case "No Aplica":
+          _value_estado_separcion_dual = 4;
+          break;
+        default:
+          _value_estado_separcion_dual = 4;
+          break;
+      }
+
+      String str_duales_mal_herm =
+          jsdta['resultado'] != null ? jsdta['resultado'].toString() : "-";
+
+      final findDisenio = str_duales_mal_herm.contains('Diseño'); // true
+      final findTamanio = str_duales_mal_herm.contains('Tamaño'); // true
+      final findTConstr =
+          str_duales_mal_herm.contains('Tipo de Construcción'); // true
+      final findMedNeum =
+          str_duales_mal_herm.contains('Medida de Neumático'); // true
+      final findNAplica = str_duales_mal_herm.contains('No Aplica'); // true
+
+      print('Obs > ${str_duales_mal_herm}');
+      // print('1- ${findDisenio}');
+      // print('2- ${findTamanio}');
+      // print('3- ${findTConstr}');
+      // print('4- ${findMedNeum}');
+      // print('5- ${findNAplica}');
+
+      if (findDisenio) {
+        _isActivateDisenio = true;
+      } else {
+        _isActivateDisenio = false;
+      }
+
+      if (findTamanio) {
+        _isActivateTamanio = true;
+      } else {
+        _isActivateTamanio = false;
+      }
+
+      if (findTConstr) {
+        _isActivateTipoConstruccion = true;
+      } else {
+        _isActivateTipoConstruccion = false;
+      }
+
+      if (findMedNeum) {
+        _isActivateMedidaNeumatico = true;
+      } else {
+        _isActivateMedidaNeumatico = false;
+      }
+
+      if (findNAplica) {
+        _isActivateNoAplica = true;
+      } else {
+        _isActivateNoAplica = false;
+      }
+
+      String str_estado_neumatico =
+          jsdta['estado'] != null ? jsdta['estado'].toString() : "-";
+      String _imagen_neumatico = jsdta['neumaticoimgruta1'] != null
+          ? "https://tiresoft2.lab-elsol.com/" + jsdta['neumaticoimgruta1']
+          : "https://tiresoft2.lab-elsol.com/images/reportes/img_neumaticos_mal_estado/no_image.png";
+
+      // print(_imagen_neumatico);
+
+      switch (str_estado_neumatico) {
+        case "Continuar en Operación":
+          _value_estado = 1;
+          str_image_view = _imagen_neumatico;
+          break;
+        case "Lista para Reencauchar":
+          _value_estado = 2;
+          str_image_view = _imagen_neumatico;
+          break;
+        case "Lista para Reemplazar":
+          _value_estado = 3;
+          str_image_view = _imagen_neumatico;
+          break;
+      }
+
+      String str_observaciones =
+          jsdta['otros'] != null ? jsdta['otros'].toString() : "-";
+
+      final findDesgIrregular =
+          str_observaciones.contains('Desg. Irregular'); // true
+      final findParaReparar =
+          str_observaciones.contains('Lista para Reparar'); // true
+      final findAroDefectuoso =
+          str_observaciones.contains('Aro Defectuoso'); // true
+      final findFallaFlanco =
+          str_observaciones.contains('Fallas en el flanco'); // true
+
+      String str_des_irregular = jsdta['desgirregular'] != null
+          ? jsdta['desgirregular'].toString().substring(0, 1)
+          : "0";
+      _desgIrregularId = int.parse(str_des_irregular);
+      print('Obs dsIrregular > ${str_des_irregular}');
+
+      int int_par_reparar =
+          jsdta['parareparar'] != null ? jsdta['parareparar'] : 0;
+      _paraRepararId = int_par_reparar;
+      print('Obs parReparar > ${int_par_reparar}');
+
+      int int_fall_flanco =
+          jsdta['fallasflanco'] != null ? jsdta['fallasflanco'] : 0;
+      _fallaFlancoId = int_fall_flanco;
+      print('Obs fallFlanco > ${int_fall_flanco}');
+
+      print('Obs > ${str_observaciones}');
+      // print('1- ${findDesgIrregular}');
+      // print('2- ${findParaReparar}');
+      // print('3- ${findAroDefectuoso}');
+      // print('4- ${findFallaFlanco}');
+
+      if (findDesgIrregular) {
+        _isActivateDesgIrregular = true;
+      } else {
+        _isActivateDesgIrregular = false;
+      }
+
+      if (findParaReparar) {
+        _isActivateParReparar = true;
+      } else {
+        _isActivateParReparar = false;
+      }
+
+      if (findAroDefectuoso) {
+        _isActivateAroDefectuoso = true;
+      } else {
+        _isActivateAroDefectuoso = false;
+      }
+
+      if (findFallaFlanco) {
+        _isActivateFallFlanco = true;
+      } else {
+        _isActivateFallFlanco = false;
+      }
 
       return _insp_edit_neumatico;
     } else {
       throw Exception("Falló la Conexión");
     }
+  }
+
+  late StreamBuilder _widget;
+
+  @override
+  void initState() {
+    _edit_neumatico = _getShowInspEditNeumatico();
+
+    _ctrlr_cantidad_tuerca = new TextEditingController(text: '1');
+
+    _ctrlr_recomendacion = new TextEditingController(text: 'Operativo II');
+
+    _ctrlr_rm_exterior = new TextEditingController(text: '5');
+    _ctrlr_rm_medio = new TextEditingController(text: '5');
+    _ctrlr_rm_interior = new TextEditingController(text: '5');
+
+    // _validateMMRemanente("8", "5", "15");
+
+    super.initState();
   }
 
   @override
@@ -410,79 +622,97 @@ class _EditInspeccionState extends State<EditInspeccion> {
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
       ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(10),
-        child: Form(
-            key: _globalFormKey,
-            child: Center(
-              child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "P-" +
-                            widget._global_insp_dtail.idt_posicion.toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 18.0),
-                      ),
-                      IconButton(
-                        icon: Image.asset('assets/llanta2.jpg'),
-                        iconSize: 100,
-                        onPressed: () {},
-                      ),
-                      SizedBox(height: 10.0),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: presionCardWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: tapaPitonWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: profundidadRodadoWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: dualesMalHermanadosWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: separacionDualesWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: observacionesWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: estadoWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: estadoTuercasWidget(),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: recomendacionWidget(),
-                      ),
-                      SizedBox(height: 10.0),
-                      MaterialButton(
-                        padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                        color: Color(0xff212F3D),
-                        textColor: Colors.white,
-                        child: Text(
-                          'Guardar',
-                          style: TextStyle(fontSize: 15.0),
-                        ),
-                        onPressed: () async => {updateInspeccionNeumatico()},
-                      )
-                    ],
-                  )),
-            )),
+      body: Center(
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(10),
+          child: FutureBuilder<List>(
+            future: _edit_neumatico,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                final error = snapshot.error;
+                return Text("$error");
+              } else if (snapshot.hasData) {
+                return Form(
+                    key: _globalFormKey,
+                    child: Center(
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "P-" +
+                                    widget._global_insp_dtail.idt_posicion
+                                        .toString(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18.0),
+                              ),
+                              IconButton(
+                                icon: Image.asset('assets/llanta2.jpg'),
+                                iconSize: 100,
+                                onPressed: () {},
+                              ),
+                              SizedBox(height: 10.0),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: presionCardWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: tapaPitonWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: profundidadRodadoWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: dualesMalHermanadosWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: separacionDualesWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: observacionesWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: estadoWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: estadoTuercasWidget(),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: recomendacionWidget(),
+                              ),
+                              SizedBox(height: 10.0),
+                              MaterialButton(
+                                padding:
+                                    EdgeInsets.only(right: 45.0, left: 45.0),
+                                color: Color(0xff212F3D),
+                                textColor: Colors.white,
+                                child: Text(
+                                  'Guardar',
+                                  style: TextStyle(fontSize: 15.0),
+                                ),
+                                onPressed: () async =>
+                                    {updateInspeccionNeumatico()},
+                              )
+                            ],
+                          )),
+                    ));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ),
       ),
     );
   }
