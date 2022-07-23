@@ -23,7 +23,9 @@ class EditInspeccion extends StatefulWidget {
 
 class _EditInspeccionState extends State<EditInspeccion> {
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
+  bool isLoadingSave = false;
   late String str_id_neumatico;
+  late String str_id_vehiculo;
   late String id_inspeccion;
   late TextEditingController _ctrlr_PSI;
   late String str_psi_tipo;
@@ -312,7 +314,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
       },
       body: jsonEncode(<String, String>{
         'clienteId': widget._global_id_cliente,
-        "id_neumaticos": "1292",
+        "id_neumaticos": str_id_neumatico,
         "exterior": exterior,
         "medio": medio,
         "interior": interior,
@@ -365,6 +367,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
       // Cargamos y validamos Datos
       str_id_neumatico = jsdta['id_neumaticos'].toString();
+      str_id_vehiculo = jsdta['id_vehiculo'].toString();
       str_psi_tipo = "PSI";
       str_psi_actual = jsdta['presion'].toString();
       str_cantidad_tuerca = jsdta['tuercacantidad'] != null
@@ -702,13 +705,29 @@ class _EditInspeccionState extends State<EditInspeccion> {
                                     EdgeInsets.only(right: 45.0, left: 45.0),
                                 color: Color(0xff212F3D),
                                 textColor: Colors.white,
-                                child: Text(
-                                  'Guardar',
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                                onPressed: () async =>
-                                    {updateInspeccionNeumatico()},
-                              )
+                                child: isLoadingSave
+                                    ? Transform.scale(
+                                        scale: 0.5,
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 1),
+                                          child: CircularProgressIndicator(
+                                              backgroundColor: Colors.white,
+                                              strokeWidth: 5.0),
+                                        ),
+                                      )
+                                    : Text(
+                                        'Guardar',
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                onPressed: () async => {
+                                  setState(() {
+                                    isLoadingSave = true;
+                                  }),
+                                  updateInspeccionNeumatico(),
+                                },
+                              ),
+                              SizedBox(height: 30.0),
                             ],
                           )),
                     ));
@@ -724,42 +743,42 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   Future<void> updateInspeccionNeumatico() async {
     print("createScrapDirecto()");
-    print("PSI > " + _ctrlr_PSI.text.toString());
-    print("P.Actual > " + _ctrlr_presion_actual.text.toString());
-    print("Tapa Piton Id > " + tapaPitonIdselected.toString());
+    // print("PSI > " + _ctrlr_PSI.text.toString());
+    // print("P.Actual > " + _ctrlr_presion_actual.text.toString());
+    // print("Tapa Piton Id > " + tapaPitonIdselected.toString());
 
-    print(
-        "Inaccesibilidad SI(1) NO(0) > " + accesibilidadIdselected.toString());
-    print("Inaccesibilidad Id > " + _motivoInnacesibilidadId.toString());
-    print("Tuerca Estado Id > " + _estadoTuercaId.toString());
+    // print(
+    //     "Inaccesibilidad SI(1) NO(0) > " + accesibilidadIdselected.toString());
+    // print("Inaccesibilidad Id > " + _motivoInnacesibilidadId.toString());
+    // print("Tuerca Estado Id > " + _estadoTuercaId.toString());
 
-    print("_isActivateDisenio > " + _isActivateDisenio.toString());
-    print("_isActivateTamanio > " + _isActivateTamanio.toString());
-    print("_isActivateTipoConstruccion > " +
-        _isActivateTipoConstruccion.toString());
-    print("_isActivateMedidaNeumatico > " +
-        _isActivateMedidaNeumatico.toString());
-    print("_isActivateNoAplica > " + _isActivateNoAplica.toString());
+    // print("_isActivateDisenio > " + _isActivateDisenio.toString());
+    // print("_isActivateTamanio > " + _isActivateTamanio.toString());
+    // print("_isActivateTipoConstruccion > " +
+    //     _isActivateTipoConstruccion.toString());
+    // print("_isActivateMedidaNeumatico > " +
+    //     _isActivateMedidaNeumatico.toString());
+    // print("_isActivateNoAplica > " + _isActivateNoAplica.toString());
 
-    print("Estado Neumatico > " + _value_estado.toString());
-    print("Image Edit > " + pickedImageAsBytesEdit.toString());
-    print("Separacion entre duales Id > " +
-        _value_estado_separcion_dual.toString());
-    print("Desgaste Irregular > " + _isActivateDesgIrregular.toString());
-    print("Desgaste Irregular Option > " + _desgIrregularId.toString());
-    print("Para Reparar > " + _isActivateParReparar.toString());
-    print("Para Reparar Option > " + _paraRepararId.toString());
-    print("Aro Defectuoso > " + _isActivateAroDefectuoso.toString());
-    print("Falla Flanco > " + _isActivateFallFlanco.toString());
-    print("Falla Flanco Option > " + _fallaFlancoId.toString());
+    // print("Estado Neumatico > " + _value_estado.toString());
+    // print("Image Edit > " + pickedImageAsBytesEdit.toString());
+    // print("Separacion entre duales Id > " +
+    //     _value_estado_separcion_dual.toString());
+    // print("Desgaste Irregular > " + _isActivateDesgIrregular.toString());
+    // print("Desgaste Irregular Option > " + _desgIrregularId.toString());
+    // print("Para Reparar > " + _isActivateParReparar.toString());
+    // print("Para Reparar Option > " + _paraRepararId.toString());
+    // print("Aro Defectuoso > " + _isActivateAroDefectuoso.toString());
+    // print("Falla Flanco > " + _isActivateFallFlanco.toString());
+    // print("Falla Flanco Option > " + _fallaFlancoId.toString());
 
-    print("Cantidad Tuerca > " + _ctrlr_cantidad_tuerca.text.toString());
-    print("Recomendacion > " + _ctrlr_recomendacion.text.toString());
-    print("RM Exterior > " + _ctrlr_rm_exterior.text.toString());
-    print("RM Medio > " + _ctrlr_rm_medio.text.toString());
-    print("RM Interior > " + _ctrlr_rm_interior.text.toString());
+    // print("Cantidad Tuerca > " + _ctrlr_cantidad_tuerca.text.toString());
+    // print("Recomendacion > " + _ctrlr_recomendacion.text.toString());
+    // print("RM Exterior > " + _ctrlr_rm_exterior.text.toString());
+    // print("RM Medio > " + _ctrlr_rm_medio.text.toString());
+    // print("RM Interior > " + _ctrlr_rm_interior.text.toString());
 
-    // // POST > ACTUALIZAR INSPECCION
+    // POST > ACTUALIZAR INSPECCION
     var request = await http.MultipartRequest(
         "POST",
         Uri.parse(
@@ -768,6 +787,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     request.fields['id'] = id_inspeccion;
     request.fields['id_cliente'] = widget._global_id_cliente.toString();
     request.fields['id_usuario'] = widget._user[0].u_id.toString();
+    request.fields['id_neumaticos'] = str_id_neumatico;
     request.fields['posicion'] =
         widget._global_insp_dtail.idt_posicion.toString();
     request.fields['tipo_presion'] = _ctrlr_PSI.text.toString();
@@ -814,9 +834,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     if (_isActivateNoAplica) {
       duales_mal_hermanados = "No Aplica";
     }
-    request.fields['resultado5'] = duales_mal_hermanados;
-
-    // OBSERVACIONES
+    request.fields['resultado'] = duales_mal_hermanados;
 
     // ESTADO DEL NEUMATICO
     String temp_estado_neumatico = "";
@@ -831,26 +849,80 @@ class _EditInspeccionState extends State<EditInspeccion> {
         temp_estado_neumatico = "Lista para Reemplazar";
         break;
     }
+    request.fields['estado'] = temp_estado_neumatico;
 
     // IMAGEN - FALTA EN EL API
     if (pickedImageAsBytesEdit != null) {
       request.files.add(http.MultipartFile.fromBytes(
-          'imgneumaticomalestado1', pickedImageAsBytesEdit!,
+          'imagen_lista_reemplazar', pickedImageAsBytesEdit!,
           filename: 'photo.jpg'));
     }
-    request.fields['estado'] = temp_estado_neumatico;
-
     // ESTADO TUERCAS
     request.fields['tuercaestado'] = _estadoTuercaId.toString();
     request.fields['tuercacantidad'] = _ctrlr_cantidad_tuerca.text.toString();
     // RECOMENDACION
     request.fields['recomendacion'] = _ctrlr_recomendacion.text.toString();
 
+    // SEPARACION ENTRE DUALES
+    request.fields['separaciond'] = "Sep. Entre Duales- No Aplica";
+
+    // // OBSERVACIONES
+    String observaciones_neumatico = "";
+
+    if (_isActivateDesgIrregular) {
+      observaciones_neumatico += "Desg. Irregular,";
+    }
+
+    if (_isActivateParReparar) {
+      observaciones_neumatico += "Lista para Reparar,";
+    }
+
+    if (_isActivateAroDefectuoso) {
+      observaciones_neumatico += "Aro Defectuoso,";
+    }
+
+    if (_isActivateFallFlanco) {
+      observaciones_neumatico += "Fallas en el flanco";
+    }
+    print("OBS > " + observaciones_neumatico);
+    request.fields['otros'] = observaciones_neumatico;
+    request.fields['desgirregular'] = _desgIrregularId.toString();
+    request.fields['parareparar'] = _paraRepararId.toString();
+    request.fields['fallasflanco'] = _fallaFlancoId.toString();
+    // DATOS PARA IMAGEN MAL ESTADO
+    request.fields['serieneumatico'] = widget._global_insp_dtail.idt_serie;
+    request.fields['vehiculo_id'] = str_id_vehiculo;
+
     // Enviar el POST
     var response = await request.send();
     String parse_response = await response.stream.bytesToString();
     print('Status: ${response.statusCode}');
     print('Response: ${parse_response}');
+
+    if (response.statusCode == 200) {
+      onSuccess();
+      setState(() {
+        isLoadingSave = false;
+      });
+      print("Finalizado");
+    } else {
+      setState(() {
+        isLoadingSave = false;
+      });
+      onError();
+    }
+  }
+
+  void onSuccess() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Inspección actualizada con exito")),
+    );
+  }
+
+  void onError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Ocurrio un error al editar inspección")),
+    );
   }
 
   Widget presionCardWidget() {

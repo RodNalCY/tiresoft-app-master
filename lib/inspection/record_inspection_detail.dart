@@ -101,14 +101,14 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     pressureController.text = '';
 
     recomendationController.text = '';
-    checkBoxDualTipoConstruccion = false;
     checkBoxDualNoAplica = true;
+    checkBoxDualTipoConstruccion = false;
     checkBoxDualTamano = false;
     checkBoxDualDisenio = false;
     checkBoxDualMedidaNeumatico = false;
   }
 
-  Future<String> createPost() async {
+  Future<String> createPostInspeccionNeumatico() async {
     if (tires[position].brand == 'tmp') {
       tireIsSaved();
       return 'Ya fue guardado';
@@ -125,6 +125,45 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     } else {
       valvula_temporal = "ST";
     }
+
+    String duales_mal_hermanados = "";
+
+    if (checkBoxDualDisenio) {
+      duales_mal_hermanados += "Diseño,";
+    }
+    if (checkBoxDualTamano) {
+      duales_mal_hermanados += "Tamaño,";
+    }
+    if (checkBoxDualTipoConstruccion) {
+      duales_mal_hermanados += "Tipo de Construcción,";
+    }
+    if (checkBoxDualMedidaNeumatico) {
+      duales_mal_hermanados += "Medida de Neumático";
+    }
+    if (checkBoxDualNoAplica) {
+      duales_mal_hermanados = "No Aplica";
+    }
+    // print('Duales mal Hermanados>  ${duales_mal_hermanados}');
+
+    String observaciones_neumatico = "";
+
+    if (_isActivateDesgIrregular) {
+      observaciones_neumatico += "Desg. Irregular,";
+    }
+
+    if (_isActivateParReparar) {
+      observaciones_neumatico += "Lista para Reparar,";
+    }
+
+    if (_isActivateAroDefectuoso) {
+      observaciones_neumatico += "Aro Defectuoso,";
+    }
+
+    if (_isActivateFallFlanco) {
+      observaciones_neumatico += "Fallas en el flanco";
+    }
+
+    // print("Obs > ${observaciones_neumatico}");
 
     var url = Uri.parse(
         "https://tiresoft2.lab-elsol.com/api/inspecciones/storeInspeccion");
@@ -148,22 +187,18 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       "valvula": valvula_temporal,
       "accesibilidad": accesibilidad_temporal,
       "motivo_inaccesibilidad": _motivoInnacesibilidad,
-      "separaciond": 0,
-      "desgirregular0": _desgIrregular,
-      "fallasflanco": _fallaFlanco,
-      "parareparar": _paraReparar,
+      "separaciond": "Sep. Entre Duales- No Aplica",
+      "otros": observaciones_neumatico,
+      "desgirregular": _desgIrregularId.toString(),
+      "parareparar": _paraRepararId.toString(),
+      "fallasflanco": _fallaFlancoId.toString(),
       "tuercaestado": _estadoTuerca,
-      "otro3": checkboxAroDefectuoso,
       "tuercacantidad": int.parse(nutQuantityController.text),
-      "estado": parseState(_state.toString()),
+      "estado": parseState(_state.toString()), // Se corrigio
       "recomendacion": recomendationController.text,
       "id_personas": userId ?? 10,
       "remanente_original": 1,
-      "resultado1": checkBoxDualDisenio,
-      "resultado2": checkBoxDualTamano,
-      "resultado3": checkBoxDualTipoConstruccion,
-      "resultado4": checkBoxDualMedidaNeumatico,
-      "resultado5": checkBoxDualNoAplica,
+      "resultado": duales_mal_hermanados,
     });
     final response = await http.post(url,
         headers: {
@@ -263,16 +298,19 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   }
 
   String parseState(String s) {
+    String resultado = "";
     switch (s) {
-      case 'Continuar':
-        return "Continuar en Operación";
-      case 'ListaParaReencauchar':
-        return 'Lista para Reencauchar';
-      case 'ListaParaReemplazar':
-        return 'Lista para Reemplazar';
-      default:
-        return "Continuar en Operación";
+      case 'stateEnum.Continuar':
+        resultado = "Continuar en Operación";
+        break;
+      case 'stateEnum.ListaParaReencauchar':
+        resultado = "Lista para Reencauchar";
+        break;
+      case 'stateEnum.ListaParaReemplazar':
+        resultado = "Lista para Reemplazar";
+        break;
     }
+    return resultado;
   }
 
   Future<String> getTires() async {
@@ -492,7 +530,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                               ),
                               TextButton(
                                 onPressed: () => {
-                                  createPost(),
+                                  createPostInspeccionNeumatico(),
                                   Navigator.pop(context, 'OK')
                                 },
                                 child: const Text('OK'),
@@ -856,6 +894,10 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             onChanged: (newValue) {
               setState(() {
                 checkBoxDualNoAplica = newValue!;
+                checkBoxDualTipoConstruccion = false;
+                checkBoxDualTamano = false;
+                checkBoxDualDisenio = false;
+                checkBoxDualMedidaNeumatico = false;
               });
             },
             controlAffinity:
@@ -867,6 +909,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             onChanged: (newValue) {
               setState(() {
                 checkBoxDualDisenio = newValue!;
+                checkBoxDualNoAplica = false;
               });
             },
             controlAffinity:
@@ -878,6 +921,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             onChanged: (newValue) {
               setState(() {
                 checkBoxDualTamano = newValue!;
+                checkBoxDualNoAplica = false;
               });
             },
             controlAffinity:
@@ -889,6 +933,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             onChanged: (newValue) {
               setState(() {
                 checkBoxDualTipoConstruccion = newValue!;
+                checkBoxDualNoAplica = false;
               });
             },
             controlAffinity:
@@ -900,6 +945,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             onChanged: (newValue) {
               setState(() {
                 checkBoxDualMedidaNeumatico = newValue!;
+                checkBoxDualNoAplica = false;
               });
             },
             controlAffinity:
@@ -909,26 +955,6 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       ),
     );
   }
-
-  List<String> fallasFlancoList = [
-    'SIN FALLAS EN EL FLANCO',
-    'RODURA RADIAL',
-    'ROTURA DIAGONAL',
-    'CORTE LATERAL',
-    'EXPOSICION DE CUERDAS',
-    'PROTUBERANCIA',
-    'RESEQUEDAD',
-    'DAÑO UNIFORME DEL CAUCHO POR ROZAMINETO',
-    'IMPACTO LATERAL'
-  ];
-
-  List<String> paraRepararList = [
-    'NO NECESITA REPARACION',
-    'BANDA DE RODAMIENTO',
-    'HOMBRO',
-    'FLANCO',
-    'PESTAÑA'
-  ];
 
   List<String> desgIrregularList = [
     'SIN DESGASTE IRREGULAR',
@@ -973,25 +999,6 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     'Malograda'
   ];
 
-  Widget fallasFlancoWidgetList() {
-    return DropdownButton<String>(
-      isExpanded: true,
-      value: _fallaFlanco.toString(),
-      items: <String>['0', '1', '2', '3', '4', '5', '6', '7', '8']
-          .map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(fallasFlancoList[int.parse(value)]),
-        );
-      }).toList(),
-      onChanged: (_val) {
-        setState(() {
-          _fallaFlanco = int.parse(_val.toString());
-        });
-      },
-    );
-  }
-
   Widget estadoTuercaWidgetList() {
     return DropdownButton<String>(
       value: _estadoTuerca.toString(),
@@ -1022,23 +1029,6 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       onChanged: (_val) {
         setState(() {
           _motivoInnacesibilidad = int.parse(_val.toString());
-        });
-      },
-    );
-  }
-
-  Widget paraRepararWidgetList() {
-    return DropdownButton<String>(
-      value: _paraReparar.toString(),
-      items: <String>['0', '1', '2', '3', '4'].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(paraRepararList[int.parse(value)]),
-        );
-      }).toList(),
-      onChanged: (_val) {
-        setState(() {
-          _paraReparar = int.parse(_val.toString());
         });
       },
     );
@@ -1082,31 +1072,232 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     );
   }
 
+  /////////////////////////////////////////////////////////////////////////////
+  late bool _isActivateDesgIrregular = false;
+  late bool _isActivateParReparar = false;
+  late bool _isActivateAroDefectuoso = false;
+  late bool _isActivateFallFlanco = false;
+
+  List<String> desgasteIrregularList = [
+    'SIN DESGASTE IRREGULAR',
+    'DESGASTE ONDULADO',
+    'DESGASTE TIPO DIENTES DE SIERRA',
+    'DESGASTE EN LOS HOMBROS',
+    'DESGASTE TIPO RIVERA',
+    'DESGASTE UNILATERAL',
+    'DESGASTE DIAGONAL',
+    'DESGASTE EXCENTRICO',
+    'DESGASTE DE UN SOLO HOMBRO',
+    'DESGASTE TIPO DEPRESION INTERMITENTE',
+    'DESGASTE EN ESCALON',
+    'DESGASTE PUNTA Y TALON',
+    'DESGASTE ALTERNADO DE TACOS',
+    'DESGASTE LOCALIZADO',
+    'DESGASTE CENTRAL',
+    'DESGASTE TIPO ISLA',
+    'CHIPPING',
+    'CHUNKING',
+    'DESGASTE DE RIBETE(S)'
+  ];
+  late int _desgIrregularId = 0;
+  Widget desgasteIrregularOptionWidgetList() {
+    return DropdownButton<String>(
+      isExpanded: true,
+      value: _desgIrregularId.toString(),
+      items: <String>[
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18'
+      ].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(desgasteIrregularList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _desgIrregularId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> paraRepararList = [
+    'NO NECESITA REPARACION',
+    'BANDA DE RODAMIENTO',
+    'HOMBRO',
+    'FLANCO',
+    'PESTAÑA'
+  ];
+  late int _paraRepararId = 0;
+  Widget paraRepararOptionWidgetList() {
+    return DropdownButton<String>(
+      value: _paraRepararId.toString(),
+      items: <String>['0', '1', '2', '3', '4'].map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(paraRepararList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _paraRepararId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
+  List<String> fallasFlancoList = [
+    'SIN FALLAS EN EL FLANCO',
+    'RODURA RADIAL',
+    'ROTURA DIAGONAL',
+    'CORTE LATERAL',
+    'EXPOSICION DE CUERDAS',
+    'PROTUBERANCIA',
+    'RESEQUEDAD',
+    'DAÑO UNIFORME DEL CAUCHO POR ROZAMINETO',
+    'IMPACTO LATERAL'
+  ];
+  late int _fallaFlancoId = 0;
+  Widget fallasFlancoOptionWidgetList() {
+    return DropdownButton<String>(
+      isExpanded: true,
+      value: _fallaFlancoId.toString(),
+      items: <String>['0', '1', '2', '3', '4', '5', '6', '7', '8']
+          .map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(fallasFlancoList[int.parse(value)]),
+        );
+      }).toList(),
+      onChanged: (_val) {
+        setState(() {
+          _fallaFlancoId = int.parse(_val.toString());
+        });
+      },
+    );
+  }
+
   Widget observationsWidget() {
     return CustomCart(
-        'Observaciones',
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          DropdownButtonHideUnderline(
-              child: ButtonTheme(
-                  alignedDropdown: true, child: desgIrregularWidgetList())),
-          DropdownButtonHideUnderline(
-              child: ButtonTheme(
-                  alignedDropdown: true, child: paraRepararWidgetList())),
-          DropdownButtonHideUnderline(
-              child: ButtonTheme(
-                  alignedDropdown: true, child: fallasFlancoWidgetList())),
-          CheckboxListTile(
-            title: const Text("Aro defectuoso"),
-            value: checkboxAroDefectuoso,
-            onChanged: (newValue) {
-              setState(() {
-                checkboxAroDefectuoso = newValue!;
-              });
-            },
-            controlAffinity:
-                ListTileControlAffinity.leading, //  <-- leading Checkbox
+      'Observaciones',
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateDesgIrregular,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateDesgIrregular = value as bool;
+                      _desgIrregularId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Desgaste Irregular"),
+            ],
           ),
-        ]));
+          _isActivateDesgIrregular
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: desgasteIrregularOptionWidgetList())
+              : Container(child: null),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateParReparar,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateParReparar = value as bool;
+                      _paraRepararId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Para Reparar")
+            ],
+          ),
+          _isActivateParReparar
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: paraRepararOptionWidgetList())
+              : Container(child: null),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateAroDefectuoso,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateAroDefectuoso = value as bool;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Aro Defectuoso")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                  value: _isActivateFallFlanco,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _isActivateFallFlanco = value as bool;
+                      _fallaFlancoId = 0;
+                    });
+                  }),
+              SizedBox(width: 10.0),
+              Text("Fallas en el Flanco")
+            ],
+          ),
+          _isActivateFallFlanco
+              ? Container(
+                  padding: EdgeInsets.all(10.0),
+                  child: fallasFlancoOptionWidgetList(),
+                )
+              : Container(child: null),
+        ],
+      ),
+    );
+    // return CustomCart(
+    //     'Observaciones',
+    //     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    //       DropdownButtonHideUnderline(
+    //           child: ButtonTheme(
+    //               alignedDropdown: true, child: desgIrregularWidgetList())),
+    //       DropdownButtonHideUnderline(
+    //           child: ButtonTheme(
+    //               alignedDropdown: true, child: paraRepararWidgetList())),
+    //       DropdownButtonHideUnderline(
+    //           child: ButtonTheme(
+    //               alignedDropdown: true, child: fallasFlancoWidgetList())),
+    //       CheckboxListTile(
+    //         title: const Text("Aro defectuoso"),
+    //         value: checkboxAroDefectuoso,
+    //         onChanged: (newValue) {
+    //           setState(() {
+    //             checkboxAroDefectuoso = newValue!;
+    //           });
+    //         },
+    //         controlAffinity:
+    //             ListTileControlAffinity.leading, //  <-- leading Checkbox
+    //       ),
+    //     ]));
   }
 
   Widget nutStateWidget() {
@@ -1306,7 +1497,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         ));
   }
 
-  Future<bool> validateRemanente(String right, String mid, String left) async {
+  Future<void> validateRemanente(String right, String mid, String left) async {
     final response = await http.post(
         Uri.parse(
             "https://tiresoft2.lab-elsol.com/api/neumaticos/validateRemanentes"),
@@ -1316,27 +1507,47 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         body: jsonEncode({
           "clienteId": widget.id_cliente,
           "id_neumaticos": tires[position].uid,
-          "interior": right,
           "exterior": left,
-          "medio": mid
+          "medio": mid,
+          "interior": right,
         }));
 
-    // print(response.statusCode);
-    if (response.statusCode == 500) {
-      // Si la llamada al servidor fue exitosa, analiza el JSON
-      var responseDecode = json.decode(response.body);
-      var message = responseDecode['error'];
-
-      setState(() {
-        messageValidationRemanenteTiresoft = message.toString();
-      });
-      return false;
-    } else {
+    print(widget.id_cliente);
+    print(tires[position].uid);
+    print(response.statusCode);
+    String body;
+    final jsonData;
+    if (response.statusCode == 200) {
+      body = utf8.decode(response.bodyBytes);
+      jsonData = jsonDecode(body);
       setState(() {
         messageValidationRemanenteTiresoft = "";
       });
-      return true;
+    } else if (response.statusCode == 500) {
+      body = utf8.decode(response.bodyBytes);
+      jsonData = jsonDecode(body);
+      setState(() {
+        messageValidationRemanenteTiresoft = jsonData["error"].toString();
+      });
+    } else {
+      throw Exception("Falló la Conexión");
     }
+
+    // if (response.statusCode == 500) {
+    //   // Si la llamada al servidor fue exitosa, analiza el JSON
+    //   var responseDecode = json.decode(response.body);
+    //   var message = responseDecode['error'];
+
+    //   setState(() {
+    //     messageValidationRemanenteTiresoft = message.toString();
+    //   });
+    //   return false;
+    // } else {
+    //   setState(() {
+    //     messageValidationRemanenteTiresoft = "";
+    //   });
+    //   return true;
+    // }
   }
 
   Future<bool> validatePressure(String pressure) async {
