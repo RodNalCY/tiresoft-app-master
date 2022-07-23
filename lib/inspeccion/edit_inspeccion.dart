@@ -897,7 +897,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     var response = await request.send();
     String parse_response = await response.stream.bytesToString();
     print('Status: ${response.statusCode}');
-    print('Response: ${parse_response}');
+    // print('Response: ${parse_response}');
 
     if (response.statusCode == 200) {
       onSuccess();

@@ -8,6 +8,7 @@ import 'package:tiresoft/inspection/models/tire.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/inspection/record_inspection_header.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
@@ -97,15 +98,31 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     midRemaindeController.text = '';
     leftRemaindeController.text = '';
     rightRemaindeController.text = '';
-
     pressureController.text = '';
-
     recomendationController.text = '';
-    checkBoxDualNoAplica = true;
-    checkBoxDualTipoConstruccion = false;
-    checkBoxDualTamano = false;
+    nutQuantityController.text = '0';
+
     checkBoxDualDisenio = false;
+    checkBoxDualTamano = false;
+    checkBoxDualTipoConstruccion = false;
     checkBoxDualMedidaNeumatico = false;
+    checkBoxDualNoAplica = true;
+
+    _isActivateDesgIrregular = false;
+    _isActivateParReparar = false;
+    _isActivateAroDefectuoso = false;
+    _isActivateFallFlanco = false;
+
+    _desgIrregularId = 0;
+    _paraRepararId = 0;
+    _fallaFlancoId = 0;
+    _estadoTuerca = 1;
+
+    _motivoInnacesibilidad = 0;
+
+    _valve = valveEnum.ST;
+    _state = stateEnum.Continuar;
+    _valveAccesibility = valveAccesibility.YES;
   }
 
   Future<String> createPostInspeccionNeumatico() async {
@@ -143,6 +160,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     if (checkBoxDualNoAplica) {
       duales_mal_hermanados = "No Aplica";
     }
+
     // print('Duales mal Hermanados>  ${duales_mal_hermanados}');
 
     String observaciones_neumatico = "";
@@ -165,62 +183,66 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
     // print("Obs > ${observaciones_neumatico}");
 
-    var url = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/inspecciones/storeInspeccion");
-
     final SharedPreferences prefs = await _prefs;
     int? userId = prefs.getInt('userId');
 
-    bool _validatePressure = false;
-    var body = jsonEncode({
-      "id_cliente": widget.id_cliente,
-      "id_neumaticos": tires[position].uid,
-      "id_vehiculo": widget.idVehiculo,
-      "km_inspeccion_parcial": widget.kmInspeccion,
-      "medio": midRemaindeController.text,
-      "exterior": leftRemaindeController.text,
-      "interior": rightRemaindeController.text,
-      "posicion": tires[position].position,
-      "id_ejes": tires[position].idEjes,
-      "tipo_presion": "PSI",
-      "presion": pressureController.text,
-      "valvula": valvula_temporal,
-      "accesibilidad": accesibilidad_temporal,
-      "motivo_inaccesibilidad": _motivoInnacesibilidad,
-      "separaciond": "Sep. Entre Duales- No Aplica",
-      "otros": observaciones_neumatico,
-      "desgirregular": _desgIrregularId.toString(),
-      "parareparar": _paraRepararId.toString(),
-      "fallasflanco": _fallaFlancoId.toString(),
-      "tuercaestado": _estadoTuerca,
-      "tuercacantidad": int.parse(nutQuantityController.text),
-      "estado": parseState(_state.toString()), // Se corrigio
-      "recomendacion": recomendationController.text,
-      "id_personas": userId ?? 10,
-      "remanente_original": 1,
-      "resultado": duales_mal_hermanados,
-    });
-    final response = await http.post(url,
+    final response = await http.post(
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/inspecciones/storeInspeccion"),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: body);
+        body: jsonEncode({
+          "id_cliente": widget.id_cliente,
+          "id_neumaticos": tires[position].uid,
+          "id_vehiculo": widget.idVehiculo,
+          "km_inspeccion_parcial": widget.kmInspeccion,
+          "medio": midRemaindeController.text,
+          "exterior": leftRemaindeController.text,
+          "interior": rightRemaindeController.text,
+          "posicion": tires[position].position,
+          "id_ejes": tires[position].idEjes,
+          "tipo_presion": "PSI",
+          "presion": pressureController.text,
+          "valvula": valvula_temporal,
+          "accesibilidad": accesibilidad_temporal,
+          "motivo_inaccesibilidad": _motivoInnacesibilidad,
+          "separaciond": "Sep. Entre Duales- No Aplica",
+          "otros": observaciones_neumatico,
+          "desgirregular": _desgIrregularId.toString(),
+          "parareparar": _paraRepararId.toString(),
+          "fallasflanco": _fallaFlancoId.toString(),
+          "tuercaestado": _estadoTuerca,
+          "tuercacantidad": int.parse(nutQuantityController.text),
+          "estado": parseState(_state.toString()), // Se corrigio
+          "recomendacion": recomendationController.text,
+          "id_personas": userId ?? 10,
+          "remanente_original": 1,
+          "resultado": duales_mal_hermanados,
+        }));
 
+    print('Status: ${response.statusCode}');
+    print('response: ${response}');
     if (response.statusCode == 201) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var newInspectionCreated = json.decode(response.body);
-      var tmpId = newInspectionCreated['inspeccion_actual'];
-      listIdInspections.add(tmpId);
-      print('TMPiD  ${tmpId} ');
-      print("Valvula");
-      print(_valve.toString());
+      var id_inspeccion = newInspectionCreated['inspeccion_actual'];
+      listIdInspections.add(id_inspeccion);
+      print('newInspectionCreated:  ${newInspectionCreated} ');
+      print('tmp-Id:  ${id_inspeccion} ');
 
       tires[position].brand = 'tmp';
-      onSuccess();
-      if (tmpId != null && pickedImageAsBytes != null) {
-        await updateImagePost(tmpId, widget.idVehiculo, tires[position].uid,
-            tires[position].position);
+
+      String imagen_no_cargada = "Imagen no cargada";
+      if (id_inspeccion != null && pickedImageAsBytes != null) {
+        imagen_no_cargada = "Imagen Cargada";
+        Future<bool> status = updateImagePost(id_inspeccion, widget.idVehiculo,
+            tires[position].uid, tires[position].position);
+
+        print('Status > ${status}');
       }
+      print("imagen_no_cargada > " + imagen_no_cargada);
+      onSuccess();
       cleanForm();
       return 'succcess';
     } else {
@@ -229,11 +251,12 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     }
   }
 
-  Future<String> updateImagePost(
+  Future<bool> updateImagePost(
       idInspeccion, idVehiculo, idNeumaticos, posicion) async {
-    var url = Uri.parse(
-        "https://tiresoft2.lab-elsol.com/api/inspecciones/singleStoreNeumaticoImgMalEstado1");
-    var request = await http.MultipartRequest("POST", url);
+    var request = await http.MultipartRequest(
+        "POST",
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/inspecciones/singleStoreNeumaticoImgMalEstado1"));
 
     request.files.add(http.MultipartFile.fromBytes(
         'neumaticoimg1', pickedImageAsBytes!,
@@ -241,7 +264,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
     request.fields['id_cliente'] = widget.id_cliente;
     request.fields['id_inspeccion'] = idInspeccion.toString();
-    request.fields['vehiculo'] = idVehiculo.toString();
+    request.fields['vehiculo_id'] = idVehiculo.toString();
     request.fields['serieneumatico'] = idNeumaticos.toString();
     request.fields['neuposicion'] = posicion.toString();
 
@@ -256,10 +279,10 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         pickedImageAsBytes = null;
         pickedImageAsBytes2 = null;
       });
-      return 'succcess';
+      return true;
     } else {
       onError();
-      return 'error';
+      return false;
     }
   }
 
@@ -554,24 +577,12 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                       },
                     ),
                   ),
-                  onPressed: () {
-                    finishInspections().then((value) => {
+                  onPressed: () async {
+                    await finishInspections().then((value) => {
                           if (value)
                             {
-                              Navigator.of(context).pop()
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) =>
-                              //           ListInspeccion(widget.id_cliente)),
-                              // )
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ListInspeccion(
-                              //             widget.id_cliente,
-                              //             widget.my_user,
-                              //             widget.name_cliente)))
+                              print("TERMINADO Y FINALIZADO")
+                              //Navigator.of(context).pop(),
                             }
                         });
                   },

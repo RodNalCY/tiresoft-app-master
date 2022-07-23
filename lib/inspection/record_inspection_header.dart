@@ -75,8 +75,9 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
 
       for (final element in _lista_vehiculos) {
         if (element['neumaticos']) {
-          letters.add(element['placa'].toString());
-          setState(() {});
+          setState(() {
+            letters.add(element['placa'].toString());
+          });
         }
       }
       setState(() {
