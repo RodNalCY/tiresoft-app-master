@@ -60,7 +60,7 @@ enum valveAccesibility { YES, NO }
 class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     with TickerProviderStateMixin {
   var position = 0;
-
+  bool isLoadingSave = false;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TextEditingController leftRemaindeController = TextEditingController();
@@ -236,12 +236,14 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       String imagen_no_cargada = "Imagen no cargada";
       if (id_inspeccion != null && pickedImageAsBytes != null) {
         imagen_no_cargada = "Imagen Cargada";
-        Future<bool> status = updateImagePost(id_inspeccion, widget.idVehiculo,
+        await updateImagePost(id_inspeccion, widget.idVehiculo,
             tires[position].uid, tires[position].position);
-
-        print('Status > ${status}');
       }
       print("imagen_no_cargada > " + imagen_no_cargada);
+
+      setState(() {
+        isLoadingSave = false;
+      });
       onSuccess();
       cleanForm();
       return 'succcess';
@@ -533,9 +535,19 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlatButton(
+              MaterialButton(
                   padding: EdgeInsets.only(right: 30.0, left: 30.0),
-                  child: Text('Guardar'),
+                  child: isLoadingSave
+                      ? Transform.scale(
+                          scale: 0.5,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 1),
+                            child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                                strokeWidth: 5.0),
+                          ),
+                        )
+                      : Text('Guardar'),
                   color: Color(0xff212F3D),
                   textColor: Colors.white,
                   onPressed: () => {
@@ -553,6 +565,9 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                               ),
                               TextButton(
                                 onPressed: () => {
+                                  setState(() {
+                                    isLoadingSave = true;
+                                  }),
                                   createPostInspeccionNeumatico(),
                                   Navigator.pop(context, 'OK')
                                 },
@@ -562,6 +577,9 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                           ),
                         ),
                       }),
+              SizedBox(
+                width: 10.0,
+              ),
               TextButton(
                   style: ButtonStyle(
                     foregroundColor:
@@ -577,19 +595,31 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                       },
                     ),
                   ),
-                  onPressed: () async {
-                    await finishInspections().then((value) => {
-                          if (value)
-                            {
-                              print("TERMINADO Y FINALIZADO")
-                              //Navigator.of(context).pop(),
-                            }
-                        });
-                  },
-                  child: Text(
-                    'Terminar y Finalizar',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ))
+                  onPressed: isLoadingSave
+                      ? null
+                      : () async {
+                          await finishInspections().then((value) => {
+                                if (value)
+                                  {
+                                    print("TERMINADO Y FINALIZADO"),
+                                    Navigator.of(context).pop(),
+                                  }
+                              });
+                        },
+                  child: isLoadingSave
+                      ? Transform.scale(
+                          scale: 0.5,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 1),
+                            child: CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                                strokeWidth: 5.0),
+                          ),
+                        )
+                      : Text(
+                          'Terminar y Finalizar',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ))
             ],
           ),
 
