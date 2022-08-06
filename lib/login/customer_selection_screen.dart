@@ -96,8 +96,8 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
             ),
 
             Container(
-              height: 610,
-              margin: EdgeInsets.fromLTRB(10, 100, 10, 0),
+              height: 470,
+              margin: EdgeInsets.fromLTRB(20, 150, 20, 0),
               padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
                   color: Colors.white70,
@@ -105,12 +105,13 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.all(20.0),
+                      margin:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 50.0),
                       decoration: BoxDecoration(
-                          color: Colors.black45,
+                          color: Color(0xff212F3D),
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Center(
                           child: Image(
@@ -118,14 +119,14 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                       )),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 15),
+                      padding: EdgeInsets.only(top: 30.0),
                     ),
                     Center(
                         child: Text("Por favor seleccione un cliente",
                             style: TextStyle(
                                 fontSize: 14, color: Color(0xff2874A6)))),
                     Padding(
-                      padding: EdgeInsets.only(top: 15),
+                      padding: EdgeInsets.only(top: 5.0),
                     ),
                     Container(
                       margin: EdgeInsets.all(20.0),
@@ -161,7 +162,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                       )),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 15.0),
+                      padding: EdgeInsets.only(top: 20.0),
                     ),
                     Center(
                       child: FlatButton(

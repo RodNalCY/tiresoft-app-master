@@ -6,6 +6,12 @@ import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/neumaticos/models/neumatico.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:url_launcher/url_launcher.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column;
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
+import 'dart:io';
+
 class ListMalEstado extends StatefulWidget {
   final String _id_cliente;
   final String _name_cliente;
@@ -54,8 +60,8 @@ class _ListMalEstadoState extends State<ListMalEstado> {
         if (item["remanente_limite"] != null) {
           str_rm_limite = item["remanente_limite"];
         }
-        if (item["fecha_retiro"] != null) {
-          str_fechita = item["fecha_retiro"];
+        if (item["fecha_scrap"] != null) {
+          str_fechita = item["fecha_scrap"];
         }
         _mal_estados.add(NeumaticoMalEstado(
             item["id"],
@@ -64,6 +70,7 @@ class _ListMalEstadoState extends State<ListMalEstado> {
             item['marca'],
             item['modelo'],
             item['medida'],
+            item['disenio'],
             str_fechita,
             str_rm_original,
             str_rm_final,
@@ -120,9 +127,6 @@ class _ListMalEstadoState extends State<ListMalEstado> {
                   Expanded(child: _myListMalEstado(context, snapshot.data))
                 ]),
               );
-              return Container(
-                child: Text("Hola Boba"),
-              );
             } else if (snapshot.hasError) {
               return Text("Error");
             }
@@ -130,7 +134,95 @@ class _ListMalEstadoState extends State<ListMalEstado> {
           },
         ),
       ),
+      floatingActionButton: FutureBuilder(
+        future: _listado_mal_estado,
+        builder: (context, snapshot) {
+          return FloatingActionButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Para descargar el archivo .xlsx'),
+                content: const Text(
+                    '¿Tiene la aplicación compatible para abrir el archivo excel?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      await _launchUrlAppStore();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('No, Descargar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await _generateExcelMalEstado(context, snapshot.data);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Si, Exportar'),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.file_download),
+          );
+        },
+      ),
     ));
+  }
+
+  Future<void> _generateExcelMalEstado(BuildContext context, data) async {
+    print("Excel Mal Estado Export");
+    final Workbook workbook = Workbook();
+    final Worksheet sheet = workbook.worksheets[0];
+    sheet.getRangeByName('A1:L1').cellStyle.backColor = '#333F4F';
+    sheet.getRangeByName('A1:L1').cellStyle.bold = true;
+    sheet.getRangeByName('A1:L1').cellStyle.fontColor = '#FFFFFF';
+    // > Columns
+    sheet.getRangeByIndex(1, 1).setText('Id');
+    sheet.getRangeByIndex(1, 2).setText('Num. Serie');
+    sheet.getRangeByIndex(1, 3).setText('Marca');
+    sheet.getRangeByIndex(1, 4).setText('Modelo');
+    sheet.getRangeByIndex(1, 5).setText('Medida');
+    sheet.getRangeByIndex(1, 6).setText('Diseño');
+    sheet.getRangeByIndex(1, 7).setText('R. Final');
+    sheet.getRangeByIndex(1, 8).setText('R. Límite');
+    sheet.getRangeByIndex(1, 9).setText('Disponibilidad');
+    sheet.getRangeByIndex(1, 10).setText('Costo (\$)');
+    sheet.getRangeByIndex(1, 11).setText('Costo de Pérdida (\$)');
+    sheet.getRangeByIndex(1, 12).setText('Fecha Retiro');
+    // > Rows
+    int _row = 2;
+    for (var i = 0; i < data.length; i++) {
+      sheet.getRangeByIndex(_row, 1).setText(data[i].nme_id.toString());
+      sheet.getRangeByIndex(_row, 2).setText(data[i].nme_num_serie);
+      sheet.getRangeByIndex(_row, 3).setText(data[i].nme_marca);
+      sheet.getRangeByIndex(_row, 4).setText(data[i].nme_modelo);
+      sheet.getRangeByIndex(_row, 5).setText(data[i].nme_medida);
+      sheet.getRangeByIndex(_row, 6).setText(data[i].nme_disenio);
+      sheet.getRangeByIndex(_row, 7).setText(data[i].nme_remanente_final);
+      sheet.getRangeByIndex(_row, 8).setText(data[i].nme_remanente_limite);
+      sheet.getRangeByIndex(_row, 9).setText(data[i].nme_disponibilidad);
+      sheet.getRangeByIndex(_row, 10).setText(data[i].nme_costo);
+      sheet.getRangeByIndex(_row, 11).setText(data[i].nme_costo_perdida);
+      sheet.getRangeByIndex(_row, 12).setText(data[i].nme_fecha_retiro);
+      _row++;
+    }
+
+    final List<int> bytes = workbook.saveAsStream();
+    final String path = (await getApplicationSupportDirectory()).path;
+    final String fileName = '$path/Neumaticos_Mal_Estado.xlsx';
+    final File file = File(fileName);
+    final _write = await file.writeAsBytes(bytes, flush: true);
+    final _open = OpenFile.open(fileName);
+    workbook.dispose();
+  }
+
+  Future<void> _launchUrlAppStore() async {
+    final Uri _url =
+        Uri.parse('https://play.google.com/store/search?q=excel&c=apps');
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
   }
 
   Widget _myListMalEstado(BuildContext context, data) {
@@ -147,7 +239,11 @@ class _ListMalEstadoState extends State<ListMalEstado> {
                         content: Text("Serie: " + data[index].nme_num_serie)))
                   },
                   title: Text(
-                      data[index].nme_marca + " " + data[index].nme_modelo,
+                      data[index].nme_marca +
+                          " " +
+                          data[index].nme_modelo +
+                          " " +
+                          data[index].nme_medida,
                       style: TextStyle(fontWeight: FontWeight.w400)),
                   subtitle: Text(data[index].nme_disponibilidad +
                       " - " +

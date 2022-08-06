@@ -4,6 +4,7 @@ class Scrapt {
   String s_marca;
   String s_modelo;
   String s_medida;
+  String s_disenio;
   String s_motivo_scrap;
   String s_fecha_scrap;
   String s_remanente_final;
@@ -17,6 +18,7 @@ class Scrapt {
       this.s_marca,
       this.s_modelo,
       this.s_medida,
+      this.s_disenio,
       this.s_motivo_scrap,
       this.s_fecha_scrap,
       this.s_remanente_final,
@@ -28,6 +30,7 @@ class Scrapt {
     this.s_marca = s_marca;
     this.s_modelo = s_modelo;
     this.s_medida = s_medida;
+    this.s_disenio = s_disenio;
     this.s_motivo_scrap = s_motivo_scrap;
     this.s_fecha_scrap = s_fecha_scrap;
     this.s_remanente_final = s_remanente_final;

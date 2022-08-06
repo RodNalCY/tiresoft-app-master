@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiresoft/inspeccion/edit_inspeccion.dart';
-import 'package:tiresoft/inspeccion/models/Inspeccion.dart';
+import 'package:tiresoft/inspeccion/models/inspeccion.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

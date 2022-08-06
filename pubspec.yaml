@@ -41,7 +41,9 @@ dependencies:
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
   provider: ^5.0.0
-  
+  syncfusion_flutter_xlsio: ^20.2.40-beta
+  path_provider: ^2.0.11
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ class NeumaticoMalEstado {
   String nme_marca;
   String nme_modelo;
   String nme_medida;
+  String nme_disenio;
   String nme_fecha_retiro;
   String nme_remanente_original;
   String nme_remanente_final;
@@ -19,6 +20,7 @@ class NeumaticoMalEstado {
       this.nme_marca,
       this.nme_modelo,
       this.nme_medida,
+      this.nme_disenio,
       this.nme_fecha_retiro,
       this.nme_remanente_original,
       this.nme_remanente_final,
@@ -31,6 +33,7 @@ class NeumaticoMalEstado {
     this.nme_marca = nme_marca;
     this.nme_modelo = nme_modelo;
     this.nme_medida = nme_medida;
+    this.nme_disenio = nme_disenio;
     this.nme_fecha_retiro = nme_fecha_retiro;
     this.nme_remanente_original = nme_remanente_original;
     this.nme_remanente_final = nme_remanente_final;
