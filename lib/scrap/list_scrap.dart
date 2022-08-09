@@ -219,7 +219,7 @@ class _ListScrapState extends State<ListScrap> {
 
     final List<int> bytes = workbook.saveAsStream();
     final String path = (await getApplicationSupportDirectory()).path;
-    final String fileName = '$path/Vehiculos.xlsx';
+    final String fileName = '$path/Scraps.xlsx';
     final File file = File(fileName);
     final _write = await file.writeAsBytes(bytes, flush: true);
     final _open = OpenFile.open(fileName);
