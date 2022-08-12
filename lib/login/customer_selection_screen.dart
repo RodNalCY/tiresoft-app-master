@@ -131,8 +131,11 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                     Container(
                       margin: EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
-                          color: Colors.black12,
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
                       child: Center(
                           child: DropdownButton<String>(
                         value: _dropdownFirsValue,
