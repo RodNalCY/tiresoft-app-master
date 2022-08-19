@@ -264,7 +264,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                         initialDate: currentValue ?? DateTime.now(),
                         lastDate: DateTime(2100));
 
-                    // validateDate(date);
+                    validateDate(date);
                     return DateTimeField.tryParse(date.toString(), format);
                   },
                 ),
@@ -308,13 +308,13 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
   }
 
   Future<bool> validateDate(DateTime? date) async {
-    print("Fecha 1");
-    print(date);
+    // print("Fecha 1");
+    // print(date);
     var newFormat = DateFormat("yyyy-MM-dd");
     String updatedDt = newFormat.format(date!);
-    print("Fecha 2 ");
-    print(newFormat);
-    print(updatedDt);
+    // print("Fecha 2 ");
+    // print(newFormat);
+    // print(updatedDt);
 
     final response = await http.post(
       Uri.parse(

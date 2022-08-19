@@ -60,68 +60,75 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
       _cliente = widget._global_client_name;
     }
 
-    return Container(
-        child: Drawer(
-            child: Container(
-      color: Color(0xff212F3D),
-      child: Column(
-        children: [
-          Container(
+    return Drawer(
+      child: Container(
+        color: Color(0xff212F3D),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
               padding: safeArea,
               width: double.infinity,
               child: buildHeader(context,
                   urlImage: _logo_url,
                   name: _name,
                   email: _email,
-                  client: _cliente)),
-          const SizedBox(height: 20.0),
-          buildOneMenuItem(context,
-              text: 'Registrar Inspección',
-              item: NavigationItemModel.registro_inspeccion,
-              icon: Icons.control_point),
-          const SizedBox(height: 16.0),
-          buildOneMenuItem(context,
-              text: 'Reporte Inspección',
-              item: NavigationItemModel.reporte_inspeccion,
-              icon: Icons.format_list_bulleted),
-          const SizedBox(height: 16.0),
-          buildOneMenuItem(context,
-              text: 'Reporte Vehiculos',
-              item: NavigationItemModel.reporte_vehiculo,
-              icon: Icons.toys),
-          const SizedBox(height: 16.0),
-          buildOneMenuItem(context,
-              text: 'Reporte Neumáticos',
-              item: NavigationItemModel.reporte_neumatico,
-              icon: Icons.data_saver_off),
-          const SizedBox(height: 16.0),
-          buildOneMenuItem(context,
-              text: 'Registrar Scrap',
-              item: NavigationItemModel.register_scrap_home,
-              icon: Icons.control_point),
-          const SizedBox(height: 16.0),
-          buildOneMenuItem(context,
-              text: 'Reporte de Scrap',
-              item: NavigationItemModel.reporte_scrap,
-              icon: Icons.format_list_bulleted),
-          buildOneMenuItem(context,
-              text: 'Reporte mal estado',
-              item: NavigationItemModel.reporte_neumatico_mal_estado,
-              icon: Icons.format_list_bulleted),
-          buildOneMenuItem(context,
-              text: 'Reportes',
-              item: NavigationItemModel.reporte_consolidado,
-              icon: Icons.apps),
-          Spacer(),
-          const SizedBox(height: 24.0),
-          Divider(color: Colors.white70),
-          buildOneMenuItem(context,
-              text: 'Cerrar',
-              item: NavigationItemModel.salir,
-              icon: Icons.exit_to_app),
-        ],
+                  client: _cliente),
+            ),
+            const SizedBox(height: 20.0),
+            buildOneMenuItem(context,
+                text: 'Nueva Inspección',
+                item: NavigationItemModel.registro_inspeccion,
+                icon: Icons.add_circle),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte Inspección',
+                item: NavigationItemModel.reporte_inspeccion,
+                icon: Icons.checklist),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte Vehiculos',
+                item: NavigationItemModel.reporte_vehiculo,
+                // icon: Icons.toys
+                icon: Icons.checklist),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte Neumáticos',
+                item: NavigationItemModel.reporte_neumatico,
+                // icon: Icons.data_saver_off
+                icon: Icons.sort),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Nuevo Scrap',
+                item: NavigationItemModel.register_scrap_home,
+                icon: Icons.add_circle),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte de Scrap',
+                item: NavigationItemModel.reporte_scrap,
+                icon: Icons.checklist),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte mal estado',
+                item: NavigationItemModel.reporte_neumatico_mal_estado,
+                icon: Icons.checklist),
+            const SizedBox(height: 5.0),
+            buildOneMenuItem(context,
+                text: 'Reporte Consolidado',
+                item: NavigationItemModel.reporte_consolidado,
+                icon: Icons.apps),
+            Spacer(),
+            //const SizedBox(height: 24.0),
+            Divider(color: Colors.white70),
+            buildOneMenuItem(context,
+                text: 'Cerrar',
+                item: NavigationItemModel.salir,
+                icon: Icons.exit_to_app),
+          ],
+        ),
       ),
-    )));
+    );
   }
 
   Widget buildOneMenuItem(BuildContext context,
@@ -131,17 +138,20 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     final provider = Provider.of<NavigationChangeProvider>(context);
     final currentItem = provider.navigationItemModel;
     final isSelected = item == currentItem;
-    final _color = isSelected ? Colors.orangeAccent : Colors.white;
+    final _color =
+        isSelected ? Color.fromARGB(255, 84, 237, 248) : Colors.white38;
 
     return Material(
       color: Colors.transparent,
       child: ListTile(
         selected: isSelected,
-        selectedTileColor: Colors.white24,
+        selectedTileColor: Colors.black26,
         leading: Icon(icon, color: _color),
+        // dense: true,
+        horizontalTitleGap: 3.0,
         title: Text(
           text,
-          style: TextStyle(color: _color, fontSize: 15.0),
+          style: TextStyle(color: _color, fontSize: 14.5),
         ),
         onTap: () => selectedItemMenuView(context, item),
       ),

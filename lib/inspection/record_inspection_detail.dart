@@ -1593,7 +1593,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
   Future<bool> validatePressure(String pressure) async {
     var presion = int.tryParse(pressure) ?? 0;
-    if (presion >= 160) {
+    if (presion >= 161) {
       setState(() {
         messageValidationPressureTiresoft = "La presion debe ser menor a 160";
       });
