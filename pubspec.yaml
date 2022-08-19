@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   datetime_picker_formfield: ^2.0.0
   simple_autocomplete_formfield: ^0.3.0
-  http: ^0.13.4
-  image_picker: ^0.8.4+11
+  http: ^0.13.5
+  image_picker: ^0.8.5+3
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
   provider: ^5.0.0

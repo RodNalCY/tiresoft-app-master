@@ -89,7 +89,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/fondo-1.jpg'),
+                  image: AssetImage('assets/fondo-login.png'),
                   fit: BoxFit.cover,
                 ),
               ),

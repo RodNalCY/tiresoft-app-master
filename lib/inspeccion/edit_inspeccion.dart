@@ -621,6 +621,13 @@ class _EditInspeccionState extends State<EditInspeccion> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    print("F->dispose()");
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     print("Id > " + widget._global_insp_dtail.idt_id.toString());
     return Scaffold(
@@ -743,6 +750,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   Future<void> updateInspeccionNeumatico() async {
     print("createScrapDirecto()");
+    // setState(() {
+    //   isLoadingSave = false;
+    // });
     // print("PSI > " + _ctrlr_PSI.text.toString());
     // print("P.Actual > " + _ctrlr_presion_actual.text.toString());
     // print("Tapa Piton Id > " + tapaPitonIdselected.toString());
@@ -779,6 +789,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     // print("RM Interior > " + _ctrlr_rm_interior.text.toString());
 
     // POST > ACTUALIZAR INSPECCION
+
     var request = await http.MultipartRequest(
         "POST",
         Uri.parse(
@@ -853,10 +864,17 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
     // IMAGEN - FALTA EN EL API
     if (pickedImageAsBytesEdit != null) {
-      request.files.add(http.MultipartFile.fromBytes(
-          'imagen_lista_reemplazar', pickedImageAsBytesEdit!,
-          filename: 'photo.jpg'));
+      final httpImage = await http.MultipartFile.fromBytes(
+        'imagen_lista_reemplazar',
+        pickedImageAsBytesEdit!,
+        filename: 'photo.jpeg',
+      );
+      request.files.add(httpImage);
     }
+
+    print("Image Edit > ");
+    print(pickedImageAsBytesEdit);
+
     // ESTADO TUERCAS
     request.fields['tuercaestado'] = _estadoTuercaId.toString();
     request.fields['tuercacantidad'] = _ctrlr_cantidad_tuerca.text.toString();
@@ -897,7 +915,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     var response = await request.send();
     String parse_response = await response.stream.bytesToString();
     print('Status: ${response.statusCode}');
-    // print('Response: ${parse_response}');
+    print('Response: ${parse_response}');
 
     if (response.statusCode == 200) {
       onSuccess();
