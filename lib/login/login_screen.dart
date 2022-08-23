@@ -53,10 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
       DeviceOrientation.portraitDown,
     ]);
     //_pageController = PageController();
-    // _emailController.text = "rcabello@gestorestecnologicos.com";
-    // _passwordController.text = "123456";
-    _emailController.text = "";
-    _passwordController.text = "";
+    _emailController.text = "rcabello@gestorestecnologicos.com";
+    _passwordController.text = "123456";
+    // _emailController.text = "";
+    // _passwordController.text = "";
     setState(() {});
   }
 
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final SharedPreferences prefs = await _prefs;
       prefs.setInt('role', jsonData['success']['role']);
       prefs.setInt('userId', jsonData['success']['userId']);
-      print(jsonData['success']['nombres']);
+      // print(jsonData['success']['nombres']);
 
       _user.add(User(
           jsonData['success']['userId'],

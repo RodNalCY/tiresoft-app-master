@@ -50,12 +50,12 @@ class _HomeState extends State<Home> {
 
   Widget buildPagesApp() {
     // widget._global_cliente_id = "5";
-    print("> id: " + widget._global_cliente_id);
-    print("> Name: " + widget._global_cliente_name);
-    print("> User:");
-    for (var element in widget._user) {
-      print(element.u_firma);
-    }
+    // print("> id: " + widget._global_cliente_id);
+    // print("> Name: " + widget._global_cliente_name);
+    // print("> User:");
+    // for (var element in widget._user) {
+    //   print(element.u_firma);
+    // }
 
     final provider = Provider.of<NavigationChangeProvider>(context);
     final navigationItem = provider.navigationItemModel;

@@ -44,6 +44,7 @@ dependencies:
   syncfusion_flutter_xlsio: ^20.2.40-beta
   path_provider: ^2.0.11
   open_file: ^3.2.1
+  syncfusion_flutter_charts: ^20.2.44
 
 dev_dependencies:
   flutter_test:

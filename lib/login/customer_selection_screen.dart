@@ -174,8 +174,8 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                           color: Color(0xff212F3D),
                           textColor: Colors.white,
                           onPressed: () => {
-                                print("Send Id: " + _global_id_cliente),
-                                print("Send NAME: " + _dropdownFirsValue),
+                                // print("Send Id: " + _global_id_cliente),
+                                // print("Send NAME: " + _dropdownFirsValue),
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
