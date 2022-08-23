@@ -30,11 +30,12 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
   late TooltipBehavior _tooltip_rueda;
   late bool exits_data;
   late String txt_title = "Distribución de Medidas de Neumáticos";
+  late String total;
 
   Future<List<DistribucionMedida>> cargarDatos() async {
     final response = await http.post(
       Uri.parse(
-          "https://tiresoft2.lab-elsol.com/api/reporte/posicion_rueda_segun_marca"),
+          "https://tiresoft2.lab-elsol.com/api/reporte/medidas_neumaticos"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -53,11 +54,13 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
       final jsonData = jsonDecode(body);
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
+        total = "0";
       } else {
         exits_data = true;
+        total = jsonData['success']['total'].toString();
         for (var item in jsonData['success']['datos']) {
           _distribucion_medida.add(
-            DistribucionMedida(item['desc_marca'], item['cantidad_marca'],
+            DistribucionMedida(item['descripcion'], item['count_medida'],
                 item['porcentaje'] + "%"),
           );
         }
@@ -93,7 +96,7 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
             } else if (snapshot.hasData) {
               if (exits_data) {
                 return SfCircularChart(
-                  title: ChartTitle(text: txt_title),
+                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   tooltipBehavior: _tooltip_rueda,
                   legend: Legend(isVisible: true),
                   series: <PieSeries<DistribucionMedida, String>>[
@@ -111,7 +114,7 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
                   ],
                 );
               } else {
-                return WidgetNotData(title: txt_title);
+                return WidgetNotData(title: txt_title + "\nTotal : " + total);
               }
             } else {
               return Container(

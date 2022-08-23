@@ -23,6 +23,7 @@ class ReporteConsolidado extends StatefulWidget {
 class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   // Activador para el reporte
   bool isActivedReporteConsolidado = false;
+  bool isActiveBTNConsulta = false;
   // AÑO SELECTED
   String anioIdSelected = "Año";
   Widget anioWidgetList() {
@@ -209,6 +210,12 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   }
 
   @override
+  void dispose() {
+    print('Finish: dispose()');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -344,18 +351,38 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                     height: 15.0,
                   ),
                   Container(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                        primary: Colors.blue,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton.icon(
+                          label: Text("Consultar"),
+                          icon: Icon(Icons.visibility),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.only(right: 15.0, left: 15.0),
+                            primary: Colors.blue,
+                            elevation: 6.0,
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: isActiveBTNConsulta
+                              ? null
+                              : () => generarReporteConsolidado(),
                         ),
-                      ),
-                      onPressed: () async {
-                        await generarReporteConsolidado();
-                      },
-                      child: Text('Consultar'),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.picture_as_pdf),
+                          label: Text("Exportar"),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.only(right: 15.0, left: 15.0),
+                            primary: Colors.red,
+                            elevation: 6.0,
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () => {},
+                        ),
+                      ],
                     ),
                   ),
                   isActivedReporteConsolidado
@@ -436,8 +463,10 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
         const SnackBar(content: Text("Por favor, seleccione el mes Final")),
       );
     } else {
+      print("Generando... Reporte Consolidado");
       setState(() {
         isActivedReporteConsolidado = true;
+        isActiveBTNConsulta = true;
       });
     }
   }

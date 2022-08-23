@@ -30,6 +30,7 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
   late TooltipBehavior _tooltip_rueda;
   late bool exits_data;
   late String txt_title = "Posición de rueda según marca";
+  late String total;
 
   Future<List<PosicionRuedaMarca>> cargarDatos() async {
     final response = await http.post(
@@ -53,8 +54,10 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
       final jsonData = jsonDecode(body);
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
+        total = "0";
       } else {
         exits_data = true;
+        total = jsonData['success']['total'].toString();
         for (var item in jsonData['success']['datos']) {
           _posicion_marca.add(
             PosicionRuedaMarca(item['desc_marca'], item['cantidad_marca'],
@@ -98,7 +101,7 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
             } else if (snapshot.hasData) {
               if (exits_data) {
                 return SfCircularChart(
-                  title: ChartTitle(text: txt_title),
+                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   tooltipBehavior: _tooltip_rueda,
                   legend: Legend(isVisible: true),
                   series: <PieSeries<PosicionRuedaMarca, String>>[
@@ -116,7 +119,7 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
                   ],
                 );
               } else {
-                return WidgetNotData(title: txt_title);
+                return WidgetNotData(title: txt_title + "\nTotal : " + total);
               }
             } else {
               return Container(

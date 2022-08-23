@@ -30,6 +30,9 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
   late TooltipBehavior _tooltip;
   late bool exits_data;
   late String txt_title = "Distribución de Marcas por eje direccional";
+  late String total;
+  late int int_max_value = 0;
+  late double double_max_value;
 
   Future<List<MarcasEjeDireccional>> cargarDatos() async {
     final response = await http.post(
@@ -54,16 +57,28 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
       final jsonData = jsonDecode(body);
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
+        total = "0";
       } else {
         exits_data = true;
+        total = jsonData['success']['total'].toString();
+        int_max_value = 0;
+
         for (var item in jsonData['success']['datos']) {
+          if (int_max_value < item['cantidad_marca']) {
+            int_max_value = item['cantidad_marca'];
+          }
+
           _marca_eje_direccional.add(
             MarcasEjeDireccional(item['desc_marca'], item['cantidad_marca'],
                 item['porcentaje'] + "%"),
           );
         }
+        int_max_value += 15;
+        String str_max_value = int_max_value.toString();
+        double_max_value = double.parse(str_max_value);
       }
 
+      // print(double_max_value);
       return _marca_eje_direccional;
     } else {
       throw Exception("Falló la Conexión");
@@ -95,10 +110,10 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
             } else if (snapshot.hasData) {
               if (exits_data) {
                 return SfCartesianChart(
-                  title: ChartTitle(text: txt_title),
+                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   primaryXAxis: CategoryAxis(),
-                  primaryYAxis:
-                      NumericAxis(minimum: 0, maximum: 120, interval: 10),
+                  primaryYAxis: NumericAxis(
+                      minimum: 0, maximum: double_max_value, interval: 10),
                   tooltipBehavior: _tooltip,
                   series: <ChartSeries<MarcasEjeDireccional, String>>[
                     ColumnSeries<MarcasEjeDireccional, String>(
@@ -118,7 +133,7 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
                   ],
                 );
               } else {
-                return WidgetNotData(title: txt_title);
+                return WidgetNotData(title: txt_title + "\nTotal : " + total);
               }
             } else {
               return Container(
