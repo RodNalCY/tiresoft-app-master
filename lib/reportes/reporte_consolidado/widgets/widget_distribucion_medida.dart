@@ -52,6 +52,7 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
+      print(jsonData);
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
         total = "0";

@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiresoft/inspeccion/models/inspeccion_details.dart';
@@ -972,8 +971,9 @@ class _EditInspeccionState extends State<EditInspeccion> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.only(top: 20.0, right: 10.0, left: 10.0),
                   child: TextFormField(
+                    maxLength: 4,
                     controller: _ctrlr_presion_actual,
                     keyboardType: TextInputType.number,
                     onChanged: (val) => validatePresion(val.toString()),
@@ -1080,6 +1080,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      maxLength: 4,
                       controller: _ctrlr_rm_exterior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Exterior'),
@@ -1092,6 +1093,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      maxLength: 4,
                       controller: _ctrlr_rm_medio,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Medio'),
@@ -1106,6 +1108,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
+                      maxLength: 4,
                       controller: _ctrlr_rm_interior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Interior'),
@@ -1525,9 +1528,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
               ),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.only(top: 16.0, right: 10.0, left: 10.0),
                   child: TextFormField(
                     // readOnly: true,
+                    maxLength: 3,
                     controller: _ctrlr_cantidad_tuerca,
                     keyboardType: TextInputType.number,
                     decoration:

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiresoft/inspeccion/list_inspeccion.dart';
@@ -832,7 +831,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
   Widget pressuseWidget() {
     return CustomCart(
-        'Presion',
+        'Presión (PSI)',
         Column(
           children: [
             Padding(
@@ -843,10 +842,11 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
               ),
             ),
             TextFormField(
+              maxLength: 4,
               controller: pressureController,
               keyboardType: TextInputType.number,
               onChanged: (val) => validatePressure(val.toString()),
-              decoration: InputDecoration(labelText: 'Presion PSI'),
+              decoration: InputDecoration(labelText: 'Presión actual'),
             ),
           ],
         ));
@@ -865,44 +865,55 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 100,
-                  child: TextFormField(
-                    onChanged: (val) => validateRemanente(
-                        rightRemaindeController.text,
-                        midRemaindeController.text,
-                        val),
-                    controller: leftRemaindeController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: 'Exterior'),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    // width: 100,
+                    child: TextFormField(
+                      maxLength: 4,
+                      onChanged: (val) => validateRemanente(
+                          rightRemaindeController.text,
+                          midRemaindeController.text,
+                          val),
+                      controller: leftRemaindeController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Exterior'),
+                    ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 100,
-                  child: TextFormField(
-                    onChanged: (val) => validateRemanente(
-                        rightRemaindeController.text,
-                        val,
-                        leftRemaindeController.text),
-                    controller: midRemaindeController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: 'Medio'),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    // width: 100,
+                    child: TextFormField(
+                      maxLength: 4,
+                      onChanged: (val) => validateRemanente(
+                          rightRemaindeController.text,
+                          val,
+                          leftRemaindeController.text),
+                      controller: midRemaindeController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Medio'),
+                    ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: 100,
-                  child: TextFormField(
-                    onChanged: (val) => validateRemanente(
-                        val,
-                        midRemaindeController.text,
-                        leftRemaindeController.text),
-                    controller: rightRemaindeController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(labelText: 'Interior'),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    // width: 100,
+                    child: TextFormField(
+                      maxLength: 4,
+                      onChanged: (val) => validateRemanente(
+                          val,
+                          midRemaindeController.text,
+                          leftRemaindeController.text),
+                      controller: rightRemaindeController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Interior'),
+                    ),
                   ),
                 ),
               ],
@@ -1347,6 +1358,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           estadoTuercaWidgetList(),
           TextFormField(
+            maxLength: 3,
             controller: nutQuantityController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(labelText: 'Cantidad de tuercas'),
