@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
+
 class WidgetEquiposInspeccionados extends StatefulWidget {
   final String cliente;
   final String mes_inicio;
@@ -27,6 +29,8 @@ class _WidgetEquiposInspeccionadosState
   List _equipos = [];
   double unityHeight = 35;
   double unityRowHeight = 25;
+  late bool exits_data;
+  late String txt_title = "Equipos Inspeccionados";
   final columns = [
     'Tipo',
     'Marca',
@@ -55,8 +59,13 @@ class _WidgetEquiposInspeccionadosState
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      _equipos = jsonData['success']['datos'];
-      // print(_equipos);
+
+      if (jsonData['success']['datos'].length == 0) {
+        exits_data = false;
+      } else {
+        exits_data = true;
+        _equipos = jsonData['success']['datos'];
+      }
       return _equipos;
     } else {
       throw Exception("Falló la Conexión");
@@ -74,30 +83,32 @@ class _WidgetEquiposInspeccionadosState
     equipos_inspeccionados = cargarDatos();
 
     return Center(
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: FutureBuilder<List>(
-          future: equipos_inspeccionados,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              final error = snapshot.error;
-              return Center(child: Text("$error"));
-            } else if (snapshot.hasData) {
-              return Center(
+      child: FutureBuilder<List>(
+        future: equipos_inspeccionados,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Center(child: Text("$error"));
+          } else if (snapshot.hasData) {
+            if (exits_data) {
+              return Card(
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Container(
                     padding: EdgeInsets.all(10),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           padding: EdgeInsets.all(10.0),
                           child: Text(
-                            "Equipos Inspeccionados",
+                            txt_title,
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 18,
@@ -179,19 +190,12 @@ class _WidgetEquiposInspeccionadosState
                 ),
               );
             } else {
-              return Container(
-                margin: EdgeInsets.all(10.0),
-                child: const SizedBox(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                  ),
-                  height: 30.0,
-                  width: 30.0,
-                ),
-              );
+              return WidgetNotData(title: txt_title + "\nTotal : 0");
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

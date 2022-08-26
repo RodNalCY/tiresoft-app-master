@@ -26,6 +26,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   // Activador para el reporte
   bool isActivedReporteConsolidado = false;
   bool isActiveBTNConsulta = false;
+  bool isLoading = false;
   // AÑO SELECTED
   String anioIdSelected = "Año";
   Widget anioWidgetList() {
@@ -387,6 +388,21 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                       ],
                     ),
                   ),
+                  isActivedReporteConsolidado && isLoading
+                      ? Container(
+                          margin:
+                              EdgeInsets.only(top: 30.0, left: 5.0, right: 5.0),
+                          child: LinearProgressIndicator(
+                            backgroundColor: Colors.black12,
+                            valueColor: AlwaysStoppedAnimation(Colors.blue),
+                            minHeight: 1.0,
+                            // value: _progress,
+                          ),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
                   isActivedReporteConsolidado
                       ? WidgetEquiposInspeccionados(
                           cliente: widget._id_cliente,
@@ -491,6 +507,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
       setState(() {
         isActivedReporteConsolidado = true;
         isActiveBTNConsulta = true;
+        isLoading = true;
+      });
+      await Future.delayed(Duration(seconds: 7));
+      setState(() {
+        isLoading = false;
       });
     }
   }

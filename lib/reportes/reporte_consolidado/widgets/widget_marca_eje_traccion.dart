@@ -94,20 +94,20 @@ class _WidgetMarcaEjeTraccionState extends State<WidgetMarcaEjeTraccion> {
   Widget build(BuildContext context) {
     marcaEjeTraccion = cargarDatos();
     return Center(
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: FutureBuilder<List<MarcasEjeTraccion>>(
-          future: marcaEjeTraccion,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              final error = snapshot.error;
-              return Center(child: Text("$error"));
-            } else if (snapshot.hasData) {
-              if (exits_data) {
-                return SfCartesianChart(
+      child: FutureBuilder<List<MarcasEjeTraccion>>(
+        future: marcaEjeTraccion,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Center(child: Text("$error"));
+          } else if (snapshot.hasData) {
+            if (exits_data) {
+              return Card(
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: SfCartesianChart(
                   title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: NumericAxis(
@@ -126,24 +126,15 @@ class _WidgetMarcaEjeTraccionState extends State<WidgetMarcaEjeTraccion> {
                       color: Color.fromRGBO(8, 142, 255, 1),
                     )
                   ],
-                );
-              } else {
-                return WidgetNotData(title: txt_title + "\nTotal : " + total);
-              }
-            } else {
-              return Container(
-                margin: EdgeInsets.all(10.0),
-                child: const SizedBox(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                  ),
-                  height: 30.0,
-                  width: 30.0,
                 ),
               );
+            } else {
+              return WidgetNotData(title: txt_title + "\nTotal : " + total);
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

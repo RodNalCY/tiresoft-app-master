@@ -96,20 +96,20 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
   Widget build(BuildContext context) {
     marcaEjeDireccional = cargarDatos();
     return Center(
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: FutureBuilder<List<MarcasEjeDireccional>>(
-          future: marcaEjeDireccional,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              final error = snapshot.error;
-              return Center(child: Text("$error"));
-            } else if (snapshot.hasData) {
-              if (exits_data) {
-                return SfCartesianChart(
+      child: FutureBuilder<List<MarcasEjeDireccional>>(
+        future: marcaEjeDireccional,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Center(child: Text("$error"));
+          } else if (snapshot.hasData) {
+            if (exits_data) {
+              return Card(
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: SfCartesianChart(
                   title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: NumericAxis(
@@ -131,24 +131,15 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
                       color: Color.fromRGBO(8, 142, 255, 1),
                     )
                   ],
-                );
-              } else {
-                return WidgetNotData(title: txt_title + "\nTotal : " + total);
-              }
-            } else {
-              return Container(
-                margin: EdgeInsets.all(10.0),
-                child: const SizedBox(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                  ),
-                  height: 30.0,
-                  width: 30.0,
                 ),
               );
+            } else {
+              return WidgetNotData(title: txt_title + "\nTotal : " + total);
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

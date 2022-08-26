@@ -87,20 +87,20 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
     // print('F FN: ${widget.mes_fin}');
 
     return Center(
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: FutureBuilder<List<PosicionRuedaMarca>>(
-          future: posicion_rueda_marca,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              final error = snapshot.error;
-              return Center(child: Text("$error"));
-            } else if (snapshot.hasData) {
-              if (exits_data) {
-                return SfCircularChart(
+      child: FutureBuilder<List<PosicionRuedaMarca>>(
+        future: posicion_rueda_marca,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Center(child: Text("$error"));
+          } else if (snapshot.hasData) {
+            if (exits_data) {
+              return Card(
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: SfCircularChart(
                   title: ChartTitle(text: txt_title + "\nTotal : " + total),
                   tooltipBehavior: _tooltip_rueda,
                   legend: Legend(isVisible: true),
@@ -117,24 +117,15 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
                       dataLabelSettings: DataLabelSettings(isVisible: true),
                     ),
                   ],
-                );
-              } else {
-                return WidgetNotData(title: txt_title + "\nTotal : " + total);
-              }
-            } else {
-              return Container(
-                margin: EdgeInsets.all(10.0),
-                child: const SizedBox(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                  ),
-                  height: 30.0,
-                  width: 30.0,
                 ),
               );
+            } else {
+              return WidgetNotData(title: txt_title + "\nTotal : " + total);
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

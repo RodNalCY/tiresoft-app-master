@@ -7,13 +7,19 @@ class WidgetNotData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        Icons.cancel,
-        size: 40.0,
+    return Card(
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5),
       ),
-      title: Text(title),
-      subtitle: Text("No existen datos para el gráfico."),
+      child: ListTile(
+        leading: Icon(
+          Icons.cancel,
+          size: 40.0,
+        ),
+        title: Text(title),
+        subtitle: Text("No existen datos para el gráfico."),
+      ),
     );
   }
 }
