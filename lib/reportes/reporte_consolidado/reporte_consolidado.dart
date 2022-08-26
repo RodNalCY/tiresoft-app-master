@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_mal_estado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_apoyo.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_traccion.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marcas_eje_direccional.dart';
@@ -386,6 +388,17 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                     ),
                   ),
                   isActivedReporteConsolidado
+                      ? WidgetEquiposInspeccionados(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  isActivedReporteConsolidado
                       ? WidgetDistribucionMedida(
                           cliente: widget._id_cliente,
                           anio: anioIdSelected,
@@ -431,6 +444,17 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                   ),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeApoyo(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  isActivedReporteConsolidado
+                      ? WidgetMalEstado(
                           cliente: widget._id_cliente,
                           anio: anioIdSelected,
                           mes_inicio: mesesIdselectedInit.toString(),
