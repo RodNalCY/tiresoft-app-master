@@ -3,11 +3,15 @@ import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inflado_neumatico.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_mal_estado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_apoyo.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_traccion.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marcas_eje_direccional.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_posicion_rueda_marca.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_presion_inflado.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchabilidad.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauche.dart';
 
 class ReporteConsolidado extends StatefulWidget {
   final String _id_cliente;
@@ -411,8 +415,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetDistribucionMedida(
@@ -422,8 +426,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetPosicionRuedaMarca(
@@ -433,8 +437,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeDireccional(
@@ -444,8 +448,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeTraccion(
@@ -455,8 +459,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeApoyo(
@@ -466,11 +470,55 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
+                  Divider(
+                    height: 30.0,
                   ),
                   isActivedReporteConsolidado
                       ? WidgetMalEstado(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  Divider(
+                    height: 30.0,
+                  ),
+                  isActivedReporteConsolidado
+                      ? WidgetInfladoNeumatico(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  Divider(
+                    height: 30.0,
+                  ),
+                  isActivedReporteConsolidado
+                      ? WidgetPresionInflado(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  Divider(
+                    height: 30.0,
+                  ),
+                  isActivedReporteConsolidado
+                      ? WidgetReencauche(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  Divider(
+                    height: 30.0,
+                  ),
+                  isActivedReporteConsolidado
+                      ? WidgetReencauchabilidad(
                           cliente: widget._id_cliente,
                           anio: anioIdSelected,
                           mes_inicio: mesesIdselectedInit.toString(),
