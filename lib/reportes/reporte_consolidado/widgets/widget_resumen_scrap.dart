@@ -143,7 +143,7 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 10,
+                                          width: 20,
                                           child: Text(
                                             data["neumatico_posicion"]
                                                 .toString(),

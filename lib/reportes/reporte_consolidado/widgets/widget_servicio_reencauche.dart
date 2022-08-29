@@ -3,13 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
 
-class WidgetResumenRetiro extends StatefulWidget {
+class WidgetServicioReencauche extends StatefulWidget {
   final String cliente;
   final String mes_inicio;
   final String mes_fin;
   final String anio;
 
-  WidgetResumenRetiro(
+  WidgetServicioReencauche(
       {Key? key,
       required this.cliente,
       required this.anio,
@@ -18,17 +18,18 @@ class WidgetResumenRetiro extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<WidgetResumenRetiro> createState() => _WidgetResumenRetiroState();
+  State<WidgetServicioReencauche> createState() =>
+      _WidgetServicioReencaucheState();
 }
 
-class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
-  late Future<List> neumaticos_resumen_retiro;
-  List _resumen_retiro = [];
+class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
+  late Future<List> servicio_reencauche;
+  List _reencauches = [];
   double unityHeight = 35;
   double unityRowHeight = 25;
 
   late bool exits_data;
-  late String txt_title = "Resumen de neumáticos en retiro";
+  late String txt_title = "Neumáticos para servicio de reencauche";
 
   final columns = [
     'Vehículo',
@@ -39,15 +40,16 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
     'Estado',
     'Serie',
     'Interior',
+    'Medio',
     'Exterior',
     'NSD',
-    'Recomendación'
+    'Observaciones'
   ];
 
   Future<List> cargarDatos() async {
     final response = await http.post(
       Uri.parse(
-          "https://tiresoft2.lab-elsol.com/api/reporte/resumen_neumaticos_retiro"),
+          "https://tiresoft2.lab-elsol.com/api/reporte/resumen_neumaticos_servicio_reencauche"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -59,7 +61,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
       }),
     );
 
-    _resumen_retiro = [];
+    _reencauches = [];
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -67,9 +69,9 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
         exits_data = false;
       } else {
         exits_data = true;
-        _resumen_retiro = jsonData['success']['datos'];
+        _reencauches = jsonData['success']['datos'];
       }
-      return _resumen_retiro;
+      return _reencauches;
     } else {
       throw Exception("Falló la Conexión");
     }
@@ -77,17 +79,17 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
 
   @override
   void initState() {
-    neumaticos_resumen_retiro = cargarDatos();
+    servicio_reencauche = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_resumen_retiro = cargarDatos();
+    servicio_reencauche = cargarDatos();
 
     return Center(
       child: FutureBuilder<List>(
-        future: neumaticos_resumen_retiro,
+        future: servicio_reencauche,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             final error = snapshot.error;
@@ -199,6 +201,14 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                                         Container(
                                           width: 50.0,
                                           child: Text(
+                                            data["medio"].toString(),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 50.0,
+                                          child: Text(
                                             data["exterior"].toString(),
                                           ),
                                         ),
@@ -213,7 +223,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 100.0,
+                                          width: 150.0,
                                           child: Text(
                                             data["recomendacion"].toString(),
                                           ),

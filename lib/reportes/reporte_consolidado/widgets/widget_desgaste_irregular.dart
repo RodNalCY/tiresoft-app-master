@@ -3,13 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
 
-class WidgetResumenRetiro extends StatefulWidget {
+class WidgetDesgasteIrregular extends StatefulWidget {
   final String cliente;
   final String mes_inicio;
   final String mes_fin;
   final String anio;
 
-  WidgetResumenRetiro(
+  WidgetDesgasteIrregular(
       {Key? key,
       required this.cliente,
       required this.anio,
@@ -18,17 +18,18 @@ class WidgetResumenRetiro extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<WidgetResumenRetiro> createState() => _WidgetResumenRetiroState();
+  State<WidgetDesgasteIrregular> createState() =>
+      _WidgetDesgasteIrregularState();
 }
 
-class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
-  late Future<List> neumaticos_resumen_retiro;
-  List _resumen_retiro = [];
+class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
+  late Future<List> desgaste_irregular;
+  List _irregular = [];
   double unityHeight = 35;
   double unityRowHeight = 25;
 
   late bool exits_data;
-  late String txt_title = "Resumen de neumáticos en retiro";
+  late String txt_title = "Rotaciones - Desgastes irregulares";
 
   final columns = [
     'Vehículo',
@@ -40,14 +41,14 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
     'Serie',
     'Interior',
     'Exterior',
-    'NSD',
-    'Recomendación'
+    'NSD MIN',
+    'Observaciones'
   ];
 
   Future<List> cargarDatos() async {
     final response = await http.post(
       Uri.parse(
-          "https://tiresoft2.lab-elsol.com/api/reporte/resumen_neumaticos_retiro"),
+          "https://tiresoft2.lab-elsol.com/api/reporte/rotaciones_desgastes_irregulares"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -59,7 +60,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
       }),
     );
 
-    _resumen_retiro = [];
+    _irregular = [];
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -67,9 +68,9 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
         exits_data = false;
       } else {
         exits_data = true;
-        _resumen_retiro = jsonData['success']['datos'];
+        _irregular = jsonData['success']['datos'];
       }
-      return _resumen_retiro;
+      return _irregular;
     } else {
       throw Exception("Falló la Conexión");
     }
@@ -77,17 +78,17 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
 
   @override
   void initState() {
-    neumaticos_resumen_retiro = cargarDatos();
+    desgaste_irregular = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_resumen_retiro = cargarDatos();
+    desgaste_irregular = cargarDatos();
 
     return Center(
       child: FutureBuilder<List>(
-        future: neumaticos_resumen_retiro,
+        future: desgaste_irregular,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             final error = snapshot.error;
@@ -118,6 +119,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                             ),
                           ),
                         ),
+                        headerRowPerformance(),
                         Container(
                           child: DataTable(
                             // dataRowHeight: unityRowHeight,
@@ -215,7 +217,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                                         Container(
                                           width: 100.0,
                                           child: Text(
-                                            data["recomendacion"].toString(),
+                                            data["td_adicional"].toString(),
                                           ),
                                         ),
                                       ),
@@ -254,5 +256,61 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
           ),
         )
         .toList();
+  }
+
+  Container headerRowPerformance() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 960,
+            margin: EdgeInsets.zero,
+            height: unityHeight,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue.shade100),
+              color: Colors.blue.shade200,
+            ),
+            child: Center(
+              child: Text(
+                '',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Container(
+            width: 326,
+            height: unityHeight,
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue.shade100),
+              color: Colors.blue.shade200,
+            ),
+            child: Center(
+              child: Text(
+                'NSD REMANENTE EN mm',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Container(
+            width: 152,
+            height: unityHeight,
+            margin: EdgeInsets.zero,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blue.shade100),
+              color: Colors.blue.shade200,
+            ),
+            child: Center(
+              child: Text(
+                '',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

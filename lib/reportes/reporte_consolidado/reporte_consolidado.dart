@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_desgaste_irregular.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inflado_neumatico.dart';
@@ -14,6 +15,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchab
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauche.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_retiro.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_scrap.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_servicio_reencauche.dart';
 
 class ReporteConsolidado extends StatefulWidget {
   final String _id_cliente;
@@ -515,6 +517,27 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                       : Container(),
                   isActivedReporteConsolidado
                       ? WidgetResumenRetiro(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? WidgetServicioReencauche(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? WidgetDesgasteIrregular(
                           cliente: widget._id_cliente,
                           anio: anioIdSelected,
                           mes_inicio: mesesIdselectedInit.toString(),

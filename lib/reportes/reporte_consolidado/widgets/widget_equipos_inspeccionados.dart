@@ -115,7 +115,7 @@ class _WidgetEquiposInspeccionadosState
                             ),
                           ),
                         ),
-                        headerRowOne(),
+                        headerRowPerformance(),
                         Container(
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
@@ -215,7 +215,7 @@ class _WidgetEquiposInspeccionadosState
         .toList();
   }
 
-  Container headerRowOne() {
+  Container headerRowPerformance() {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -141,7 +141,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 50.0,
+                                          width: 20.0,
                                           child: Text(
                                             data["neumatico_posicion"]
                                                 .toString(),
