@@ -3,13 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
 
-class WidgetMalEstado extends StatefulWidget {
+class WidgetResumenScrap extends StatefulWidget {
   final String cliente;
   final String mes_inicio;
   final String mes_fin;
   final String anio;
 
-  WidgetMalEstado(
+  WidgetResumenScrap(
       {Key? key,
       required this.cliente,
       required this.anio,
@@ -18,36 +18,30 @@ class WidgetMalEstado extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<WidgetMalEstado> createState() => _WidgetMalEstadoState();
+  State<WidgetResumenScrap> createState() => _WidgetResumenScrapState();
 }
 
-class _WidgetMalEstadoState extends State<WidgetMalEstado> {
-  late Future<List> neumaticos_mal_estado;
-  List _mal_estado = [];
+class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
+  late Future<List> neumaticos_resumen_scrap;
+  List _resumen_scrap = [];
   double unityHeight = 35;
   double unityRowHeight = 25;
 
   late bool exits_data;
-  late String txt_title = "Resumen de neumáticos en mal Estado";
+  late String txt_title = "Resumen de Neumáticos En Scrap";
 
   final columns = [
-    'Placa',
-    'Posición',
-    'Eje',
-    'Marca',
-    'Medida',
-    'Modelo',
-    'Estado',
-    'Diseño',
+    'Vehículo',
     'Serie',
-    'NSD',
-    'Observaciones',
+    'Posición',
+    'Motivo retiro',
+    'Imagen',
   ];
 
   Future<List> cargarDatos() async {
     final response = await http.post(
       Uri.parse(
-          "https://tiresoft2.lab-elsol.com/api/reporte/resumen_neumaticos_mal_estado"),
+          "https://tiresoft2.lab-elsol.com/api/reporte/resumen_neumaticos_scrap"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -59,7 +53,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
       }),
     );
 
-    _mal_estado = [];
+    _resumen_scrap = [];
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -67,9 +61,9 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
         exits_data = false;
       } else {
         exits_data = true;
-        _mal_estado = jsonData['success']['datos'];
+        _resumen_scrap = jsonData['success']['datos'];
       }
-      return _mal_estado;
+      return _resumen_scrap;
     } else {
       throw Exception("Falló la Conexión");
     }
@@ -77,17 +71,17 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
 
   @override
   void initState() {
-    neumaticos_mal_estado = cargarDatos();
+    neumaticos_resumen_scrap = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_mal_estado = cargarDatos();
+    neumaticos_resumen_scrap = cargarDatos();
 
     return Center(
       child: FutureBuilder<List>(
-        future: neumaticos_mal_estado,
+        future: neumaticos_resumen_scrap,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             final error = snapshot.error;
@@ -133,7 +127,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                     cells: <DataCell>[
                                       DataCell(
                                         Container(
-                                          width: 80.0,
+                                          width: 100.0,
                                           child: Text(
                                             data["placa"].toString(),
                                           ),
@@ -141,7 +135,15 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 50.0,
+                                          width: 100.0,
+                                          child: Text(
+                                            data["num_serie"].toString(),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 10,
                                           child: Text(
                                             data["neumatico_posicion"]
                                                 .toString(),
@@ -150,33 +152,9 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 80,
-                                          child: Text(
-                                            data["eje"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
                                           width: 100,
                                           child: Text(
-                                            data["marca"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["medida"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["modelo"].toString(),
+                                            data["motivo"].toString(),
                                           ),
                                         ),
                                       ),
@@ -184,39 +162,8 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                         Container(
                                           width: 200.0,
                                           child: Text(
-                                            data["estado"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 80.0,
-                                          child: Text(
-                                            data["disenio"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 80.0,
-                                          child: Text(
-                                            data["serieneumatico"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Text(
-                                            data["nsd"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 200.0,
-                                          child: Text(
-                                            data["observaciones"].toString(),
+                                            data["neumaticoimgruta1"]
+                                                .toString(),
                                           ),
                                         ),
                                       ),

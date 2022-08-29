@@ -12,6 +12,8 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_posicion_ru
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_presion_inflado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchabilidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauche.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_retiro.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_scrap.dart';
 
 class ReporteConsolidado extends StatefulWidget {
   final String _id_cliente;
@@ -415,9 +417,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetDistribucionMedida(
                           cliente: widget._id_cliente,
@@ -426,9 +430,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetPosicionRuedaMarca(
                           cliente: widget._id_cliente,
@@ -437,9 +443,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeDireccional(
                           cliente: widget._id_cliente,
@@ -448,9 +456,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeTraccion(
                           cliente: widget._id_cliente,
@@ -459,9 +469,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetMarcaEjeApoyo(
                           cliente: widget._id_cliente,
@@ -470,9 +482,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetMalEstado(
                           cliente: widget._id_cliente,
@@ -481,9 +495,37 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? WidgetResumenScrap(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? WidgetResumenRetiro(
+                          cliente: widget._id_cliente,
+                          anio: anioIdSelected,
+                          mes_inicio: mesesIdselectedInit.toString(),
+                          mes_fin: mesesIdselectedFinish.toString(),
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetInfladoNeumatico(
                           cliente: widget._id_cliente,
@@ -492,9 +534,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetPresionInflado(
                           cliente: widget._id_cliente,
@@ -503,9 +547,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetReencauche(
                           cliente: widget._id_cliente,
@@ -514,9 +560,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  Divider(
-                    height: 30.0,
-                  ),
+                  isActivedReporteConsolidado
+                      ? Divider(
+                          height: 30.0,
+                        )
+                      : Container(),
                   isActivedReporteConsolidado
                       ? WidgetReencauchabilidad(
                           cliente: widget._id_cliente,
