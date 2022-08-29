@@ -238,160 +238,171 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
         backgroundColor: Color(0xff212F3D),
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.white54,
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(
-              left: 10.0,
-              right: 10.0,
-            ),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const SizedBox(height: 15.0),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        '${widget._name_cliente}',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
+                  Card(
+                    elevation: 3.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                  ),
-                  isActivedReporteConsolidado
-                      ? Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10.0),
+                        Container(
+                          margin: EdgeInsets.all(10),
                           child: Center(
                             child: Text(
-                              '(${calcularMeses(mesesIdselectedInit)} a ${calcularMeses(mesesIdselectedFinish)} - ${anioIdSelected})',
+                              '${widget._name_cliente}',
                               style: TextStyle(
-                                  color: Color(0xff212F3D), fontSize: 14.0),
+                                  color: Colors.blue,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                        )
-                      : Container(),
-                  const SizedBox(height: 25.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                        ),
+                        isActivedReporteConsolidado
+                            ? Container(
+                                child: Center(
+                                  child: Text(
+                                    '(${calcularMeses(mesesIdselectedInit)} a ${calcularMeses(mesesIdselectedFinish)} - ${anioIdSelected})',
+                                    style: TextStyle(
+                                        color: Color(0xff212F3D),
+                                        fontSize: 14.0),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                        const SizedBox(height: 10.0),
                         Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                ),
+                                child: anioWidgetList(),
                               ),
-                            ),
-                            child: anioWidgetList()),
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          child: mesesInitedWidgetList(),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade50,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          child: mesesFinishedWidgetList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Container(
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      elevation: 2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.radio_button_checked,
-                                  color: Colors.red,
-                                  size: 15.0,
+                              Container(
+                                padding:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
                                 ),
-                                SizedBox(
-                                  width: 5.0,
+                                child: mesesInitedWidgetList(),
+                              ),
+                              Container(
+                                padding:
+                                    EdgeInsets.only(left: 10.0, right: 10.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue.shade50,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
                                 ),
-                                Text("Seguimiento del Reporte Consolidado",
-                                    style: TextStyle(color: Colors.black38))
+                                child: mesesFinishedWidgetList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10.0),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.radio_button_checked,
+                                      color: Colors.red,
+                                      size: 15.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Text("Seguimiento del Reporte Consolidado",
+                                        style: TextStyle(color: Colors.black38))
+                                  ],
+                                ),
+                                Divider(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.description,
+                                      size: 15.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Text(
+                                      'No Enviado',
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.description,
-                                  size: 15.0,
-                                ),
-                                SizedBox(
-                                  width: 5.0,
-                                ),
-                                Text(
-                                  'No Enviado',
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ElevatedButton.icon(
-                          label: Text("Consultar"),
-                          icon: Icon(Icons.visibility),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.only(right: 15.0, left: 15.0),
-                            primary: Colors.blue,
-                            elevation: 6.0,
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
                           ),
-                          onPressed: isActiveBTNConsulta
-                              ? null
-                              : () => generarReporteConsolidado(),
                         ),
-                        ElevatedButton.icon(
-                          icon: Icon(Icons.picture_as_pdf),
-                          label: Text("Exportar"),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.only(right: 15.0, left: 15.0),
-                            primary: Colors.red,
-                            elevation: 6.0,
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton.icon(
+                                label: Text("Consultar"),
+                                icon: Icon(Icons.visibility),
+                                style: ElevatedButton.styleFrom(
+                                  padding:
+                                      EdgeInsets.only(right: 15.0, left: 15.0),
+                                  primary: Colors.blue,
+                                  elevation: 6.0,
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onPressed: isActiveBTNConsulta
+                                    ? null
+                                    : () => generarReporteConsolidado(),
+                              ),
+                              ElevatedButton.icon(
+                                icon: Icon(Icons.picture_as_pdf),
+                                label: Text("Exportar"),
+                                style: ElevatedButton.styleFrom(
+                                  padding:
+                                      EdgeInsets.only(right: 15.0, left: 15.0),
+                                  primary: Colors.red,
+                                  elevation: 6.0,
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                onPressed: () => {},
+                              ),
+                            ],
                           ),
-                          onPressed: () => {},
                         ),
                       ],
                     ),
@@ -420,7 +431,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -433,7 +444,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -446,7 +457,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -459,7 +470,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -472,7 +483,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -485,7 +496,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -498,7 +509,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -511,7 +522,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -524,7 +535,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -537,6 +548,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
+                      ? SizedBox(
+                          height: 30.0,
+                        )
+                      : Container(),
+                  isActivedReporteConsolidado
                       ? WidgetDesgasteIrregular(
                           cliente: widget._id_cliente,
                           anio: anioIdSelected,
@@ -545,7 +561,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -558,7 +574,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -571,7 +587,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -584,7 +600,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         )
                       : Container(),
                   isActivedReporteConsolidado
-                      ? Divider(
+                      ? SizedBox(
                           height: 30.0,
                         )
                       : Container(),
@@ -596,9 +612,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                           mes_fin: mesesIdselectedFinish.toString(),
                         )
                       : Container(),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  isActivedReporteConsolidado
+                      ? SizedBox(
+                          height: 30.0,
+                        )
+                      : Container(),
                 ],
               ),
             ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'dart:convert';
 import 'package:tiresoft/reportes/reporte_consolidado/models/indice_reencauchabilidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
@@ -95,13 +96,9 @@ class _WidgetReencauchabilidadState extends State<WidgetReencauchabilidad> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
-              return Card(
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: SfCartesianChart(
-                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              return GraphicCard(
+                title: txt_title + "\nTotal : " + total,
+                widget: SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis:
                       NumericAxis(minimum: 0, maximum: 2.5, interval: 0.5),

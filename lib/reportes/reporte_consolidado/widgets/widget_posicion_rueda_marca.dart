@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'dart:convert';
 
 import 'package:tiresoft/reportes/reporte_consolidado/models/posicion_rueda_marca.dart';
@@ -95,13 +96,9 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
-              return Card(
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: SfCircularChart(
-                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              return GraphicCard(
+                title: txt_title + "\nTotal : " + total,
+                widget: SfCircularChart(
                   tooltipBehavior: _tooltip_rueda,
                   legend: Legend(isVisible: true),
                   series: <PieSeries<PosicionRuedaMarca, String>>[

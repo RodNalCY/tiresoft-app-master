@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'dart:convert';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
 
@@ -94,30 +95,17 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
-              return Card(
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: SingleChildScrollView(
+              return GraphicCard(
+                title: txt_title,
+                widget: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   child: Container(
-                    padding: EdgeInsets.all(10),
+                    padding: EdgeInsets.only(bottom: 10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            txt_title,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
                         Container(
                           child: DataTable(
                             // dataRowHeight: unityRowHeight,

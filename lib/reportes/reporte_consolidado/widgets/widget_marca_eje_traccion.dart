@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/models/marcas_eje_traccion.dart';
 import 'dart:convert';
 
@@ -102,13 +103,35 @@ class _WidgetMarcaEjeTraccionState extends State<WidgetMarcaEjeTraccion> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
-              return Card(
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: SfCartesianChart(
-                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              // return Card(
+              //   elevation: 3.0,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(5),
+              //   ),
+              //   child: SfCartesianChart(
+              //     title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              //     primaryXAxis: CategoryAxis(),
+              //     primaryYAxis: NumericAxis(
+              //         minimum: 0, maximum: double_max_value, interval: 10),
+              //     tooltipBehavior: _tooltip,
+              //     series: <ChartSeries<MarcasEjeTraccion, String>>[
+              //       ColumnSeries<MarcasEjeTraccion, String>(
+              //         borderWidth: 1,
+              //         borderColor: Colors.blue,
+              //         dataSource: snapshot.data!,
+              //         xValueMapper: (MarcasEjeTraccion data, _) => data.xData,
+              //         yValueMapper: (MarcasEjeTraccion data, _) => data.yData,
+              //         dataLabelMapper: (MarcasEjeTraccion data, _) => data.text,
+              //         dataLabelSettings: DataLabelSettings(isVisible: true),
+              //         name: 'Marca',
+              //         color: Color.fromRGBO(8, 142, 255, 1),
+              //       )
+              //     ],
+              //   ),
+              // );
+              return GraphicCard(
+                title: txt_title + "\nTotal : " + total,
+                widget: SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: NumericAxis(
                       minimum: 0, maximum: double_max_value, interval: 10),

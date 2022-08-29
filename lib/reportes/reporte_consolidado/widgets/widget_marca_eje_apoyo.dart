@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:http/http.dart' as http;
+import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/models/marcas_eje_apoyo.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
 import 'dart:convert';
@@ -102,13 +103,36 @@ class _WidgetMarcaEjeApoyoState extends State<WidgetMarcaEjeApoyo> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
-              return Card(
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: SfCartesianChart(
-                  title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              // return Card(
+              //   elevation: 3.0,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(5),
+              //   ),
+              //   child: SfCartesianChart(
+              //     title: ChartTitle(text: txt_title + "\nTotal : " + total),
+              //     primaryXAxis: CategoryAxis(),
+              //     primaryYAxis: NumericAxis(
+              //         minimum: 0, maximum: double_max_value, interval: 10),
+              //     tooltipBehavior: _tooltip,
+              //     series: <ChartSeries<MarcasEjeApoyo, String>>[
+              //       ColumnSeries<MarcasEjeApoyo, String>(
+              //         borderWidth: 1,
+              //         borderColor: Colors.blue,
+              //         dataSource: snapshot.data!,
+              //         xValueMapper: (MarcasEjeApoyo data, _) => data.xData,
+              //         yValueMapper: (MarcasEjeApoyo data, _) => data.yData,
+              //         dataLabelMapper: (MarcasEjeApoyo data, _) => data.text,
+              //         dataLabelSettings: DataLabelSettings(isVisible: true),
+              //         name: 'Marca',
+              //         color: Color.fromRGBO(8, 142, 255, 1),
+              //       )
+              //     ],
+              //   ),
+              // );
+
+              return GraphicCard(
+                title: txt_title + "\nTotal : " + total,
+                widget: SfCartesianChart(
                   primaryXAxis: CategoryAxis(),
                   primaryYAxis: NumericAxis(
                       minimum: 0, maximum: double_max_value, interval: 10),
