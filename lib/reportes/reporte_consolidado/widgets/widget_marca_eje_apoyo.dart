@@ -11,13 +11,15 @@ class WidgetMarcaEjeApoyo extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetMarcaEjeApoyo(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -25,7 +27,10 @@ class WidgetMarcaEjeApoyo extends StatefulWidget {
 }
 
 class _WidgetMarcaEjeApoyoState extends State<WidgetMarcaEjeApoyo> {
+  late bool refreshing = false;
+
   late Future<List<MarcasEjeApoyo>> marcaEjeApoyo;
+  List<MarcasEjeApoyo> _marca_eje_apoyo = [];
   late TooltipBehavior _tooltip;
   late bool exits_data;
   late String txt_title = "Distribución de Marcas por eje apoyo";
@@ -49,7 +54,8 @@ class _WidgetMarcaEjeApoyoState extends State<WidgetMarcaEjeApoyo> {
       }),
     );
 
-    List<MarcasEjeApoyo> _marca_eje_apoyo = [];
+    _marca_eje_apoyo = [];
+    print('6-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -86,6 +92,7 @@ class _WidgetMarcaEjeApoyoState extends State<WidgetMarcaEjeApoyo> {
 
   @override
   void initState() {
+    refreshing = false;
     marcaEjeApoyo = cargarDatos();
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
@@ -93,7 +100,15 @@ class _WidgetMarcaEjeApoyoState extends State<WidgetMarcaEjeApoyo> {
 
   @override
   Widget build(BuildContext context) {
-    marcaEjeApoyo = cargarDatos();
+    if (refreshing && widget.refresh) {
+      marcaEjeApoyo = cargarDatos();
+      print("6-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("6-No se ejecuta");
+      refreshing = true;
+    }
+
     return Center(
       child: FutureBuilder<List<MarcasEjeApoyo>>(
         future: marcaEjeApoyo,

@@ -9,13 +9,15 @@ class WidgetDesgasteIrregular extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetDesgasteIrregular(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -24,6 +26,8 @@ class WidgetDesgasteIrregular extends StatefulWidget {
 }
 
 class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
+  late bool refreshing = false;
+
   late Future<List> desgaste_irregular;
   List _irregular = [];
   double unityHeight = 35;
@@ -62,6 +66,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
     );
 
     _irregular = [];
+    print('1-Status Code${response.statusCode}');
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -79,13 +84,22 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
 
   @override
   void initState() {
+    refreshing = false;
     desgaste_irregular = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    desgaste_irregular = cargarDatos();
+    // desgaste_irregular = cargarDatos();
+    if (refreshing && widget.refresh) {
+      desgaste_irregular = cargarDatos();
+      print("1-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("1-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

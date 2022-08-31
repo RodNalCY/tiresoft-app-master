@@ -9,13 +9,15 @@ class WidgetServicioReencauche extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetServicioReencauche(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -24,6 +26,8 @@ class WidgetServicioReencauche extends StatefulWidget {
 }
 
 class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
+  late bool refreshing = false;
+
   late Future<List> servicio_reencauche;
   List _reencauches = [];
   double unityHeight = 35;
@@ -63,6 +67,8 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
     );
 
     _reencauches = [];
+    print('15-Status Code${response.statusCode}');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -80,13 +86,21 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
 
   @override
   void initState() {
+    refreshing = false;
     servicio_reencauche = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    servicio_reencauche = cargarDatos();
+    if (refreshing && widget.refresh) {
+      servicio_reencauche = cargarDatos();
+      print("15-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("15-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

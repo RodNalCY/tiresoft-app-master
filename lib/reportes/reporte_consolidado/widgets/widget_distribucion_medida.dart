@@ -12,13 +12,15 @@ class WidgetDistribucionMedida extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetDistribucionMedida(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -27,7 +29,10 @@ class WidgetDistribucionMedida extends StatefulWidget {
 }
 
 class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
+  late bool refreshing = false;
+
   late Future<List<DistribucionMedida>> distribucionMedida;
+  List<DistribucionMedida> _distribucion_medida = [];
   late TooltipBehavior _tooltip_rueda;
   late bool exits_data;
   late String txt_title = "Distribución de Medidas de Neumáticos";
@@ -48,7 +53,8 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
       }),
     );
 
-    List<DistribucionMedida> _distribucion_medida = [];
+    _distribucion_medida = [];
+    print('2-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -75,6 +81,7 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_rueda = TooltipBehavior(enable: true);
     distribucionMedida = cargarDatos();
     super.initState();
@@ -82,7 +89,26 @@ class _WidgetDistribucionMedidaState extends State<WidgetDistribucionMedida> {
 
   @override
   Widget build(BuildContext context) {
-    distribucionMedida = cargarDatos();
+    // print("Logica");
+    // print(refreshing);
+    // print(widget.refresh);
+    if (refreshing && widget.refresh) {
+      distribucionMedida = cargarDatos();
+      print("2-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("2-No se ejecuta");
+      refreshing = true;
+    }
+
+    // if (_count == 1) {
+    //   print("No se ejecuta");
+    //   _count++;
+    // } else {
+    //   print("Se ejecuta");
+    //   distribucionMedida = cargarDatos();
+    // }
+
     return Center(
       child: FutureBuilder<List<DistribucionMedida>>(
         future: distribucionMedida,

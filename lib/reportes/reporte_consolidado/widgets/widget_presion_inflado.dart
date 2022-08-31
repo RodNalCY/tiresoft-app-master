@@ -12,13 +12,15 @@ class WidgetPresionInflado extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetPresionInflado(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -26,7 +28,10 @@ class WidgetPresionInflado extends StatefulWidget {
 }
 
 class _WidgetPresionInfladoState extends State<WidgetPresionInflado> {
+  late bool refreshing = false;
+
   late Future<List<PresionInflado>> presion_inflado;
+  List<PresionInflado> _presion = [];
   late TooltipBehavior _tooltip_presion;
   late bool exits_data;
   late String txt_title = "Presión de inflado de neumáticos";
@@ -47,7 +52,8 @@ class _WidgetPresionInfladoState extends State<WidgetPresionInflado> {
       }),
     );
 
-    List<PresionInflado> _presion = [];
+    _presion = [];
+    print('10-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -73,6 +79,7 @@ class _WidgetPresionInfladoState extends State<WidgetPresionInflado> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_presion = TooltipBehavior(enable: true);
     presion_inflado = cargarDatos();
     super.initState();
@@ -80,7 +87,15 @@ class _WidgetPresionInfladoState extends State<WidgetPresionInflado> {
 
   @override
   Widget build(BuildContext context) {
-    presion_inflado = cargarDatos();
+    if (refreshing && widget.refresh) {
+      presion_inflado = cargarDatos();
+      print("10-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("10-No se ejecuta");
+      refreshing = true;
+    }
+
     return Center(
       child: FutureBuilder<List<PresionInflado>>(
         future: presion_inflado,

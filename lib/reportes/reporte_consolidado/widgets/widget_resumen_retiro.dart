@@ -9,13 +9,15 @@ class WidgetResumenRetiro extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetResumenRetiro(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -23,6 +25,8 @@ class WidgetResumenRetiro extends StatefulWidget {
 }
 
 class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
+  late bool refreshing = false;
+
   late Future<List> neumaticos_resumen_retiro;
   List _resumen_retiro = [];
   double unityHeight = 35;
@@ -61,6 +65,8 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
     );
 
     _resumen_retiro = [];
+    print('13-Status Code${response.statusCode}');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -78,13 +84,21 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
 
   @override
   void initState() {
+    refreshing = false;
     neumaticos_resumen_retiro = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_resumen_retiro = cargarDatos();
+    if (refreshing && widget.refresh) {
+      neumaticos_resumen_retiro = cargarDatos();
+      print("13-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("13-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

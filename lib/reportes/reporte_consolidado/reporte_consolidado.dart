@@ -31,6 +31,7 @@ class ReporteConsolidado extends StatefulWidget {
 }
 
 class _ReporteConsolidadoState extends State<ReporteConsolidado> {
+  late bool _refresh = false;
   // Activador para el reporte
   bool isActivedReporteConsolidado = false;
   bool isActiveBTNConsulta = false;
@@ -383,9 +384,13 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                onPressed: isActiveBTNConsulta
-                                    ? null
-                                    : () => generarReporteConsolidado(),
+                                // onPressed: isActiveBTNConsulta
+                                //     ? null
+                                //     : () => generarReporteConsolidado(),
+
+                                onPressed: () {
+                                  generarReporteConsolidado();
+                                },
                               ),
                               ElevatedButton.icon(
                                 icon: Icon(Icons.picture_as_pdf),
@@ -422,201 +427,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                   SizedBox(
                     height: 20,
                   ),
-                  isActivedReporteConsolidado
-                      ? WidgetEquiposInspeccionados(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetDistribucionMedida(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetPosicionRuedaMarca(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetMarcaEjeDireccional(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetMarcaEjeTraccion(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetMarcaEjeApoyo(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetMalEstado(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetResumenScrap(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetResumenRetiro(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetServicioReencauche(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetDesgasteIrregular(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetInfladoNeumatico(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetPresionInflado(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetReencauche(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? WidgetReencauchabilidad(
-                          cliente: widget._id_cliente,
-                          anio: anioIdSelected,
-                          mes_inicio: mesesIdselectedInit.toString(),
-                          mes_fin: mesesIdselectedFinish.toString(),
-                        )
-                      : Container(),
-                  isActivedReporteConsolidado
-                      ? SizedBox(
-                          height: 30.0,
-                        )
-                      : Container(),
+                  isActivedReporteConsolidado ? pintarGraficos() : Container(),
                 ],
               ),
             ),
@@ -645,11 +456,176 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
         isActivedReporteConsolidado = true;
         isActiveBTNConsulta = true;
         isLoading = true;
+        _refresh = true;
       });
-      await Future.delayed(Duration(seconds: 7));
+      await Future.delayed(Duration(seconds: 3));
+      setState(() {
+        _refresh = false;
+      });
+      await Future.delayed(Duration(seconds: 3));
       setState(() {
         isLoading = false;
       });
     }
+  }
+
+  Widget pintarGraficos() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          WidgetEquiposInspeccionados(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetDistribucionMedida(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetPosicionRuedaMarca(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMarcaEjeDireccional(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMarcaEjeTraccion(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMarcaEjeApoyo(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMalEstado(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetResumenScrap(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetResumenRetiro(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetServicioReencauche(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetDesgasteIrregular(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetInfladoNeumatico(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetPresionInflado(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetReencauche(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetReencauchabilidad(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+        ],
+      ),
+    );
   }
 }

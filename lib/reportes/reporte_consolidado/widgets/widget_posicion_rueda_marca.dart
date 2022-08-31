@@ -12,13 +12,15 @@ class WidgetPosicionRuedaMarca extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetPosicionRuedaMarca(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -27,7 +29,10 @@ class WidgetPosicionRuedaMarca extends StatefulWidget {
 }
 
 class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
+  late bool refreshing = false;
+
   late Future<List<PosicionRuedaMarca>> posicion_rueda_marca;
+  List<PosicionRuedaMarca> _posicion_marca = [];
   late TooltipBehavior _tooltip_rueda;
   late bool exits_data;
   late String txt_title = "Posición de rueda según marca";
@@ -48,7 +53,8 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
       }),
     );
 
-    List<PosicionRuedaMarca> _posicion_marca = [];
+    _posicion_marca = [];
+    print('9-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -74,6 +80,7 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_rueda = TooltipBehavior(enable: true);
     posicion_rueda_marca = cargarDatos();
     super.initState();
@@ -81,11 +88,20 @@ class _WidgetPosicionRuedaMarcaState extends State<WidgetPosicionRuedaMarca> {
 
   @override
   Widget build(BuildContext context) {
-    posicion_rueda_marca = cargarDatos();
+    // posicion_rueda_marca = cargarDatos();
     // print("FECHA SELECCIONADA");
     // print('ANIO: ${widget.anio}');
     // print('F IN: ${widget.mes_inicio}');
     // print('F FN: ${widget.mes_fin}');
+
+    if (refreshing && widget.refresh) {
+      posicion_rueda_marca = cargarDatos();
+      print("9-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("9-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List<PosicionRuedaMarca>>(

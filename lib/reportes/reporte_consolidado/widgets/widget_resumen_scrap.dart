@@ -9,13 +9,15 @@ class WidgetResumenScrap extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetResumenScrap(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -23,6 +25,8 @@ class WidgetResumenScrap extends StatefulWidget {
 }
 
 class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
+  late bool refreshing = false;
+
   late Future<List> neumaticos_resumen_scrap;
   List _resumen_scrap = [];
   double unityHeight = 35;
@@ -55,6 +59,8 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
     );
 
     _resumen_scrap = [];
+    print('14-Status Code${response.statusCode}');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -72,13 +78,21 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
 
   @override
   void initState() {
+    refreshing = false;
     neumaticos_resumen_scrap = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_resumen_scrap = cargarDatos();
+    if (refreshing && widget.refresh) {
+      neumaticos_resumen_scrap = cargarDatos();
+      print("14-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("14-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

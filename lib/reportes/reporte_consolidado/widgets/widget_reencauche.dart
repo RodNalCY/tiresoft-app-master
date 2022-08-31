@@ -12,13 +12,15 @@ class WidgetReencauche extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetReencauche(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -26,7 +28,10 @@ class WidgetReencauche extends StatefulWidget {
 }
 
 class _WidgetReencaucheState extends State<WidgetReencauche> {
+  late bool refreshing = false;
+
   late Future<List<IndiceReencauche>> indiceReencauche;
+  List<IndiceReencauche> _indice_reencauche = [];
   late TooltipBehavior _tooltip_reencauche;
   late bool exits_data;
   late String txt_title = "Índice de reencauche";
@@ -47,7 +52,8 @@ class _WidgetReencaucheState extends State<WidgetReencauche> {
       }),
     );
 
-    List<IndiceReencauche> _indice_reencauche = [];
+    _indice_reencauche = [];
+    print('12-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -73,6 +79,7 @@ class _WidgetReencaucheState extends State<WidgetReencauche> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_reencauche = TooltipBehavior(enable: true);
     indiceReencauche = cargarDatos();
     super.initState();
@@ -80,7 +87,14 @@ class _WidgetReencaucheState extends State<WidgetReencauche> {
 
   @override
   Widget build(BuildContext context) {
-    indiceReencauche = cargarDatos();
+    if (refreshing && widget.refresh) {
+      indiceReencauche = cargarDatos();
+      print("12-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("12-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List<IndiceReencauche>>(

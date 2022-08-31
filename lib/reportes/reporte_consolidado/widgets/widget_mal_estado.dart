@@ -9,13 +9,15 @@ class WidgetMalEstado extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetMalEstado(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -23,6 +25,8 @@ class WidgetMalEstado extends StatefulWidget {
 }
 
 class _WidgetMalEstadoState extends State<WidgetMalEstado> {
+  late bool refreshing = false;
+
   late Future<List> neumaticos_mal_estado;
   List _mal_estado = [];
   double unityHeight = 35;
@@ -61,6 +65,8 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
     );
 
     _mal_estado = [];
+    print('5-Status Code${response.statusCode}');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -78,13 +84,21 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
 
   @override
   void initState() {
+    refreshing = false;
     neumaticos_mal_estado = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    neumaticos_mal_estado = cargarDatos();
+    if (refreshing && widget.refresh) {
+      neumaticos_mal_estado = cargarDatos();
+      print("5-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("5-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

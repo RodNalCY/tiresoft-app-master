@@ -12,13 +12,15 @@ class WidgetMarcaEjeDireccional extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetMarcaEjeDireccional(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -27,7 +29,10 @@ class WidgetMarcaEjeDireccional extends StatefulWidget {
 }
 
 class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
+  late bool refreshing = false;
+
   late Future<List<MarcasEjeDireccional>> marcaEjeDireccional;
+  List<MarcasEjeDireccional> _marca_eje_direccional = [];
   late TooltipBehavior _tooltip;
   late bool exits_data;
   late String txt_title = "Distribución de Marcas por eje direccional";
@@ -51,7 +56,8 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
       }),
     );
 
-    List<MarcasEjeDireccional> _marca_eje_direccional = [];
+    _marca_eje_direccional = [];
+    print('8-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -88,6 +94,7 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
 
   @override
   void initState() {
+    refreshing = false;
     marcaEjeDireccional = cargarDatos();
     _tooltip = TooltipBehavior(enable: true);
     super.initState();
@@ -95,7 +102,15 @@ class _WidgetMarcaEjeDireccionalState extends State<WidgetMarcaEjeDireccional> {
 
   @override
   Widget build(BuildContext context) {
-    marcaEjeDireccional = cargarDatos();
+    if (refreshing && widget.refresh) {
+      marcaEjeDireccional = cargarDatos();
+      print("8-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("8-No se ejecuta");
+      refreshing = true;
+    }
+
     return Center(
       child: FutureBuilder<List<MarcasEjeDireccional>>(
         future: marcaEjeDireccional,

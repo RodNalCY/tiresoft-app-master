@@ -11,13 +11,15 @@ class WidgetReencauchabilidad extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetReencauchabilidad(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -26,7 +28,10 @@ class WidgetReencauchabilidad extends StatefulWidget {
 }
 
 class _WidgetReencauchabilidadState extends State<WidgetReencauchabilidad> {
+  late bool refreshing = false;
+
   late Future<List<IndiceReencauchabilidad>> indiceReencauchabilidad;
+  List<IndiceReencauchabilidad> _indice_reencauchabilidad = [];
   late TooltipBehavior _tooltip_reencauchabilidad;
   late bool exits_data;
   late String txt_title = "Índice de reencauchabilidad";
@@ -47,7 +52,8 @@ class _WidgetReencauchabilidadState extends State<WidgetReencauchabilidad> {
       }),
     );
 
-    List<IndiceReencauchabilidad> _indice_reencauchabilidad = [];
+    _indice_reencauchabilidad = [];
+    print('11-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -79,6 +85,7 @@ class _WidgetReencauchabilidadState extends State<WidgetReencauchabilidad> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_reencauchabilidad = TooltipBehavior(enable: true);
     indiceReencauchabilidad = cargarDatos();
     super.initState();
@@ -86,7 +93,15 @@ class _WidgetReencauchabilidadState extends State<WidgetReencauchabilidad> {
 
   @override
   Widget build(BuildContext context) {
-    indiceReencauchabilidad = cargarDatos();
+    if (refreshing && widget.refresh) {
+      indiceReencauchabilidad = cargarDatos();
+      print("11-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("11-No se ejecuta");
+      refreshing = true;
+    }
+
     return Center(
       child: FutureBuilder<List<IndiceReencauchabilidad>>(
         future: indiceReencauchabilidad,

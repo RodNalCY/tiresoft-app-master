@@ -10,13 +10,15 @@ class WidgetEquiposInspeccionados extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetEquiposInspeccionados(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -26,6 +28,8 @@ class WidgetEquiposInspeccionados extends StatefulWidget {
 
 class _WidgetEquiposInspeccionadosState
     extends State<WidgetEquiposInspeccionados> {
+  late bool refreshing = false;
+
   late Future<List> equipos_inspeccionados;
   List _equipos = [];
   double unityHeight = 35;
@@ -57,6 +61,8 @@ class _WidgetEquiposInspeccionadosState
     );
 
     _equipos = [];
+    print('3-Status Code${response.statusCode}');
+
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
@@ -75,13 +81,21 @@ class _WidgetEquiposInspeccionadosState
 
   @override
   void initState() {
+    refreshing = false;
     equipos_inspeccionados = cargarDatos();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    equipos_inspeccionados = cargarDatos();
+    if (refreshing && widget.refresh) {
+      equipos_inspeccionados = cargarDatos();
+      print("3-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("3-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List>(

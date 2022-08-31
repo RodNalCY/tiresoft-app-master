@@ -12,13 +12,15 @@ class WidgetInfladoNeumatico extends StatefulWidget {
   final String mes_inicio;
   final String mes_fin;
   final String anio;
+  final bool refresh;
 
   WidgetInfladoNeumatico(
       {Key? key,
       required this.cliente,
       required this.anio,
       required this.mes_inicio,
-      required this.mes_fin})
+      required this.mes_fin,
+      required this.refresh})
       : super(key: key);
 
   @override
@@ -26,7 +28,10 @@ class WidgetInfladoNeumatico extends StatefulWidget {
 }
 
 class _WidgetInfladoNeumaticoState extends State<WidgetInfladoNeumatico> {
+  late bool refreshing = false;
+
   late Future<List<InfladoNeumatico>> inflado_neumatico;
+  List<InfladoNeumatico> _inflado = [];
   late TooltipBehavior _tooltip_inflado;
   late bool exits_data;
   late String txt_title = "Inflado de neumáticos";
@@ -47,7 +52,8 @@ class _WidgetInfladoNeumaticoState extends State<WidgetInfladoNeumatico> {
       }),
     );
 
-    List<InfladoNeumatico> _inflado = [];
+    _inflado = [];
+    print('4-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -73,6 +79,7 @@ class _WidgetInfladoNeumaticoState extends State<WidgetInfladoNeumatico> {
 
   @override
   void initState() {
+    refreshing = false;
     _tooltip_inflado = TooltipBehavior(enable: true);
     inflado_neumatico = cargarDatos();
     super.initState();
@@ -80,7 +87,14 @@ class _WidgetInfladoNeumaticoState extends State<WidgetInfladoNeumatico> {
 
   @override
   Widget build(BuildContext context) {
-    inflado_neumatico = cargarDatos();
+    if (refreshing && widget.refresh) {
+      inflado_neumatico = cargarDatos();
+      print("4-Se ejecuta");
+      refreshing = false;
+    } else {
+      print("4-No se ejecuta");
+      refreshing = true;
+    }
 
     return Center(
       child: FutureBuilder<List<InfladoNeumatico>>(
