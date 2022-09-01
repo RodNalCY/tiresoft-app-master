@@ -13,6 +13,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_posicion_ru
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_presion_inflado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchabilidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauche.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_remanente_unidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_retiro.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_scrap.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_servicio_reencauche.dart';
@@ -34,7 +35,6 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   late bool _refresh = false;
   // Activador para el reporte
   bool isActivedReporteConsolidado = false;
-  bool isActiveBTNConsulta = false;
   bool isLoading = false;
   // AÑO SELECTED
   String anioIdSelected = "Año";
@@ -384,13 +384,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                // onPressed: isActiveBTNConsulta
-                                //     ? null
-                                //     : () => generarReporteConsolidado(),
-
-                                onPressed: () {
-                                  generarReporteConsolidado();
-                                },
+                                onPressed: isLoading
+                                    ? null
+                                    : () => generarReporteConsolidado(),
                               ),
                               ElevatedButton.icon(
                                 icon: Icon(Icons.picture_as_pdf),
@@ -454,7 +450,6 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
       print("Generando... Reporte Consolidado");
       setState(() {
         isActivedReporteConsolidado = true;
-        isActiveBTNConsulta = true;
         isLoading = true;
         _refresh = true;
       });
@@ -555,6 +550,16 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             height: 30.0,
           ),
           WidgetResumenRetiro(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetRemanenteUnidad(
             cliente: widget._id_cliente,
             anio: anioIdSelected,
             mes_inicio: mesesIdselectedInit.toString(),
