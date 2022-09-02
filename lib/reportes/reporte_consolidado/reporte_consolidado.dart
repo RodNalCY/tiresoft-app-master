@@ -13,6 +13,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_posicion_ru
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_presion_inflado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchabilidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauche.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_remanente_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_remanente_unidad.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_retiro.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_resumen_scrap.dart';
@@ -560,6 +561,16 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             height: 30.0,
           ),
           WidgetRemanenteUnidad(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetRemanenteMedida(
             cliente: widget._id_cliente,
             anio: anioIdSelected,
             mes_inicio: mesesIdselectedInit.toString(),
