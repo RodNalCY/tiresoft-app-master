@@ -77,6 +77,13 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
     '23',
     '24',
     '25',
+    '26',
+    '27',
+    '28',
+    '29',
+    '30',
+    '31',
+    '32',
     'Total',
   ];
   List<String> columns_details = [
@@ -129,8 +136,8 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
 
         total_suma = _list_totales.length;
 
-        if (total_suma < 25) {
-          resultado = 25 - total_suma;
+        if (total_suma < 32) {
+          resultado = 32 - total_suma;
           for (var i = 0; i < resultado; i++) {
             _list_totales.add("-");
           }
@@ -195,8 +202,6 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
       remanentes_medidas = cargarDatos();
       print("17-Se ejecuta");
       refreshing = false;
-      print("NUEVO OBJETO");
-      print(medida_detalles);
     } else {
       print("17-No se ejecuta");
       refreshing = true;
@@ -380,6 +385,41 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                                               null
                                           ? nsdDataCell(data[
                                               "totalneumaticos_nsk_minimo_25"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_26"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_26"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_27"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_27"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_28"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_28"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_29"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_29"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_30"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_30"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_31"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_31"])
+                                          : dataEmpty(),
+                                      data["totalneumaticos_nsk_minimo_32"] !=
+                                              null
+                                          ? nsdDataCell(data[
+                                              "totalneumaticos_nsk_minimo_32"])
                                           : dataEmpty(),
                                       DataCell(
                                         Container(
@@ -610,7 +650,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             ),
           ),
           Container(
-            width: 2202,
+            width: 2790,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
