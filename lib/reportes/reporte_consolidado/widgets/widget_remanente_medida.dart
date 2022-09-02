@@ -27,7 +27,6 @@ class WidgetRemanenteMedida extends StatefulWidget {
 
 class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
   // static const DataCell empty = DataCell(Text("-"));
-  late int total_general;
   late bool refreshing = false;
   late Future<List> remanentes_medidas;
   List _remanentes = [];
@@ -36,6 +35,20 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
   late bool exits_data;
   late String txt_title = "Niveles de remanente por medida";
   List _list_totales = [];
+
+  late String aplicacion_name;
+  late int aplicacion_reencauche;
+  late int aplicacion_proximo;
+
+  late int total_reencauchar;
+  late double percent_reencauchar;
+  late int total_proximos;
+  late double percent_proximos;
+  late int total_operativos;
+  late double percent_operativos;
+  late int total_general;
+  late Set medida_detalles;
+
   List<String> columns = [
     'Tipo',
     'Medida',
@@ -94,6 +107,13 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
     _list_totales = [];
     int total_suma = 0;
     int resultado = 0;
+    aplicacion_name = "";
+    aplicacion_reencauche = 0;
+    aplicacion_proximo = 0;
+    double r1_temporal = 0.0;
+    double r2_temporal = 0.0;
+    medida_detalles = {};
+
     print('17-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
@@ -106,7 +126,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         exits_data = true;
         _remanentes = jsonData['success']['datos'];
         _list_totales = jsonData['success']['totales'];
-        total_general = jsonData['success']['resumen']['total_general'];
+
         total_suma = _list_totales.length;
 
         if (total_suma < 25) {
@@ -115,8 +135,46 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             _list_totales.add("-");
           }
         }
-        print("TOTAL GENERAL");
-        print(total_general);
+
+        for (var data in jsonData['success']['resumen']['aplicacion']) {
+          aplicacion_name = data['aplicacion'].toString();
+          r1_temporal = double.parse(data['rem_reencauche'].toString());
+          r2_temporal = double.parse(data['rem_proximo'].toString());
+        }
+        aplicacion_reencauche = r1_temporal.round();
+        aplicacion_proximo = r2_temporal.round();
+
+        total_reencauchar =
+            jsonData['success']['resumen']['neumaticos_reencauchar'];
+        total_proximos =
+            jsonData['success']['resumen']['neumaticos_proximo_reencauchar'];
+        total_operativos =
+            jsonData['success']['resumen']['neumaticos_operativos'];
+        total_general = jsonData['success']['resumen']['total_general'];
+
+        percent_reencauchar = ((total_reencauchar / total_general) * 100);
+        percent_proximos = ((total_proximos / total_general) * 100);
+        percent_operativos = ((total_operativos / total_general) * 100);
+
+        medida_detalles = {
+          {
+            'aplicacion': 'Total',
+            'reencauche': total_reencauchar.toString(),
+            'proximo': total_proximos.toString(),
+            'operativo': total_operativos.toString(),
+            'total': total_general.toString(),
+            'porcentaje': '100%',
+          },
+          {
+            'aplicacion': 'Porcentaje',
+            'reencauche': percent_reencauchar.toStringAsFixed(1) + " %",
+            'proximo': percent_proximos.toStringAsFixed(1) + " %",
+            'operativo': percent_operativos.toStringAsFixed(1) + " %",
+            'total': total_general.toString(),
+            'porcentaje': '100%',
+          },
+        };
+        // print(medida_detalles);
       }
       return _remanentes;
     } else {
@@ -137,6 +195,8 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
       remanentes_medidas = cargarDatos();
       print("17-Se ejecuta");
       refreshing = false;
+      print("NUEVO OBJETO");
+      print(medida_detalles);
     } else {
       print("17-No se ejecuta");
       refreshing = true;
@@ -344,14 +404,82 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                         ),
                         Container(
                           child: DataTable(
-                              dataRowHeight: unityRowHeight,
-                              headingRowHeight: unityHeight,
-                              headingRowColor: MaterialStateColor.resolveWith(
-                                  (states) => Colors.blue.shade200),
-                              border:
-                                  TableBorder.all(color: Colors.blue.shade100),
-                              columns: getColumnsTwo(columns_details),
-                              rows: []),
+                            dataRowHeight: unityRowHeight,
+                            headingRowHeight: unityHeight,
+                            headingRowColor: MaterialStateColor.resolveWith(
+                                (states) => Colors.blue.shade200),
+                            border:
+                                TableBorder.all(color: Colors.blue.shade100),
+                            columns: getColumnsTwo(columns_details),
+                            rows: medida_detalles
+                                .map(
+                                  (data) => DataRow(
+                                    cells: <DataCell>[
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["aplicacion"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["reencauche"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["proximo"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["operativo"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["total"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["porcentaje"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                .toList(),
+                          ),
                         )
                       ],
                     ),
@@ -476,7 +604,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             ),
             child: Center(
               child: Text(
-                'Aplicación: MIXTA',
+                'Aplicación: ' + aplicacion_name.toString(),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
@@ -506,9 +634,11 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         .map(
           (String column) => DataColumn(
             label: Expanded(
-              child: Text(
-                column,
-                textAlign: TextAlign.center,
+              child: Container(
+                child: Text(
+                  column,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),

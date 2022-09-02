@@ -173,22 +173,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: EdgeInsets.only(top: 35.0),
                     ),
                     Center(
-                      child: RaisedButton(
-                        padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                        child: isLoading
-                            ? Transform.scale(
-                                scale: 0.6,
-                                child: CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
-                                    strokeWidth: 5.0),
-                              )
-                            : Text("Login"),
-                        color: Color(0xff212F3D),
-                        textColor: Colors.white,
-                        onPressed: () async => {
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                          onPrimary: Colors.white,
+                          primary: Color(0xff212F3D),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(2)),
+                          ),
+                        ),
+                        onPressed: () async {
                           setState(() {
                             isLoading = true;
-                          }),
+                          });
                           login().then((value) async => {
                                 if (value == "succcess")
                                   {
@@ -211,10 +208,61 @@ class _LoginScreenState extends State<LoginScreen> {
                                       isLoading = false;
                                     })
                                   }
-                              })
+                              });
                         },
+                        child: isLoading
+                            ? Transform.scale(
+                                scale: 0.6,
+                                child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 5.0),
+                              )
+                            : Text("Login"),
                       ),
                     ),
+                    // Center(
+                    //   child: FlatButton(
+                    //     padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                    //     child: isLoading
+                    //         ? Transform.scale(
+                    //             scale: 0.6,
+                    //             child: CircularProgressIndicator(
+                    //                 backgroundColor: Colors.white,
+                    //                 strokeWidth: 5.0),
+                    //           )
+                    //         : Text("Login"),
+                    //     color: Color(0xff212F3D),
+                    //     textColor: Colors.white,
+                    //     onPressed: () async => {
+                    //       setState(() {
+                    //         isLoading = true;
+                    //       }),
+                    //       login().then((value) async => {
+                    //             if (value == "succcess")
+                    //               {
+                    //                 // print("SUCCESS LOGIN"),
+                    //                 Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                       builder: (context) =>
+                    //                           CustomerSelectionScreen(
+                    //                               _user, _cliente)),
+                    //                 ),
+                    //                 setState(() {
+                    //                   isLoading = false;
+                    //                 })
+                    //               }
+                    //             else
+                    //               {
+                    //                 await Future.delayed(Duration(seconds: 1)),
+                    //                 setState(() {
+                    //                   isLoading = false;
+                    //                 })
+                    //               }
+                    //           })
+                    //     },
+                    //   ),
+                    // ),
                     Center(
                       child: Padding(
                           padding: EdgeInsets.only(top: 5.0),

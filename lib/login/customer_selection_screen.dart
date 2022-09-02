@@ -168,40 +168,63 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                       padding: EdgeInsets.only(top: 20.0),
                     ),
                     Center(
-                      child: FlatButton(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                          child: Text('Seleccionar'),
-                          color: Color(0xff212F3D),
-                          textColor: Colors.white,
-                          onPressed: () => {
-                                // print("Send Id: " + _global_id_cliente),
-                                // print("Send NAME: " + _dropdownFirsValue),
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Home(
-                                          _global_id_cliente,
-                                          widget._user,
-                                          _dropdownFirsValue)),
-                                )
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           RecordInspectionHeader(
-                                //             _global_id_cliente,
-                                //           )),
-                                // )
-
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => CustomDrawer(
-                                //             _global_id_cliente,
-                                //           )),
-                                // )
-                              }),
+                          onPrimary: Colors.white,
+                          primary: Color(0xff212F3D),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(2)),
+                          ),
+                        ),
+                        onPressed: () async {
+                          // print("Send Id: " + _global_id_cliente),
+                          // print("Send NAME: " + _dropdownFirsValue),
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Home(_global_id_cliente,
+                                    widget._user, _dropdownFirsValue)),
+                          );
+                        },
+                        child: Text('Seleccionar'),
+                      ),
                     ),
+                    // Center(
+                    //   child: FlatButton(
+                    //       padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                    //       child: Text('Seleccionar'),
+                    //       color: Color(0xff212F3D),
+                    //       textColor: Colors.white,
+                    //       onPressed: () => {
+                    //             // print("Send Id: " + _global_id_cliente),
+                    //             // print("Send NAME: " + _dropdownFirsValue),
+                    //             Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => Home(
+                    //                       _global_id_cliente,
+                    //                       widget._user,
+                    //                       _dropdownFirsValue)),
+                    //             )
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) =>
+                    //             //           RecordInspectionHeader(
+                    //             //             _global_id_cliente,
+                    //             //           )),
+                    //             // )
+
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) => CustomDrawer(
+                    //             //             _global_id_cliente,
+                    //             //           )),
+                    //             // )
+                    //           }),
+                    // ),
                   ],
                 ),
               ),
