@@ -5,6 +5,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_desgaste_ir
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inflado_neumatico.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inspecciones.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_mal_estado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_apoyo.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_traccion.dart';
@@ -631,6 +632,16 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             height: 30.0,
           ),
           WidgetReencauchabilidad(
+            cliente: widget._id_cliente,
+            anio: anioIdSelected,
+            mes_inicio: mesesIdselectedInit.toString(),
+            mes_fin: mesesIdselectedFinish.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetInspecciones(
             cliente: widget._id_cliente,
             anio: anioIdSelected,
             mes_inicio: mesesIdselectedInit.toString(),
