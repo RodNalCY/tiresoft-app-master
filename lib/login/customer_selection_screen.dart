@@ -129,40 +129,52 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                       padding: EdgeInsets.only(top: 5.0),
                     ),
                     Container(
-                      margin: EdgeInsets.all(20.0),
+                      margin: EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         color: Colors.black12,
                         borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+                          Radius.circular(5),
                         ),
                       ),
                       child: Center(
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10.0),
                           child: DropdownButton<String>(
-                        value: _dropdownFirsValue,
-                        icon: const Icon(Icons.unfold_more,
-                            color: Color(0xff2874A6)),
-                        elevation: 16,
-                        style: const TextStyle(
-                            color: Color(0xff2874A6),
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold),
-                        underline: Container(
-                          height: 1,
-                          color: Color(0xff2874A6),
+                            value: _dropdownFirsValue,
+                            icon: const Icon(Icons.unfold_more,
+                                color: Color(0xff2874A6)),
+                            elevation: 16,
+                            style: const TextStyle(
+                                color: Color(0xff2874A6),
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold),
+                            underline: Container(
+                              height: 1,
+                              color: Color(0xff2874A6),
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _dropdownFirsValue = newValue!;
+                              });
+                            },
+                            items: listarClienteMap.values
+                                .map<DropdownMenuItem<String>>(
+                              (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: SizedBox(
+                                    width: 280,
+                                    child: Text(
+                                      value,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
                         ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _dropdownFirsValue = newValue!;
-                          });
-                        },
-                        items: listarClienteMap.values
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      )),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20.0),
