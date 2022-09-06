@@ -261,7 +261,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
 
     request.files.add(http.MultipartFile.fromBytes(
         'neumaticoimg1', pickedImageAsBytes!,
-        filename: 'photo.jpg'));
+        filename: 'photo.jpeg'));
 
     request.fields['id_cliente'] = widget.id_cliente;
     request.fields['id_inspeccion'] = idInspeccion.toString();
