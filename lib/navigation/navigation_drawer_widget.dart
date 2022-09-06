@@ -24,14 +24,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String _logo_url = "";
 
   @override
-  void initState() {
-    // WidgetsFlutterBinding.ensureInitialized();
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-    //     overlays: [SystemUiOverlay.top]);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     print("Drawer >>>");
 
@@ -97,7 +89,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                 text: 'Reporte Neumáticos',
                 item: NavigationItemModel.reporte_neumatico,
                 // icon: Icons.data_saver_off
-                icon: Icons.sort),
+                icon: Icons.checklist),
             const SizedBox(height: 5.0),
             buildOneMenuItem(context,
                 text: 'Nuevo Scrap',
@@ -117,7 +109,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildOneMenuItem(context,
                 text: 'Reporte Consolidado',
                 item: NavigationItemModel.reporte_consolidado,
-                icon: Icons.apps),
+                icon: Icons.document_scanner),
             Spacer(),
             //const SizedBox(height: 24.0),
             Divider(color: Colors.white70),
@@ -185,12 +177,12 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             padding: NavigationDrawerWidget._padding
                 .add(EdgeInsets.symmetric(vertical: 40.0)),
             child: Row(children: [
-              CircleAvatar(radius: 35.0, backgroundImage: AssetImage(urlImage)),
+              CircleAvatar(radius: 33.0, backgroundImage: AssetImage(urlImage)),
               SizedBox(width: 10.0),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.black38,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    borderRadius: BorderRadius.all(Radius.circular(2.0))),
                 padding: EdgeInsets.only(
                     top: 5.0, bottom: 5.0, right: 10.0, left: 10.0),
                 child: Column(
@@ -198,14 +190,14 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   children: [
                     Text(
                       name,
-                      style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      style: TextStyle(fontSize: 13.0, color: Colors.white),
                     ),
                     const SizedBox(height: 1.0),
                     Text(email,
                         style: TextStyle(fontSize: 13.0, color: Colors.white)),
-                    const SizedBox(height: 7.0),
+                    const SizedBox(height: 1.0),
                     Text(client,
-                        style: TextStyle(fontSize: 13.0, color: Colors.white)),
+                        style: TextStyle(fontSize: 14.0, color: Colors.white)),
                   ],
                 ),
               ),
