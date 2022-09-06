@@ -55,16 +55,4 @@ class _ScrapRegisterHomeState extends State<ScrapRegisterHome> {
                   )
                 ])));
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    print("4-Method dispose()");
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    print("3-Method deactivate()");
-  }
 }

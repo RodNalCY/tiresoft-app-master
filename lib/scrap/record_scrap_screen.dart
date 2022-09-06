@@ -32,12 +32,10 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _kmController = TextEditingController();
-  final TextEditingController _remanenteLimiteController =
-      TextEditingController();
-  final TextEditingController _remanenteFinalController =
-      TextEditingController();
+  late final TextEditingController _dateController;
+  late final TextEditingController _kmController;
+  late final TextEditingController _remanenteLimiteController;
+  late final TextEditingController _remanenteFinalController;
 
   bool _validateRemanenteLimite = false;
   bool _validateRemanenteFinal = false;
@@ -49,26 +47,16 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   int? selectedVehiculoId;
   final format = DateFormat("yyyy-MM-dd");
   var vehicles = [];
-  final List<String> letters = [];
   XFile? pickedImage;
   XFile? pickedImage2;
 
   Uint8List? pickedImageAsBytes;
   Uint8List? pickedImageAsBytes2;
 
-  @override
-  void initState() {
-    getVehicles();
-    super.initState();
-    mapTires = {
-      '0': 'Debe seleccionar un vehiculo',
-      '1': 'Debe seleccionar un vehiculo'
-    };
+  late Future<List> listaVehiculos;
+  final List<String> letters = [];
 
-    listIdTires = ['0', '1'];
-  }
-
-  void getVehicles() async {
+  Future<List> getVehicles() async {
     final response = await http.post(
       Uri.parse("https://tiresoft2.lab-elsol.com/api/vehiculosMinified"),
       headers: <String, String>{
@@ -94,6 +82,7 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     } else {
       throw Exception("Falló la Conexión");
     }
+    return letters;
   }
 
   Map mapTires = {'0': '7914', '1': '7915', '2': '1070 - 4'};
@@ -190,7 +179,29 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   bool isLoadingSave = false;
 
   @override
+  void initState() {
+    _dateController = TextEditingController();
+    _kmController = TextEditingController();
+    _remanenteLimiteController = TextEditingController();
+    _remanenteFinalController = TextEditingController();
+
+    listaVehiculos = getVehicles();
+    super.initState();
+    mapTires = {
+      '0': 'Debe seleccionar un vehiculo',
+      '1': 'Debe seleccionar un vehiculo'
+    };
+
+    listIdTires = ['0', '1'];
+  }
+
+  @override
   void dispose() {
+    _dateController.dispose();
+    _kmController.dispose();
+    _remanenteLimiteController.dispose();
+    _remanenteFinalController.dispose();
+
     super.dispose();
     print("4-Method dispose()");
   }
@@ -204,237 +215,259 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
   @override
   Widget build(BuildContext context) {
     print("REGISTRO SCRAP NEUMATICO INSTALADO");
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: homeScaffoldKey,
       // drawer: CustomDrawer(widget._cliente_id),
       drawer: NavigationDrawerWidget(widget._user, widget._cliente_name),
       appBar: AppBar(
-        title: Text("Neumático Instalado"),
+        title: Text("Scrap Instalado"),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
       ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(10),
-        child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: const Center(
-                        child: Text(
-                            "Por favor ingrese la siguiente información",
-                            style: TextStyle(fontSize: 14))),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: SimpleAutocompleteFormField<String>(
-                      suggestionsHeight: 150,
-                      decoration: InputDecoration(
-                          errorText: _validateVehicle
-                              ? 'Debe seleccionar un vehiculo'
-                              : null,
-                          labelText: 'Placa del Vehiculo',
-                          border: OutlineInputBorder()),
-                      // suggestionsHeight: 200.0,
-                      maxSuggestions: 1000,
-                      itemBuilder: (context, item) => Padding(
-                        padding: EdgeInsets.only(top: 7.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff212F3D),
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          padding: EdgeInsets.only(
-                              left: 30.0, bottom: 5.0, top: 5.0),
-                          child: Text(
-                            item!,
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 16.0),
+      body: FutureBuilder(
+        future: listaVehiculos,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            final error = snapshot.error;
+            return Text('$error');
+          } else if (snapshot.hasData) {
+            return Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(10),
+              child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          child: const Center(
+                              child: Text(
+                                  "Por favor ingrese la siguiente información",
+                                  style: TextStyle(fontSize: 14))),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: SimpleAutocompleteFormField<String>(
+                            suggestionsHeight: 150,
+                            decoration: InputDecoration(
+                                errorText: _validateVehicle
+                                    ? 'Debe seleccionar un vehiculo'
+                                    : null,
+                                labelText: 'Placa del Vehiculo',
+                                border: OutlineInputBorder()),
+                            // suggestionsHeight: 200.0,
+                            maxSuggestions: 1000,
+                            itemBuilder: (context, item) => Padding(
+                              padding: EdgeInsets.only(top: 7.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xff212F3D),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                padding: EdgeInsets.only(
+                                    left: 30.0, bottom: 5.0, top: 5.0),
+                                child: Text(
+                                  item!,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16.0),
+                                ),
+                              ),
+                            ),
+                            onSearch: (String search) async => search.isEmpty
+                                ? letters
+                                : letters
+                                    .where((letter) =>
+                                        search.toLowerCase().contains(letter))
+                                    .toList(),
+                            itemFromString: (string) => letters.singleWhere(
+                                (letter) => letter == string.toLowerCase(),
+                                orElse: () => ''),
+                            onChanged: (value) => {
+                              setState(() => {
+                                    selectedLetter = value,
+                                  }),
+                              for (final element in vehicles)
+                                {
+                                  if (element["placa"] == value)
+                                    {
+                                      setState(() =>
+                                          {selectedVehiculoId = element['id']}),
+                                      getTires(),
+                                    },
+                                },
+                            },
+
+                            validator: (letter) => letter == null
+                                ? 'Placa invalida o no existe'
+                                : null,
                           ),
                         ),
-                      ),
-                      onSearch: (String search) async => search.isEmpty
-                          ? letters
-                          : letters
-                              .where((letter) =>
-                                  search.toLowerCase().contains(letter))
-                              .toList(),
-                      itemFromString: (string) => letters.singleWhere(
-                          (letter) => letter == string.toLowerCase(),
-                          orElse: () => ''),
-                      onChanged: (value) => {
-                        setState(() => {
-                              selectedLetter = value,
-                            }),
-                        for (final element in vehicles)
-                          {
-                            if (element["placa"] == value)
-                              {
-                                setState(
-                                    () => {selectedVehiculoId = element['id']}),
-                                getTires(),
-                              },
-                          },
-                      },
-
-                      validator: (letter) =>
-                          letter == null ? 'Placa invalida o no existe' : null,
-                    ),
-                  ),
-                  Container(
-                      padding: EdgeInsets.all(10), child: tiresAvailable()),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _remanenteLimiteController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Remanente Limite',
-                        errorText: _validateRemanenteLimite
-                            ? 'Debe ingresar el remanente Limite'
-                            : null,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _remanenteFinalController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Remanente Final',
-                        errorText: _validateRemanenteFinal
-                            ? 'Debe ingresar el remanente Final'
-                            : null,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextFormField(
-                      controller: _kmController,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Kilometraje recorrido',
-                        errorText:
-                            _validateKm ? 'Km es un campo obligatorio' : null,
-                      ),
-                    ),
-                  ),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Motivo de Scrap",
-                            style: TextStyle(
-                                fontSize: 16.0, color: Colors.black54),
-                          ),
-                          SizedBox(height: 5.0),
-                          motivoScrapWidgetList(),
-                        ],
-                      )),
-                  SizedBox(height: 10.0),
-                  Container(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Motivo de Retiro",
-                            style: TextStyle(
-                                fontSize: 16.0, color: Colors.black54),
-                          ),
-                          SizedBox(height: 5.0),
-                          motivoRetiroWidgetList(),
-                        ],
-                      )),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: DateTimeField(
-                      initialValue: DateTime.now(),
-                      controller: _dateController,
-                      // onFieldSubmitted: _onSubmitbornDate,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        errorText: _validateDate
-                            ? 'Fecha de retiro es un campo obligatorio'
-                            : null,
-                        labelText: "Fecha de retiro",
-                        labelStyle: TextStyle(
-                            fontFamily: "WorkSansSemiBold", fontSize: 16.0),
-                      ),
-                      format: format,
-                      onShowPicker: (context, currentValue) async {
-                        final date = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            initialDate: currentValue ?? DateTime.now(),
-                            lastDate: DateTime(2100));
-
-                        return DateTimeField.tryParse(date.toString(), format);
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Padding(padding: EdgeInsets.all(5.0)),
-                        addPhotoWidget(),
-                        Padding(padding: EdgeInsets.all(5.0)),
-                        addPhotoWidget2()
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25.0),
-                  Center(
-                    child: MaterialButton(
-                      padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                      child: isLoadingSave
-                          ? Transform.scale(
-                              scale: 0.5,
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 1),
-                                child: CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
-                                    strokeWidth: 5.0),
-                              ),
-                            )
-                          : Text(
-                              'Guardar',
-                              style: TextStyle(fontSize: 15.0),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            child: tiresAvailable()),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: _remanenteLimiteController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Remanente Limite',
+                              errorText: _validateRemanenteLimite
+                                  ? 'Debe ingresar el remanente Limite'
+                                  : null,
                             ),
-                      color: Color(0xff212F3D),
-                      textColor: Colors.white,
-                      onPressed: () async => {
-                        print("Finalizado I"),
-                        if (!validateFormIsEmpty())
-                          {
-                            setState(() {
-                              isLoadingSave = true;
-                            }),
-                            createScrap()
-                          }
-                      },
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            controller: _remanenteFinalController,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Remanente Final',
+                              errorText: _validateRemanenteFinal
+                                  ? 'Debe ingresar el remanente Final'
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: TextFormField(
+                            controller: _kmController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Kilometraje recorrido',
+                              errorText: _validateKm
+                                  ? 'Km es un campo obligatorio'
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Motivo de Scrap",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.black54),
+                                ),
+                                SizedBox(height: 5.0),
+                                motivoScrapWidgetList(),
+                              ],
+                            )),
+                        SizedBox(height: 10.0),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Motivo de Retiro",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.black54),
+                                ),
+                                SizedBox(height: 5.0),
+                                motivoRetiroWidgetList(),
+                              ],
+                            )),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: DateTimeField(
+                            initialValue: DateTime.now(),
+                            controller: _dateController,
+                            // onFieldSubmitted: _onSubmitbornDate,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              errorText: _validateDate
+                                  ? 'Fecha de retiro es un campo obligatorio'
+                                  : null,
+                              labelText: "Fecha de retiro",
+                              labelStyle: TextStyle(
+                                  fontFamily: "WorkSansSemiBold",
+                                  fontSize: 16.0),
+                            ),
+                            format: format,
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+
+                              return DateTimeField.tryParse(
+                                  date.toString(), format);
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 5.0),
+                          child: Row(
+                            children: [
+                              Padding(padding: EdgeInsets.all(5.0)),
+                              addPhotoWidget(),
+                              Padding(padding: EdgeInsets.all(5.0)),
+                              addPhotoWidget2()
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 25.0),
+                        Center(
+                          child: MaterialButton(
+                            padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                            child: isLoadingSave
+                                ? Transform.scale(
+                                    scale: 0.5,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(vertical: 1),
+                                      child: CircularProgressIndicator(
+                                          backgroundColor: Colors.white,
+                                          strokeWidth: 5.0),
+                                    ),
+                                  )
+                                : Text(
+                                    'Guardar',
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                            color: Color(0xff212F3D),
+                            textColor: Colors.white,
+                            onPressed: () async => {
+                              print("Finalizado I"),
+                              if (!validateFormIsEmpty())
+                                {
+                                  setState(() {
+                                    isLoadingSave = true;
+                                  }),
+                                  createScrap()
+                                }
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 25.0),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: 25.0),
-                ],
+                  )),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
               ),
-            )),
+            );
+          }
+        },
       ),
     );
   }

@@ -148,8 +148,6 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
             final error = snapshot.error;
             return Text("$error");
           } else if (snapshot.hasData) {
-            print("Inspeccion");
-            print(snapshot.data);
             return Container(
               color: Colors.white,
               padding: EdgeInsets.all(10),
