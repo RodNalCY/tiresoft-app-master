@@ -84,7 +84,7 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
                       Column(
                         children: [
                           Card(
-                            elevation: 5,
+                            elevation: 1,
                             child: Container(
                               padding: EdgeInsets.all(15.0),
                               child: Column(children: [

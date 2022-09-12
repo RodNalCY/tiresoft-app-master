@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:tiresoft/login/models/user.dart';
 import 'dart:convert';
 import 'package:tiresoft/widgets/custom_cart.dart';
+import 'dart:io';
 
 class EditInspeccion extends StatefulWidget {
   String _global_id_cliente;
@@ -21,6 +22,13 @@ class EditInspeccion extends StatefulWidget {
 }
 
 class _EditInspeccionState extends State<EditInspeccion> {
+  ////////////////////////////////////////////
+  File? file_image;
+  ImagePicker image_picker = ImagePicker();
+  XFile? pickedFile;
+  late String name_photo_response;
+  // late bool state_link = false;
+  ////////////////////////////////////////////
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
   bool isLoadingSave = false;
   late String str_id_neumatico;
@@ -362,10 +370,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsdta = jsonDecode(body);
-      print("JSON INSPECCION NEUMATICO:");
-      print(jsdta);
-      print(jsdta["km_proyectado"]);
-
+      // print("JSON INSPECCION NEUMATICO:");
+      // print(jsdta);
+      // print(jsdta["km_proyectado"]);
+      file_image = null;
       // Cargamos y validamos Datos
       str_id_neumatico = jsdta['id_neumaticos'].toString();
       str_id_vehiculo = jsdta['id_vehiculo'].toString();
@@ -478,7 +486,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
           str_duales_mal_herm.contains('Medida de Neumático'); // true
       final findNAplica = str_duales_mal_herm.contains('No Aplica'); // true
 
-      print('Obs > ${str_duales_mal_herm}');
+      // print('Obs > ${str_duales_mal_herm}');
       // print('1- ${findDisenio}');
       // print('2- ${findTamanio}');
       // print('3- ${findTConstr}');
@@ -535,6 +543,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
         case "Lista para Reemplazar":
           _value_estado = 3;
           str_image_view = _imagen_neumatico;
+
           break;
       }
 
@@ -554,19 +563,19 @@ class _EditInspeccionState extends State<EditInspeccion> {
           ? jsdta['desgirregular'].toString().substring(0, 1)
           : "0";
       _desgIrregularId = int.parse(str_des_irregular);
-      print('Obs dsIrregular > ${str_des_irregular}');
+      // print('Obs dsIrregular > ${str_des_irregular}');
 
       int int_par_reparar =
           jsdta['parareparar'] != null ? jsdta['parareparar'] : 0;
       _paraRepararId = int_par_reparar;
-      print('Obs parReparar > ${int_par_reparar}');
+      // print('Obs parReparar > ${int_par_reparar}');
 
       int int_fall_flanco =
           jsdta['fallasflanco'] != null ? jsdta['fallasflanco'] : 0;
       _fallaFlancoId = int_fall_flanco;
-      print('Obs fallFlanco > ${int_fall_flanco}');
+      // print('Obs fallFlanco > ${int_fall_flanco}');
 
-      print('Obs > ${str_observaciones}');
+      // print('Obs > ${str_observaciones}');
       // print('1- ${findDesgIrregular}');
       // print('2- ${findParaReparar}');
       // print('3- ${findAroDefectuoso}');
@@ -630,7 +639,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   @override
   Widget build(BuildContext context) {
-    print("Id > " + widget._global_insp_dtail.idt_id.toString());
+    // print("Id > " + widget._global_insp_dtail.idt_id.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text("Serie: " + widget._global_insp_dtail.idt_serie),
@@ -696,7 +705,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                           ),
                           Container(
                             padding: EdgeInsets.all(10),
-                            child: estadoWidget(),
+                            child: estadoWidget(context),
                           ),
                           Container(
                             padding: EdgeInsets.all(10),
@@ -819,10 +828,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
     // POST > ACTUALIZAR INSPECCION
 
-    var request = await http.MultipartRequest(
-        "POST",
-        Uri.parse(
-            "https://tiresoft2.lab-elsol.com/api/inspecciones/updateInspeccion"));
+    Uri uri = Uri.parse(
+        'https://tiresoft2.lab-elsol.com/api/inspecciones/updateInspeccion');
+
+    http.MultipartRequest request = http.MultipartRequest('POST', uri);
 
     request.fields['id'] = id_inspeccion;
     request.fields['id_cliente'] = widget._global_id_cliente.toString();
@@ -891,18 +900,14 @@ class _EditInspeccionState extends State<EditInspeccion> {
     }
     request.fields['estado'] = temp_estado_neumatico;
 
-    // IMAGEN - FALTA EN EL API
-    if (pickedImageAsBytesEdit != null) {
-      final httpImage = await http.MultipartFile.fromBytes(
-        'imagen_lista_reemplazar',
-        pickedImageAsBytesEdit!,
-        filename: 'photo.jpeg',
-      );
-      request.files.add(httpImage);
+    //IMAGEN - FALTA EN EL API
+    if (file_image != null) {
+      request.files
+          .add(await http.MultipartFile.fromPath('file', file_image!.path));
     }
 
-    print("Image Edit > ");
-    print(pickedImageAsBytesEdit);
+    // print("Image Edit > ");
+    // print(pickedImageAsBytesEdit);
 
     // ESTADO TUERCAS
     request.fields['tuercaestado'] = _estadoTuercaId.toString();
@@ -931,7 +936,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     if (_isActivateFallFlanco) {
       observaciones_neumatico += "Fallas en el flanco";
     }
-    print("OBS > " + observaciones_neumatico);
+    // print("OBS > " + observaciones_neumatico);
     request.fields['otros'] = observaciones_neumatico;
     request.fields['desgirregular'] = _desgIrregularId.toString();
     request.fields['parareparar'] = _paraRepararId.toString();
@@ -1020,7 +1025,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
 
   Future<bool> validatePresion(String pressure) async {
     var presion = int.tryParse(pressure) ?? 0;
-    print("PSI > " + presion.toString());
+    // print("PSI > " + presion.toString());
     if (presion > 160) {
       setState(() {
         messageValidationPresion = "La presion debe ser menor a 160";
@@ -1391,7 +1396,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
-  Widget estadoWidget() {
+  Widget estadoWidget(BuildContext context) {
     return CustomCart(
       'Estado',
       Column(
@@ -1405,7 +1410,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 onChanged: (value) {
                   setState(() {
                     _value_estado = value as int;
-                    pickedImageAsBytesEdit = null;
+                    // pickedImageAsBytesEdit = null;
+                    file_image = null;
                   });
                 },
               ),
@@ -1421,7 +1427,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 onChanged: (value) {
                   setState(() {
                     _value_estado = value as int;
-                    pickedImageAsBytesEdit = null;
+                    // pickedImageAsBytesEdit = null;
+                    file_image = null;
                   });
                 },
               ),
@@ -1437,6 +1444,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 onChanged: (value) {
                   setState(() {
                     _value_estado = value as int;
+                    _point_edit = true;
                   });
                 },
               ),
@@ -1444,15 +1452,20 @@ class _EditInspeccionState extends State<EditInspeccion> {
               Text("Lista para Reemplazar")
             ],
           ),
-          _value_estado.toInt() == 3 ? calcularPhoto() : Text(""),
+          _value_estado.toInt() == 3 ? calcularPhoto(context) : Text(""),
         ],
       ),
     );
   }
 
-  Widget calcularPhoto() {
-    if (_point_edit == true) {
-      return camaraUploadEditPhoto();
+  Widget calcularPhoto(BuildContext context) {
+    print("STATUS");
+    print(_point_edit);
+    print(file_image);
+    if (_point_edit == true && file_image == null) {
+      return showUploadPhoto(context);
+    } else if (_point_edit == true && file_image != null) {
+      return showViewPhoto(context);
     } else {
       return showImageEdit();
     }
@@ -1476,70 +1489,241 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 _point_edit = true;
               });
             },
-            child: const Text('Editar'),
+            child: Icon(Icons.cameraswitch),
           ),
         ],
       ),
     );
   }
 
-  Widget camaraUploadEditPhoto() {
+  Center showUploadPhoto(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 200.0,
+        height: 200.0,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Colors.red[200],
+            ),
+          ),
+          child: Icon(
+            Icons.add_photo_alternate,
+            size: 40,
+          ),
+          onPressed: () {
+            showOptionDialog(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  Center showViewPhoto(BuildContext context) {
     return Center(
       child: Column(
         children: [
-          TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.hovered))
-                      return Colors.blue.withOpacity(0.04);
-                    if (states.contains(MaterialState.focused) ||
-                        states.contains(MaterialState.pressed))
-                      return Colors.blue.withOpacity(0.12);
-                    return null; // Defer to the widget's default.
+          SizedBox(
+            width: 200,
+            height: 200,
+            child: Image.file(file_image!),
+          ),
+          SizedBox.fromSize(
+            size: Size(60, 60),
+            child: ClipOval(
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.blue,
+                  onTap: () {
+                    showOptionDialog(context);
                   },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.cameraswitch,
+                        color: Colors.blueGrey,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Text(
+                        "Actualizar",
+                        style: TextStyle(color: Colors.blueGrey, fontSize: 9.0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              onPressed: () {
-                _pickImageOpenCamara();
-              },
-              child: const Text('Adjuntar foto 1')),
-          Container(
-            child: pickedImageAsBytesEdit != null
-                ? Image.memory(
-                    pickedImageAsBytesEdit!,
-                    width: 200.0,
-                    height: 200.0,
-                    fit: BoxFit.fitHeight,
-                  )
-                : Container(
-                    decoration: BoxDecoration(color: Colors.red[200]),
-                    width: 200,
-                    height: 200,
-                    child: Icon(
-                      Icons.camera_alt,
-                      color: Colors.grey[800],
-                    ),
-                  ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(fontSize: 14.0),
             ),
-            onPressed: () {
-              print("Button Editar Desactivate");
-              setState(() {
-                _point_edit = false;
-                pickedImageAsBytesEdit = null;
-              });
-            },
-            child: const Text('Cancelar'),
           ),
         ],
       ),
     );
   }
+
+  Future<void> showOptionDialog(BuildContext context) async {
+    await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Center(
+            child: Text(
+              "Seleccionar el origen de la imagen:",
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              InkWell(
+                onTap: () {
+                  openFileOrCamera(1, context);
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.photo_library,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Galería',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  openFileOrCamera(2, context);
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Cámara',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future openFileOrCamera(int option, BuildContext context) async {
+    pickedFile = null;
+
+    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
+
+    switch (option) {
+      case 1:
+        pickedFile = await image_picker.pickImage(
+            source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
+        break;
+      case 2:
+        pickedFile = await image_picker.pickImage(
+            source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
+        break;
+    }
+
+    setState(() {
+      if (pickedFile != null) {
+        file_image = File(pickedFile!.path);
+        // setState(() {
+        //   // state_link = false;
+        // });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Imagen no seleccionada")),
+        );
+      }
+    });
+  }
+
+  // Widget camaraUploadEditPhoto() {
+  //   return Center(
+  //     child: Column(
+  //       children: [
+  //         TextButton(
+  //             style: ButtonStyle(
+  //               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+  //               overlayColor: MaterialStateProperty.resolveWith<Color?>(
+  //                 (Set<MaterialState> states) {
+  //                   if (states.contains(MaterialState.hovered))
+  //                     return Colors.blue.withOpacity(0.04);
+  //                   if (states.contains(MaterialState.focused) ||
+  //                       states.contains(MaterialState.pressed))
+  //                     return Colors.blue.withOpacity(0.12);
+  //                   return null; // Defer to the widget's default.
+  //                 },
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               _pickImageOpenCamara();
+  //             },
+  //             child: const Text('Adjuntar foto 1')),
+  //         Container(
+  //           child: pickedImageAsBytesEdit != null
+  //               ? Image.memory(
+  //                   pickedImageAsBytesEdit!,
+  //                   width: 200.0,
+  //                   height: 200.0,
+  //                   fit: BoxFit.fitHeight,
+  //                 )
+  //               : Container(
+  //                   decoration: BoxDecoration(color: Colors.red[200]),
+  //                   width: 200,
+  //                   height: 200,
+  //                   child: Icon(
+  //                     Icons.camera_alt,
+  //                     color: Colors.grey[800],
+  //                   ),
+  //                 ),
+  //         ),
+  //         TextButton(
+  //           style: TextButton.styleFrom(
+  //             textStyle: const TextStyle(fontSize: 14.0),
+  //           ),
+  //           onPressed: () {
+  //             print("Button Editar Desactivate");
+  //             setState(() {
+  //               _point_edit = false;
+  //               pickedImageAsBytesEdit = null;
+  //             });
+  //           },
+  //           child: const Text('Cancelar'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget estadoTuercasWidget() {
     return CustomCart(
@@ -1575,39 +1759,6 @@ class _EditInspeccionState extends State<EditInspeccion> {
         ],
       ),
     );
-  }
-
-  void _pickImageOpenCamara() async {
-    final imageSource = await showDialog<ImageSource>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                "Seleccione el origen de la foto",
-                style: TextStyle(fontSize: 14),
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  child: Text("Camara"),
-                  onPressed: () => Navigator.pop(context, ImageSource.camera),
-                ),
-                MaterialButton(
-                  child: Text("Galeria"),
-                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
-                )
-              ],
-            ));
-
-    if (imageSource != null) {
-      final XFile? file = await _imagePicker.pickImage(
-          source: imageSource, maxHeight: 1920, maxWidth: 1080);
-
-      if (file != null) {
-        file.readAsBytes().then((x) {
-          setState(() => {pickedImageAsBytesEdit = x});
-        });
-        setState(() => {pickedImageXFile = file});
-      }
-    }
   }
 
   Widget recomendacionWidget() {
