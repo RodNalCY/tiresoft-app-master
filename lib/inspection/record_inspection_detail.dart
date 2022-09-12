@@ -58,6 +58,14 @@ enum valveAccesibility { YES, NO }
 
 class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     with TickerProviderStateMixin {
+  ///////////////////////////////////////////
+  File? file_image;
+  ImagePicker image_picker = ImagePicker();
+  XFile? pickedFile;
+  late String name_photo_response;
+  late bool state_link = false;
+  ///////////////////////////////////////////
+
   var position = 0;
   bool isLoadingSave = false;
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
@@ -122,6 +130,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     _valve = valveEnum.ST;
     _state = stateEnum.Continuar;
     _valveAccesibility = valveAccesibility.YES;
+
+    file_image = null;
   }
 
   Future<String> createPostInspeccionNeumatico() async {
@@ -220,36 +230,78 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           "resultado": duales_mal_hermanados,
         }));
 
-    print('Status: ${response.statusCode}');
-    print('response: ${response}');
+    // print('Status: ${response.statusCode}');
+    // print('response: ${response}');
     if (response.statusCode == 201) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var newInspectionCreated = json.decode(response.body);
       var id_inspeccion = newInspectionCreated['inspeccion_actual'];
       listIdInspections.add(id_inspeccion);
-      print('newInspectionCreated:  ${newInspectionCreated} ');
-      print('tmp-Id:  ${id_inspeccion} ');
+      // print('newInspectionCreated:  ${newInspectionCreated} ');
+      // print('tmp-Id:  ${id_inspeccion} ');
 
       tires[position].brand = 'tmp';
 
-      String imagen_no_cargada = "Imagen no cargada";
-      if (id_inspeccion != null && pickedImageAsBytes != null) {
-        imagen_no_cargada = "Imagen Cargada";
-        await updateImagePost(id_inspeccion, widget.idVehiculo,
-            tires[position].uid, tires[position].position);
+      if (id_inspeccion != null && file_image != null) {
+        bool responseImg = await sendImageMalEstado(id_inspeccion,
+            widget.idVehiculo, tires[position].uid, tires[position].position);
+
+        if (responseImg) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Imagen enviado.')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error al enviar Imagen.')),
+          );
+        }
       }
-      print("imagen_no_cargada > " + imagen_no_cargada);
 
       setState(() {
         isLoadingSave = false;
       });
-      onSuccess();
-      cleanForm();
+
+      await Future.delayed(const Duration(seconds: 3), () {
+        onSuccess();
+        cleanForm();
+      });
       return 'succcess';
     } else {
       onError();
       return 'error';
     }
+  }
+
+  Future<bool> sendImageMalEstado(
+      idInspeccion, idVehiculo, idNeumaticos, posicion) async {
+    bool resul_response = false;
+
+    Uri uri = Uri.parse(
+        'https://tiresoft2.lab-elsol.com/api/inspecciones/sendImgMalEstado');
+    http.MultipartRequest request = http.MultipartRequest('POST', uri);
+
+    request.files
+        .add(await http.MultipartFile.fromPath('file', file_image!.path));
+    request.fields['id_inspeccion'] = idInspeccion.toString();
+    request.fields['id_cliente'] = widget.id_cliente;
+    request.fields['vehiculo_id'] = idVehiculo.toString();
+    request.fields['serieneumatico'] = idNeumaticos.toString();
+    request.fields['neuposicion'] = posicion.toString();
+
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var responseBytes = await response.stream.toBytes();
+      var responseString = utf8.decode(responseBytes);
+      final jsonData = jsonDecode(responseString);
+      resul_response = jsonData['success'];
+      if (jsonData['success']) {
+        resul_response = true;
+      } else {
+        resul_response = false;
+      }
+    }
+
+    return resul_response;
   }
 
   Future<bool> updateImagePost(
@@ -263,8 +315,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         'neumaticoimg1', pickedImageAsBytes!,
         filename: 'photo.jpeg'));
 
-    request.fields['id_cliente'] = widget.id_cliente;
     request.fields['id_inspeccion'] = idInspeccion.toString();
+    request.fields['id_cliente'] = widget.id_cliente;
     request.fields['vehiculo_id'] = idVehiculo.toString();
     request.fields['serieneumatico'] = idNeumaticos.toString();
     request.fields['neuposicion'] = posicion.toString();
@@ -409,8 +461,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     }
   }
 
-  Widget applyWidget() {
-    return form1();
+  Widget applyWidget(BuildContext context) {
+    return allFormulario(context);
   }
 
   void onSuccess() {
@@ -518,8 +570,11 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.fromLTRB(40, 15, 15, 15),
             decoration: BoxDecoration(
-                color: Colors.white70,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
+              color: Colors.white70,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
             alignment: Alignment.center,
             child: tires.length > 0
                 ? diagramPosition()
@@ -528,9 +583,6 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                     semanticsLabel: 'Linear progress indicator',
                   ),
           ),
-
-          ///Widget button
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -580,50 +632,51 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                 width: 10.0,
               ),
               TextButton(
-                  style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.hovered))
-                          return Colors.blue.withOpacity(0.04);
-                        if (states.contains(MaterialState.focused) ||
-                            states.contains(MaterialState.pressed))
-                          return Colors.blue.withOpacity(0.12);
-                        return null; // Defer to the widget's default.
-                      },
-                    ),
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                  overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.hovered))
+                        return Colors.blue.withOpacity(0.04);
+                      if (states.contains(MaterialState.focused) ||
+                          states.contains(MaterialState.pressed))
+                        return Colors.blue.withOpacity(0.12);
+                      return null; // Defer to the widget's default.
+                    },
                   ),
-                  onPressed: isLoadingSave
-                      ? null
-                      : () async {
-                          await finishInspections().then((value) => {
-                                if (value)
-                                  {
-                                    print("TERMINADO Y FINALIZADO"),
-                                    Navigator.of(context).pop(),
-                                  }
-                              });
-                        },
-                  child: isLoadingSave
-                      ? Transform.scale(
-                          scale: 0.5,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 1),
-                            child: CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                                strokeWidth: 5.0),
-                          ),
-                        )
-                      : Text(
-                          'Terminar y Finalizar',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ))
+                ),
+                onPressed: isLoadingSave
+                    ? null
+                    : () async {
+                        await finishInspections().then((value) => {
+                              if (value)
+                                {
+                                  print("TERMINADO Y FINALIZADO"),
+                                  Navigator.of(context).pop(),
+                                }
+                            });
+                      },
+                child: isLoadingSave
+                    ? Transform.scale(
+                        scale: 0.5,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(vertical: 1),
+                          child: CircularProgressIndicator(
+                              backgroundColor: Colors.white, strokeWidth: 5.0),
+                        ),
+                      )
+                    : Text(
+                        'Terminar y Finalizar',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+              )
             ],
           ),
 
           Expanded(
-            child: tires.length > 0 ? applyWidget() : Text('Cargando...'),
+            child:
+                tires.length > 0 ? applyWidget(context) : Text('Cargando...'),
           ),
         ],
       ),
@@ -708,7 +761,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             ));
 
     if (imageSource != null) {
-      final XFile? file = await _picker.pickImage(source: imageSource);
+      final XFile? file = await _picker.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
@@ -719,30 +773,35 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     }
   }
 
-  form1() {
+  allFormulario(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(15),
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: Colors.white70,
-            borderRadius: const BorderRadius.all(Radius.circular(10))),
-        alignment: Alignment.center,
-        child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                tableInfoTire(),
-                pressuseWidget(),
-                reasonInnacesibilityWidget(),
-                rollingDepthWidget(),
-                valveCoverWidget(),
-                mismatchedDualsWidget(),
-                tireStateWidget(),
-                observationsWidget(),
-                nutStateWidget(),
-                recomendationWidget(),
-              ],
-            )));
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white70,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      alignment: Alignment.center,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            tableInfoTire(),
+            pressuseWidget(),
+            reasonInnacesibilityWidget(),
+            rollingDepthWidget(),
+            valveCoverWidget(),
+            mismatchedDualsWidget(),
+            tireStateWidget(context),
+            observationsWidget(),
+            nutStateWidget(),
+            recomendationWidget(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget tableInfoTire() {
@@ -1460,94 +1519,230 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         ]));
   }
 
-  Widget tireStateWidget() {
+  Widget tireStateWidget(BuildContext context) {
     return CustomCart(
-        'Estados del Neumatico',
-        Column(
-          children: [
-            ListTile(
-              title: const Text('Continuar en Operación'),
-              leading: Radio<stateEnum>(
-                value: stateEnum.Continuar,
-                groupValue: _state,
-                onChanged: (stateEnum? value) {
-                  setState(() {
-                    _state = value;
-                  });
+      'Estados del Neumatico',
+      Column(
+        children: [
+          ListTile(
+            title: const Text('Continuar en Operación'),
+            leading: Radio<stateEnum>(
+              value: stateEnum.Continuar,
+              groupValue: _state,
+              onChanged: (stateEnum? value) {
+                setState(() {
+                  _state = value;
+                });
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('Lista para Reencauchar'),
+            leading: Radio<stateEnum>(
+              value: stateEnum.ListaParaReencauchar,
+              groupValue: _state,
+              onChanged: (stateEnum? value) {
+                setState(() {
+                  _state = value;
+                });
+              },
+            ),
+          ),
+          ListTile(
+            title: const Text('Lista para Reemplazar'),
+            leading: Radio<stateEnum>(
+              value: stateEnum.ListaParaReemplazar,
+              groupValue: _state,
+              onChanged: (stateEnum? value) {
+                setState(() {
+                  _state = value;
+                });
+              },
+            ),
+          ),
+          _state.toString() == "stateEnum.ListaParaReemplazar"
+              ? SizedBox(
+                  height: 10.0,
+                )
+              : Container(),
+          _state.toString() == "stateEnum.ListaParaReemplazar"
+              ? file_image != null
+                  ? showViewPhoto(context)
+                  : showUploadPhoto(context)
+              : Text(""),
+          _state.toString() == "stateEnum.ListaParaReemplazar"
+              ? SizedBox(
+                  height: 20.0,
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  Column showViewPhoto(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: Image.file(file_image!),
+        ),
+        SizedBox.fromSize(
+          size: Size(60, 60),
+          child: ClipOval(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                splashColor: Colors.blue,
+                onTap: () {
+                  showOptionDialog(context);
                 },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.cameraswitch,
+                      color: Colors.blueGrey,
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    // Text(
+                    //   "Cambiar",
+                    //   style: TextStyle(color: Colors.blueGrey, fontSize: 9.0),
+                    // ),
+                  ],
+                ),
               ),
             ),
-            ListTile(
-              title: const Text('Lista para Reencauchar'),
-              leading: Radio<stateEnum>(
-                value: stateEnum.ListaParaReencauchar,
-                groupValue: _state,
-                onChanged: (stateEnum? value) {
-                  setState(() {
-                    _state = value;
-                  });
-                },
+          ),
+        ),
+      ],
+    );
+  }
+
+  SizedBox showUploadPhoto(BuildContext context) {
+    return SizedBox(
+      width: 200.0,
+      height: 200.0,
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Colors.red[200],
+          ),
+        ),
+        child: Icon(
+          Icons.add_photo_alternate,
+          size: 40,
+        ),
+        onPressed: () {
+          showOptionDialog(context);
+        },
+      ),
+    );
+  }
+
+  Future<void> showOptionDialog(BuildContext context) async {
+    await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Center(
+            child: Text(
+              "Seleccionar el origen de la imagen:",
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Colors.black54,
               ),
             ),
-            ListTile(
-              title: const Text('Lista para Reemplazar'),
-              leading: Radio<stateEnum>(
-                value: stateEnum.ListaParaReemplazar,
-                groupValue: _state,
-                onChanged: (stateEnum? value) {
-                  setState(() {
-                    _state = value;
-                  });
+          ),
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              InkWell(
+                onTap: () {
+                  openFileOrCamera(1);
                 },
-              ),
-            ),
-            _state.toString() == "stateEnum.ListaParaReemplazar"
-                ? Column(
+                child: Container(
+                  child: Column(
                     children: [
-                      TextButton(
-                          style: ButtonStyle(
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.blue),
-                            overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.hovered))
-                                  return Colors.blue.withOpacity(0.04);
-                                if (states.contains(MaterialState.focused) ||
-                                    states.contains(MaterialState.pressed))
-                                  return Colors.blue.withOpacity(0.12);
-                                return null; // Defer to the widget's default.
-                              },
-                            ),
-                          ),
-                          onPressed: () {
-                            _pickImage();
-                          },
-                          child: const Text('Adjuntar foto 1')),
-                      Container(
-                        child: pickedImageAsBytes != null
-                            ? Image.memory(
-                                pickedImageAsBytes!,
-                                width: 200.0,
-                                height: 200.0,
-                                fit: BoxFit.fitHeight,
-                              )
-                            : Container(
-                                decoration:
-                                    BoxDecoration(color: Colors.red[200]),
-                                width: 200,
-                                height: 200,
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.grey[800],
-                                ),
-                              ),
-                      )
+                      Icon(
+                        Icons.photo_library,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Galería',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
                     ],
-                  )
-                : Text(""),
-          ],
-        ));
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  openFileOrCamera(2);
+                },
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Cámara',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future openFileOrCamera(int option) async {
+    pickedFile = null;
+
+    Navigator.of(context).pop();
+    switch (option) {
+      case 1:
+        pickedFile = await image_picker.pickImage(
+            source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
+        break;
+      case 2:
+        pickedFile = await image_picker.pickImage(
+            source: ImageSource.camera, maxHeight: 1920, maxWidth: 1080);
+        break;
+    }
+
+    setState(() {
+      if (pickedFile != null) {
+        file_image = File(pickedFile!.path);
+        setState(() {
+          state_link = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Imagen no seleccionada")),
+        );
+      }
+    });
   }
 
   Future<void> validateRemanente(String right, String mid, String left) async {

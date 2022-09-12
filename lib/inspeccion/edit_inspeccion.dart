@@ -311,13 +311,15 @@ class _EditInspeccionState extends State<EditInspeccion> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'clienteId': widget._global_id_cliente,
-        "id_neumaticos": str_id_neumatico,
-        "exterior": exterior,
-        "medio": medio,
-        "interior": interior,
-      }),
+      body: jsonEncode(
+        <String, String>{
+          'clienteId': widget._global_id_cliente,
+          "id_neumaticos": str_id_neumatico,
+          "exterior": exterior,
+          "medio": medio,
+          "interior": interior,
+        },
+      ),
     );
     String body;
     final jsonData;
@@ -648,95 +650,94 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 return Text("$error");
               } else if (snapshot.hasData) {
                 return Form(
-                    key: _globalFormKey,
-                    child: Center(
-                      child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "P-" +
-                                    widget._global_insp_dtail.idt_posicion
-                                        .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18.0),
-                              ),
-                              IconButton(
-                                icon: Image.asset('assets/llanta2.jpg'),
-                                iconSize: 100,
-                                onPressed: () {},
-                              ),
-                              SizedBox(height: 10.0),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: presionCardWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: tapaPitonWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: profundidadRodadoWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: dualesMalHermanadosWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: separacionDualesWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: observacionesWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: estadoWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: estadoTuercasWidget(),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                child: recomendacionWidget(),
-                              ),
-                              SizedBox(height: 10.0),
-                              MaterialButton(
-                                padding:
-                                    EdgeInsets.only(right: 45.0, left: 45.0),
-                                color: Color(0xff212F3D),
-                                textColor: Colors.white,
-                                child: isLoadingSave
-                                    ? Transform.scale(
-                                        scale: 0.5,
-                                        child: Container(
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 1),
-                                          child: CircularProgressIndicator(
-                                              backgroundColor: Colors.white,
-                                              strokeWidth: 5.0),
-                                        ),
-                                      )
-                                    : Text(
-                                        'Guardar',
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                onPressed: () async => {
-                                  setState(() {
-                                    isLoadingSave = true;
-                                  }),
-                                  updateInspeccionNeumatico(),
-                                },
-                              ),
-                              SizedBox(height: 30.0),
-                            ],
-                          )),
-                    ));
+                  key: _globalFormKey,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "P-" +
+                                widget._global_insp_dtail.idt_posicion
+                                    .toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 18.0),
+                          ),
+                          IconButton(
+                            icon: Image.asset('assets/llanta2.jpg'),
+                            iconSize: 100,
+                            onPressed: () {},
+                          ),
+                          SizedBox(height: 10.0),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: presionCardWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: tapaPitonWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: profundidadRodadoWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: dualesMalHermanadosWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: separacionDualesWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: observacionesWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: estadoWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: estadoTuercasWidget(),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: recomendacionWidget(),
+                          ),
+                          SizedBox(height: 10.0),
+                          MaterialButton(
+                            padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                            color: Color(0xff212F3D),
+                            textColor: Colors.white,
+                            child: isLoadingSave
+                                ? Transform.scale(
+                                    scale: 0.5,
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(vertical: 1),
+                                      child: CircularProgressIndicator(
+                                          backgroundColor: Colors.white,
+                                          strokeWidth: 5.0),
+                                    ),
+                                  )
+                                : Text(
+                                    'Guardar',
+                                    style: TextStyle(fontSize: 15.0),
+                                  ),
+                            onPressed: () async => {
+                              setState(() {
+                                isLoadingSave = true;
+                              }),
+                              updateInspeccionNeumatico(),
+                            },
+                          ),
+                          SizedBox(height: 30.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
               } else {
                 return Center(child: CircularProgressIndicator());
               }
@@ -1160,13 +1161,14 @@ class _EditInspeccionState extends State<EditInspeccion> {
           Row(
             children: [
               Checkbox(
-                  value: _isActivateTipoConstruccion,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _isActivateTipoConstruccion = value as bool;
-                      _isActivateNoAplica = false;
-                    });
-                  }),
+                value: _isActivateTipoConstruccion,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isActivateTipoConstruccion = value as bool;
+                    _isActivateNoAplica = false;
+                  });
+                },
+              ),
               SizedBox(width: 10.0),
               Text("Tipo de Construcción")
             ],
@@ -1567,7 +1569,8 @@ class _EditInspeccionState extends State<EditInspeccion> {
             ));
 
     if (imageSource != null) {
-      final XFile? file = await _imagePicker.pickImage(source: imageSource);
+      final XFile? file = await _imagePicker.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
