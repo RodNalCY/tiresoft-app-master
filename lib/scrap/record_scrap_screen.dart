@@ -602,23 +602,65 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text(
-                "Seleccione el origen de la foto",
+                "Seleccionar el origen de la imagen 1 :",
                 style: TextStyle(fontSize: 14),
               ),
               actions: <Widget>[
-                MaterialButton(
-                  child: Text("Camara"),
-                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MaterialButton(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.photo_library,
+                              size: 35.0,
+                              color: Colors.blueGrey,
+                            ),
+                            Text(
+                              'Galería',
+                              style: TextStyle(
+                                fontSize: 9.0,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.pop(context, ImageSource.gallery),
+                    ),
+                    MaterialButton(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              size: 35.0,
+                              color: Colors.blueGrey,
+                            ),
+                            Text(
+                              'Cámara',
+                              style: TextStyle(
+                                fontSize: 9.0,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.pop(context, ImageSource.camera),
+                    ),
+                  ],
                 ),
-                MaterialButton(
-                  child: Text("Galeria"),
-                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
-                )
               ],
             ));
 
     if (imageSource != null) {
-      final XFile? file = await _picker.pickImage(source: imageSource);
+      final XFile? file = await _picker.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
@@ -634,23 +676,65 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
         context: context,
         builder: (context) => AlertDialog(
               title: const Text(
-                "Seleccione el origen de la foto",
+                "Seleccionar el origen de la imagen 2 :",
                 style: TextStyle(fontSize: 14),
               ),
               actions: <Widget>[
-                MaterialButton(
-                  child: Text("Camara"),
-                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    MaterialButton(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.photo_library,
+                              size: 35.0,
+                              color: Colors.blueGrey,
+                            ),
+                            Text(
+                              'Galería',
+                              style: TextStyle(
+                                fontSize: 9.0,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.pop(context, ImageSource.gallery),
+                    ),
+                    MaterialButton(
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.camera_alt,
+                              size: 35.0,
+                              color: Colors.blueGrey,
+                            ),
+                            Text(
+                              'Cámara',
+                              style: TextStyle(
+                                fontSize: 9.0,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.pop(context, ImageSource.camera),
+                    ),
+                  ],
                 ),
-                MaterialButton(
-                  child: Text("Galeria"),
-                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
-                )
               ],
             ));
 
     if (imageSource != null) {
-      final XFile? file = await _picker.pickImage(source: imageSource);
+      final XFile? file = await _picker.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
@@ -665,23 +749,37 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     return Column(
       children: [
         TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Colors.blue.withOpacity(0.04);
-                  if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Colors.blue.withOpacity(0.12);
-                  return null; // Defer to the widget's default.
-                },
-              ),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.hovered))
+                  return Colors.blue.withOpacity(0.04);
+                if (states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed))
+                  return Colors.blue.withOpacity(0.12);
+                return null; // Defer to the widget's default.
+              },
             ),
-            onPressed: () {
-              _pickImage();
-            },
-            child: const Text('Adjuntar foto 1')),
+          ),
+          onPressed: () {
+            _pickImage();
+          },
+          child: Container(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.center_focus_weak,
+                  size: 28.0,
+                ),
+                Text(
+                  'Subir',
+                  style: TextStyle(fontSize: 9.0),
+                )
+              ],
+            ),
+          ),
+        ),
         Container(
           child: pickedImageAsBytes != null
               ? Image.memory(
@@ -695,7 +793,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                   width: 180.0,
                   height: 180.0,
                   child: Icon(
-                    Icons.camera_alt,
+                    Icons.add_photo_alternate,
+                    size: 35,
                     color: Colors.grey[800],
                   ),
                 ),
@@ -708,23 +807,37 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
     return Column(
       children: [
         TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Colors.blue.withOpacity(0.04);
-                  if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Colors.blue.withOpacity(0.12);
-                  return null; // Defer to the widget's default.
-                },
-              ),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.hovered))
+                  return Colors.blue.withOpacity(0.04);
+                if (states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed))
+                  return Colors.blue.withOpacity(0.12);
+                return null; // Defer to the widget's default.
+              },
             ),
-            onPressed: () {
-              _pickImage2();
-            },
-            child: const Text('Adjuntar foto 2')),
+          ),
+          onPressed: () {
+            _pickImage2();
+          },
+          child: Container(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.center_focus_weak,
+                  size: 28.0,
+                ),
+                Text(
+                  'Subir',
+                  style: TextStyle(fontSize: 9.0),
+                )
+              ],
+            ),
+          ),
+        ),
         Container(
           child: pickedImageAsBytes2 != null
               ? Image.memory(
@@ -738,7 +851,8 @@ class _RecordScrapScreenState extends State<RecordScrapScreen> {
                   width: 180.0,
                   height: 180.0,
                   child: Icon(
-                    Icons.camera_alt,
+                    Icons.add_photo_alternate,
+                    size: 35,
                     color: Colors.grey[800],
                   ),
                 ),

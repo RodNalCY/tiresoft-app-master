@@ -1459,9 +1459,6 @@ class _EditInspeccionState extends State<EditInspeccion> {
   }
 
   Widget calcularPhoto(BuildContext context) {
-    print("STATUS");
-    print(_point_edit);
-    print(file_image);
     if (_point_edit == true && file_image == null) {
       return showUploadPhoto(context);
     } else if (_point_edit == true && file_image != null) {

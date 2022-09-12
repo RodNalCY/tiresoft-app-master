@@ -1105,26 +1105,67 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
 
   void _pickImageFunctionTwo() async {
     final imageSource = await showDialog<ImageSource>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                "Seleccione el origen de la foto",
-                style: TextStyle(fontSize: 14),
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  child: Text("Camara"),
-                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Seleccionar el origen de la imagen 2 :",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              MaterialButton(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.photo_library,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Galería',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                MaterialButton(
-                  child: Text("Galeria"),
-                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
-                )
-              ],
-            ));
+                onPressed: () => Navigator.pop(context, ImageSource.gallery),
+              ),
+              MaterialButton(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Cámara',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context, ImageSource.camera),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
 
     if (imageSource != null) {
-      final XFile? file = await _pickerImageTwo.pickImage(source: imageSource);
+      final XFile? file = await _pickerImageTwo.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
@@ -1139,23 +1180,37 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
     return Column(
       children: [
         TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Colors.blue.withOpacity(0.04);
-                  if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Colors.blue.withOpacity(0.12);
-                  return null; // Defer to the widget's default.
-                },
-              ),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.hovered))
+                  return Colors.blue.withOpacity(0.04);
+                if (states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed))
+                  return Colors.blue.withOpacity(0.12);
+                return null; // Defer to the widget's default.
+              },
             ),
-            onPressed: () {
-              _pickImageFunctionTwo();
-            },
-            child: const Text('Adjuntar foto 2')),
+          ),
+          onPressed: () {
+            _pickImageFunctionTwo();
+          },
+          child: Container(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.center_focus_weak,
+                  size: 28.0,
+                ),
+                Text(
+                  'Subir',
+                  style: TextStyle(fontSize: 9.0),
+                )
+              ],
+            ),
+          ),
+        ),
         Container(
           child: pickedImageAsBytesTwo != null
               ? Image.memory(
@@ -1169,7 +1224,8 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                   width: 190.0,
                   height: 190.0,
                   child: Icon(
-                    Icons.camera_alt,
+                    Icons.add_photo_alternate,
+                    size: 35,
                     color: Colors.grey[800],
                   ),
                 ),
@@ -1184,26 +1240,67 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
 
   void _pickImageFunctionOne() async {
     final imageSource = await showDialog<ImageSource>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(
-                "Seleccione el origen de la foto",
-                style: TextStyle(fontSize: 14),
-              ),
-              actions: <Widget>[
-                MaterialButton(
-                  child: Text("Camara"),
-                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Seleccionar el origen de la imagen 1 :",
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              MaterialButton(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.photo_library,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Galería',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                MaterialButton(
-                  child: Text("Galeria"),
-                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
-                )
-              ],
-            ));
+                onPressed: () => Navigator.pop(context, ImageSource.gallery),
+              ),
+              MaterialButton(
+                child: Container(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.camera_alt,
+                        size: 35.0,
+                        color: Colors.blueGrey,
+                      ),
+                      Text(
+                        'Cámara',
+                        style: TextStyle(
+                          fontSize: 9.0,
+                          color: Colors.black45,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                onPressed: () => Navigator.pop(context, ImageSource.camera),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
 
     if (imageSource != null) {
-      final XFile? file = await _pickerImageOne.pickImage(source: imageSource);
+      final XFile? file = await _pickerImageOne.pickImage(
+          source: imageSource, maxHeight: 1920, maxWidth: 1080);
 
       if (file != null) {
         file.readAsBytes().then((x) {
@@ -1218,23 +1315,37 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
     return Column(
       children: [
         TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Colors.blue.withOpacity(0.04);
-                  if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Colors.blue.withOpacity(0.12);
-                  return null; // Defer to the widget's default.
-                },
-              ),
+          style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            overlayColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.hovered))
+                  return Colors.blue.withOpacity(0.04);
+                if (states.contains(MaterialState.focused) ||
+                    states.contains(MaterialState.pressed))
+                  return Colors.blue.withOpacity(0.12);
+                return null; // Defer to the widget's default.
+              },
             ),
-            onPressed: () {
-              _pickImageFunctionOne();
-            },
-            child: const Text('Adjuntar foto 1')),
+          ),
+          onPressed: () {
+            _pickImageFunctionOne();
+          },
+          child: Container(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.center_focus_weak,
+                  size: 28.0,
+                ),
+                Text(
+                  'Subir',
+                  style: TextStyle(fontSize: 9.0),
+                )
+              ],
+            ),
+          ),
+        ),
         Container(
           child: pickedImageAsBytesOne != null
               ? Image.memory(
@@ -1248,7 +1359,8 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                   width: 190.0,
                   height: 190.0,
                   child: Icon(
-                    Icons.camera_alt,
+                    Icons.add_photo_alternate,
+                    size: 35,
                     color: Colors.grey[800],
                   ),
                 ),
