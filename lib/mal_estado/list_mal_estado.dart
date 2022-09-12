@@ -109,8 +109,8 @@ class _ListMalEstadoState extends State<ListMalEstado> {
             if (snapshot.hasData) {
               return Container(
                 child: Column(children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                  Card(
+                    elevation: 5.0,
                     child: TextField(
                       onChanged: (value) {
                         setState(() {
@@ -119,10 +119,18 @@ class _ListMalEstadoState extends State<ListMalEstado> {
                       },
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),
-                        // hintText: 'buscar x placa',
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
                       ),
                       style: TextStyle(fontSize: 18.0),
                     ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
                   ),
                   Expanded(child: _myListMalEstado(context, snapshot.data))
                 ]),

@@ -707,31 +707,60 @@ class _EditInspeccionState extends State<EditInspeccion> {
                             child: recomendacionWidget(),
                           ),
                           SizedBox(height: 10.0),
-                          MaterialButton(
-                            padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                            color: Color(0xff212F3D),
-                            textColor: Colors.white,
-                            child: isLoadingSave
-                                ? Transform.scale(
-                                    scale: 0.5,
-                                    child: Container(
-                                      margin: EdgeInsets.symmetric(vertical: 1),
-                                      child: CircularProgressIndicator(
-                                          backgroundColor: Colors.white,
-                                          strokeWidth: 5.0),
-                                    ),
-                                  )
-                                : Text(
-                                    'Guardar',
-                                    style: TextStyle(fontSize: 15.0),
+                          Center(
+                            child: SizedBox(
+                              width: 130,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  onPrimary: Colors.white,
+                                  primary: Color(0xff212F3D),
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(2)),
                                   ),
-                            onPressed: () async => {
-                              setState(() {
-                                isLoadingSave = true;
-                              }),
-                              updateInspeccionNeumatico(),
-                            },
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    isLoadingSave = true;
+                                  });
+                                  updateInspeccionNeumatico();
+                                },
+                                child: isLoadingSave
+                                    ? Transform.scale(
+                                        scale: 0.6,
+                                        child: CircularProgressIndicator(
+                                            backgroundColor: Colors.white,
+                                            strokeWidth: 5.0),
+                                      )
+                                    : Text('Actualizar'),
+                              ),
+                            ),
                           ),
+                          // MaterialButton(
+                          //   padding: EdgeInsets.only(right: 45.0, left: 45.0),
+                          //   color: Color(0xff212F3D),
+                          //   textColor: Colors.white,
+                          //   child: isLoadingSave
+                          //       ? Transform.scale(
+                          //           scale: 0.5,
+                          //           child: Container(
+                          //             margin: EdgeInsets.symmetric(vertical: 1),
+                          //             child: CircularProgressIndicator(
+                          //                 backgroundColor: Colors.white,
+                          //                 strokeWidth: 5.0),
+                          //           ),
+                          //         )
+                          //       : Text(
+                          //           'Guardar',
+                          //           style: TextStyle(fontSize: 15.0),
+                          //         ),
+                          //   onPressed: () async => {
+                          //     setState(() {
+                          //       isLoadingSave = true;
+                          //     }),
+                          //     updateInspeccionNeumatico(),
+                          //   },
+                          // ),
                           SizedBox(height: 30.0),
                         ],
                       ),

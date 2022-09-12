@@ -78,78 +78,99 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
               if (snapshot.hasData) {
                 // return _myListInspeccionDetails(context, snapshot.data);
                 return Container(
-                  child: Column(children: <Widget>[
-                    Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text.rich(
-                                  TextSpan(
-                                    text: 'Placa: ', // default text style
-                                    children: <TextSpan>[
+                  margin: EdgeInsets.only(top: 15.0, left: 5.0, right: 5.0),
+                  child: Column(
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          Card(
+                            elevation: 5,
+                            child: Container(
+                              padding: EdgeInsets.all(15.0),
+                              child: Column(children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text.rich(
                                       TextSpan(
-                                          text: widget._inspeccion.i_placa,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 17.0)),
-                                    ],
-                                  ),
-                                  style: TextStyle(fontSize: 16.0)),
-                            ),
-                            SizedBox(height: 5.0),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text.rich(
-                                  TextSpan(
-                                    text:
-                                        'Kilometraje (km): ', // default text style
-                                    children: <TextSpan>[
+                                        text: 'Placa: ', // default text style
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: widget._inspeccion.i_placa,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0)),
+                                        ],
+                                      ),
+                                      style: TextStyle(fontSize: 16.0)),
+                                ),
+                                SizedBox(height: 5.0),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text.rich(
                                       TextSpan(
-                                          text: widget
-                                              ._inspeccion.i_km_inspeccion,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 17.0)),
-                                    ],
-                                  ),
-                                  style: TextStyle(fontSize: 16.0)),
-                            ),
-                            SizedBox(height: 5.0),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text.rich(
-                                  TextSpan(
-                                    text: 'Fecha: ', // default text style
-                                    children: <TextSpan>[
+                                        text:
+                                            'Kilometraje (km): ', // default text style
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: widget
+                                                  ._inspeccion.i_km_inspeccion,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0)),
+                                        ],
+                                      ),
+                                      style: TextStyle(fontSize: 16.0)),
+                                ),
+                                SizedBox(height: 5.0),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text.rich(
                                       TextSpan(
-                                          text: widget
-                                              ._inspeccion.i_fecha_inspeccion,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 17.0)),
-                                    ],
-                                  ),
-                                  style: TextStyle(fontSize: 16.0)),
+                                        text: 'Fecha: ', // default text style
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: widget._inspeccion
+                                                  .i_fecha_inspeccion,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0)),
+                                        ],
+                                      ),
+                                      style: TextStyle(fontSize: 16.0)),
+                                ),
+                              ]),
                             ),
-                          ],
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                      child: TextField(
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Card(
+                        elevation: 5,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            border: const OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent)),
+                          ),
                           onChanged: (value) {
                             setState(() {
                               searchString = value;
                             });
                           },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.search),
-                          )),
-                    ),
-                    Expanded(
-                        child: _myListInspeccionDetails(context, snapshot.data))
-                  ]),
+                        ),
+                      ),
+                      Expanded(
+                          child:
+                              _myListInspeccionDetails(context, snapshot.data))
+                    ],
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return Text("Error");

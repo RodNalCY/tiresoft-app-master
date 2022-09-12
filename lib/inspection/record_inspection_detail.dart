@@ -558,6 +558,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       appBar: AppBar(
         title: const Text('Inspeccionar neumaticos'),
         elevation: 0.0,
+        backgroundColor: Color(0xff212F3D),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),

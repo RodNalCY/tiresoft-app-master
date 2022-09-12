@@ -25,6 +25,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _global_id_cliente = "";
+  bool isLoading = false;
 
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   // Toggles the password show status
@@ -180,26 +181,43 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                       padding: EdgeInsets.only(top: 20.0),
                     ),
                     Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.only(right: 45.0, left: 45.0),
-                          onPrimary: Colors.white,
-                          primary: Color(0xff212F3D),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(2)),
+                      child: SizedBox(
+                        width: 130,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            onPrimary: Colors.white,
+                            primary: Color(0xff212F3D),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2)),
+                            ),
                           ),
-                        ),
-                        onPressed: () async {
-                          // print("Send Id: " + _global_id_cliente),
-                          // print("Send NAME: " + _dropdownFirsValue),
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
+                          onPressed: () async {
+                            // print("Send Id: " + _global_id_cliente),
+                            // print("Send NAME: " + _dropdownFirsValue),
+
+                            setState(() => isLoading = true);
+                            await Future.delayed(const Duration(seconds: 2),
+                                () {
+                              setState(() => isLoading = false);
+                            });
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
                                 builder: (context) => Home(_global_id_cliente,
-                                    widget._user, _dropdownFirsValue)),
-                          );
-                        },
-                        child: Text('Seleccionar'),
+                                    widget._user, _dropdownFirsValue),
+                              ),
+                            );
+                          },
+                          child: isLoading
+                              ? Transform.scale(
+                                  scale: 0.6,
+                                  child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                      strokeWidth: 5.0),
+                                )
+                              : Text('Seleccionar'),
+                        ),
                       ),
                     ),
                     // Center(

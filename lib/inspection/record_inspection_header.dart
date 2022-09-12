@@ -26,6 +26,8 @@ class RecordInspectionHeader extends StatefulWidget {
 }
 
 class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
+  bool isLoading = false;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final TextEditingController _dateController;
   late final TextEditingController _kmController;
@@ -91,8 +93,9 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
     super.initState();
   }
 
+  @override
   void dispose() {
-    print("dispose");
+    print("> dispose()");
     _dateController.dispose();
     _kmController.dispose();
     _codeController.dispose();
@@ -157,7 +160,7 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(top: 10.0, bottom: 30.0),
+                      margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
                       child: Center(
                           child: Text(
                               "Por favor ingrese la siguiente información",
@@ -299,31 +302,40 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                     ),
                     Center(
                       child: MaterialButton(
-                        minWidth: 150.0,
+                        minWidth: 130.0,
                         height: 40.0,
-                        child: Text('Siguiente'),
+                        child: isLoading
+                            ? Transform.scale(
+                                scale: 0.6,
+                                child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 5.0),
+                              )
+                            : Text('Siguiente'),
                         color: Color(0xff212F3D),
                         textColor: Colors.white,
-                        onPressed: () => {
+                        onPressed: () async => {
+                          setState(() => isLoading = true),
+                          await Future.delayed(const Duration(seconds: 2), () {
+                            setState(() => isLoading = false);
+                          }),
                           if (!validateFormIsEmpty())
                             {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          RecordInspectionDetail(
-                                            id_cliente: widget._id_cliente,
-                                            name_cliente: widget._name_cliente,
-                                            my_user: widget._user,
-                                            title: 'Registrar inspeccion',
-                                            idVehiculo: selectedId,
-                                            fechaInspeccion:
-                                                _dateController.text,
-                                            codigoInspeccion:
-                                                _codeController.text,
-                                            kmInspeccion:
-                                                int.parse(_kmController.text),
-                                          ))),
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RecordInspectionDetail(
+                                    id_cliente: widget._id_cliente,
+                                    name_cliente: widget._name_cliente,
+                                    my_user: widget._user,
+                                    title: 'Registrar inspeccion',
+                                    idVehiculo: selectedId,
+                                    fechaInspeccion: _dateController.text,
+                                    codigoInspeccion: _codeController.text,
+                                    kmInspeccion: int.parse(_kmController.text),
+                                  ),
+                                ),
+                              ),
                             }
                         },
                       ),

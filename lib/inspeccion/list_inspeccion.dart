@@ -100,8 +100,8 @@ class _ListInspeccionState extends State<ListInspeccion> {
                 // return _myListInspeccion(context, snapshot.data);
                 return Container(
                   child: Column(children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                    Card(
+                      elevation: 5,
                       child: TextField(
                         onChanged: (value) {
                           setState(() {
@@ -110,11 +110,18 @@ class _ListInspeccionState extends State<ListInspeccion> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search),
-                          // hintText: 'buscar x placa / identificador',
+                          border: const OutlineInputBorder(),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
                         ),
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
+                    SizedBox(height: 2.0),
                     Expanded(child: _myListInspeccion(context, snapshot.data))
                   ]),
                 );
