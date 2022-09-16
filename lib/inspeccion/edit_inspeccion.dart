@@ -674,7 +674,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                                 fontWeight: FontWeight.w700, fontSize: 18.0),
                           ),
                           IconButton(
-                            icon: Image.asset('assets/llanta2.jpg'),
+                            icon: Image.asset('assets/neumatico1.jpg'),
                             iconSize: 100,
                             onPressed: () {},
                           ),

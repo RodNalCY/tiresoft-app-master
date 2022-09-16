@@ -524,8 +524,8 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
         ? IconButton(
             tooltip: tires[pos].serie,
             icon: this.position == pos
-                ? Image.asset('assets/llanta3.jpg')
-                : Image.asset('assets/llanta2.jpg'),
+                ? Image.asset('assets/neumatico3.jpg')
+                : Image.asset('assets/neumatico1.jpg'),
             iconSize: 50,
             onPressed: () {
               setState(() {
@@ -534,7 +534,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
             },
           )
         : IconButton(
-            icon: Image.asset('assets/llanta1.jpg'),
+            icon: Image.asset('assets/neumatico2.jpg'),
             iconSize: 50,
             onPressed: () {},
           );

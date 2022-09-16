@@ -57,7 +57,8 @@ class _ListVehiculosState extends State<ListVehiculos> {
           str_f_fabricacion = item["fecha_fabricacion"];
         }
 
-        _vehiculos.add(Vehiculo(
+        _vehiculos.add(
+          Vehiculo(
             item["id"],
             item["placa"],
             item["codigo"],
@@ -69,7 +70,12 @@ class _ListVehiculosState extends State<ListVehiculos> {
             item["nomplanta"],
             item["nomestado"],
             str_f_fabricacion,
-            item["fecha_registro"]));
+            item["fecha_registro"],
+            item["n_neumaticos"].toString(),
+            item["tipo_costo"].toString(),
+            item["id_configuracion"].toString(),
+          ),
+        );
       }
 
       return _vehiculos;
@@ -241,10 +247,12 @@ class _ListVehiculosState extends State<ListVehiculos> {
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //     SnackBar(content: Text("Placa: " + data[index].v_placa)))
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ListVehiculoDetails(
-                                data[index], data[index].v_placa)))
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ListVehiculoDetails(
+                            vehiculo: data[index], cliente: widget._id_cliente),
+                      ),
+                    ),
                   },
                   title: Text(data[index].v_marca + " " + data[index].v_modelo,
                       style: TextStyle(fontWeight: FontWeight.w400)),
@@ -257,7 +265,7 @@ class _ListVehiculosState extends State<ListVehiculos> {
                       child: Text(
                     data[index].v_placa,
                     style: TextStyle(
-                      fontSize: 10.0,
+                      fontSize: 9.0,
                     ),
                   )),
                   trailing: Icon(Icons.arrow_forward_ios),

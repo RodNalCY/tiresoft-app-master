@@ -11,7 +11,9 @@ class Vehiculo {
   String v_estado;
   String v_anio_fabricacion;
   String v_f_registro;
-
+  String v_num_neumaticos;
+  String v_id_tipo_costo;
+  String v_id_configuracion;
   Vehiculo(
       this.v_id,
       this.v_placa,
@@ -24,7 +26,10 @@ class Vehiculo {
       this.v_planta,
       this.v_estado,
       this.v_anio_fabricacion,
-      this.v_f_registro) {
+      this.v_f_registro,
+      this.v_num_neumaticos,
+      this.v_id_tipo_costo,
+      this.v_id_configuracion) {
     this.v_id = v_id;
     this.v_placa = v_placa;
     this.v_codigo = v_codigo;
@@ -37,5 +42,8 @@ class Vehiculo {
     this.v_estado = v_estado;
     this.v_anio_fabricacion = v_anio_fabricacion;
     this.v_f_registro = v_f_registro;
+    this.v_num_neumaticos = v_num_neumaticos;
+    this.v_id_tipo_costo = v_id_tipo_costo;
+    this.v_id_configuracion = v_id_configuracion;
   }
 }
