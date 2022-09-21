@@ -250,7 +250,9 @@ class _ListVehiculosState extends State<ListVehiculos> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ListVehiculoDetails(
-                            vehiculo: data[index], cliente: widget._id_cliente),
+                            vehiculo: data[index],
+                            user: widget._user,
+                            cliente: widget._id_cliente),
                       ),
                     ),
                   },
