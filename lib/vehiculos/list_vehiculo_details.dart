@@ -36,7 +36,8 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
   List<UbicacionPosicion> _posicion = [];
 
   late Map<String, dynamic> retirados;
-  String map_neumaticos = "";
+  String str_neumaticos = "";
+  bool isLoading = false;
 
   Future<List<UbicacionPosicion>> cargarpositionSuccess() async {
     final response = await http.post(
@@ -119,6 +120,11 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
     _txtEdFecha.dispose();
     _txtEdKmHr.dispose();
     super.dispose();
+  }
+
+  void clearInputs() {
+    // _txtEdFecha.text = '';
+    _txtEdKmHr.text = '';
   }
 
   @override
@@ -311,12 +317,27 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
                               child: MaterialButton(
                                 onPressed: () async {
                                   if (!validateFormIsEmpty()) {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+
                                     enviarListaRetirado();
                                   }
                                 },
                                 color: Color(0xff212F3D),
-                                child: Text('Guardar',
-                                    style: TextStyle(color: Colors.white)),
+                                child: isLoading
+                                    ? Transform.scale(
+                                        scale: 0.5,
+                                        child: Container(
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 1),
+                                          child: CircularProgressIndicator(
+                                              backgroundColor: Colors.white,
+                                              strokeWidth: 5.0),
+                                        ),
+                                      )
+                                    : Text('Guardar',
+                                        style: TextStyle(color: Colors.white)),
                               ),
                             ),
                           ],
@@ -699,19 +720,49 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
   }
 
   Future<void> enviarListaRetirado() async {
-    if (map_neumaticos.length > 0) {
-      final ultimo = map_neumaticos.length - 1;
-      final neumaticos_retirados = map_neumaticos.substring(0, ultimo);
+    if (str_neumaticos.length > 0) {
+      final ultimo = str_neumaticos.length - 1;
+      final array_objects = str_neumaticos.substring(0, ultimo);
+      final array_neumaticos = '[' + array_objects + ']';
+      final List<dynamic> json_decoder = jsonDecode(array_neumaticos);
+      print(json_decoder);
       retirados = {
         "id_cliente": widget.cliente,
         "id_usuario": widget.user[0].u_id,
         "id_vehiculo": widget.vehiculo.v_id,
         "fecha_retiro": _txtEdFecha.text.toString(),
         "km_retiro": _txtEdKmHr.text.toString(),
-        "retirados": [neumaticos_retirados]
+        "neumaticosretirados": json_decoder
       };
-      print('> ${retirados}');
+
+      final response = await http.post(
+        Uri.parse(
+            "https://tiresoft2.lab-elsol.com/api/vehiculos/storedesinstalacion"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(retirados),
+      );
+      // print('Status > ${response.statusCode}');
+      if (response.statusCode == 200) {
+        String body = utf8.decode(response.bodyBytes);
+        final jsonData = jsonDecode(body);
+
+        clearInputs();
+        setState(() {
+          isLoading = false;
+        });
+        str_neumaticos = "";
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Desinstalado(s) con exito.")),
+        );
+      } else {
+        throw Exception("Falló la Conexión");
+      }
     } else {
+      setState(() {
+        isLoading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Debe desinstalar por lo menos un neumático.")),
@@ -721,7 +772,7 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
 
   Future<void> selectedRemoveNeumatico(
       BuildContext context, String name, String id) async {
-    map_neumaticos = map_neumaticos +
+    str_neumaticos = str_neumaticos +
         '{' +
         '"id_neumatico":${id},' +
         '"motivo_retiro":${motivoRetiroIdSelected}' +
