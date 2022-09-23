@@ -469,7 +469,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: new Text(
-                    "Verifique si su cuenta de correo electrónico se encuentra activo, caso contrario edite porque se enviará el Reporte Consolidado a su buzon de correo.",
+                    "Verifique si su cuenta de correo electrónico se encuentra activo, caso contrario edite porque se enviará el Reporte Consolidado a su buzón de correo.",
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
@@ -591,14 +591,42 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                 borderRadius: BorderRadius.circular(15),
               ),
               actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: new Text(
-                    "El Reporte Consolidado (pdf) se enviará al siguiente correo:\n\n" +
-                        email +
-                        "\n\npara finalizar el proceso pulsar el botón enviar.",
-                    style: TextStyle(color: Colors.black54),
+                Center(
+                  child: new Padding(
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                    child: new Icon(
+                      Icons.picture_as_pdf,
+                      size: 40.0,
+                      color: Colors.red.shade500,
+                    ),
                   ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 5.0,
+                        left: 15.0,
+                        right: 15.0,
+                      ),
+                      child: new Text(
+                        "El Reporte Consolidado (.pdf) se enviará al siguiente correo:",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 20.0,
+                        left: 15.0,
+                        right: 15.0,
+                      ),
+                      child: new Text(
+                        '"' + email + '"',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -675,9 +703,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20.0,
-                ),
+                _isLoadingSend
+                    ? SizedBox(
+                        height: 20.0,
+                      )
+                    : Container(),
                 _isLoadingSend
                     ? new LinearProgressIndicator(
                         color: Colors.blue,
