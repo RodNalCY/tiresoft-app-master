@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/models/anio.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/models/mes.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_desgaste_irregular.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
@@ -43,193 +45,244 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   bool isActivedReporteConsolidado = false;
   bool isLoading = false;
   // AÑO SELECTED
-  String anioIdSelected = "Año";
-  Widget anioWidgetList() {
-    return DropdownButton<String>(
-      value: anioIdSelected,
-      icon: const Icon(
-        Icons.expand_more,
-        color: Colors.blue,
-      ),
-      elevation: 16,
-      style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-      underline: Container(
-        height: 1,
-        color: Colors.blue,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          anioIdSelected = newValue!;
-        });
-      },
-      items: <String>['Año', '2019', '2020', '2021', '2022']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(
-            value,
-          ),
-        );
-      }).toList(),
-    );
-  }
+  late List<Anio> _list_anios = [];
+  late String _ddownFirstAnioName;
+  late String _ddownFirstAnioId;
+  bool statusMes = false;
+  bool statusMessage = false;
 
-  // MES INICIAL SELECTED
-  int mesesIdselectedInit = 0;
-  List<String> listaMesesNameInit = [
-    'Mes Inicial',
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Setiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ];
-  Widget mesesInitedWidgetList() {
-    return DropdownButton<String>(
-      icon: const Icon(Icons.expand_more, color: Colors.blue),
-      elevation: 16,
-      style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-      underline: Container(
-        height: 1,
-        color: Colors.blue,
-      ),
-      value: mesesIdselectedInit.toString(),
-      items: <String>[
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12'
-      ].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(listaMesesNameInit[int.parse(value)]),
-        );
-      }).toList(),
-      onChanged: (_val) {
-        setState(() {
-          mesesIdselectedInit = int.parse(_val.toString());
-        });
+  Future<List<Anio>> cargarListaAnios() async {
+    print("cargarListaAnios()");
+    final response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/reporte/anios"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
       },
+      body: jsonEncode(<String, String>{
+        'id_cliente': '5',
+      }),
     );
-  }
+    _list_anios = [];
 
-  // AÑO FINAL SELECTED
-  int mesesIdselectedFinish = 0;
-  List<String> listaMesesNameFinish = [
-    'Mes Final',
-    'Enero',
-    'Febrero',
-    'Marzo',
-    'Abril',
-    'Mayo',
-    'Junio',
-    'Julio',
-    'Agosto',
-    'Setiembre',
-    'Octubre',
-    'Noviembre',
-    'Diciembre'
-  ];
-  Widget mesesFinishedWidgetList() {
-    return DropdownButton<String>(
-      icon: const Icon(Icons.expand_more, color: Colors.blue),
-      elevation: 16,
-      style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-      underline: Container(
-        height: 1,
-        color: Colors.blue,
-      ),
-      value: mesesIdselectedFinish.toString(),
-      items: <String>[
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12'
-      ].map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(listaMesesNameFinish[int.parse(value)]),
-        );
-      }).toList(),
-      onChanged: (_val) {
-        setState(() {
-          mesesIdselectedFinish = int.parse(_val.toString());
-        });
-      },
-    );
-  }
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      for (var item in jsonData['success']['datos']) {
+        _list_anios.add(Anio(item['anio'], item['anio']));
+      }
 
-  String calcularMeses(int mes) {
-    String value = "";
-    switch (mes) {
-      case 1:
-        value = "Enero";
-        break;
-      case 2:
-        value = "Febrero";
-        break;
-      case 3:
-        value = "Marzo";
-        break;
-      case 4:
-        value = "Abril";
-        break;
-      case 5:
-        value = "Mayo";
-        break;
-      case 6:
-        value = "Junio";
-        break;
-      case 7:
-        value = "Julio";
-        break;
-      case 8:
-        value = "Agosto";
-        break;
-      case 9:
-        value = "Setiembre";
-        break;
-      case 10:
-        value = "Octubre";
-        break;
-      case 11:
-        value = "Noviembre";
-        break;
-      case 12:
-        value = "Diciembre";
-        break;
+      _ddownFirstAnioName = jsonData['success']['datos'][0]['anio'];
+      _ddownFirstAnioId = jsonData['success']['datos'][0]['anio'];
+      cargarListaMeses();
+
+      return _list_anios;
+    } else {
+      throw Exception("Falló la Conexión");
     }
-    return value;
+  }
+
+  late List<Mes> _mesesList = [];
+  late String _ddownFirsMesInitName;
+  late String _ddownFirsMesInitId;
+
+  late String _ddownFirsMesFinishName;
+  late String _ddownFirsMesFinishId;
+
+  Future<List<Mes>> cargarListaMeses() async {
+    print("cargarListaMeses()");
+    final response = await http.post(
+      Uri.parse("https://tiresoft2.lab-elsol.com/api/reporte/meses"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id_cliente': '5',
+        'year': _ddownFirstAnioId,
+      }),
+    );
+    _mesesList = [];
+
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      for (var item in jsonData['success']['datos']) {
+        _mesesList.add(Mes(item['numero_mes'], item['mes']));
+      }
+
+      setState(() {
+        _ddownFirsMesInitName = jsonData['success']['datos'][0]['mes'];
+        _ddownFirsMesInitId = jsonData['success']['datos'][0]['numero_mes'];
+
+        _ddownFirsMesFinishName = jsonData['success']['datos'][0]['mes'];
+        _ddownFirsMesFinishId = jsonData['success']['datos'][0]['numero_mes'];
+        statusMes = true;
+      });
+
+      return _mesesList;
+    } else {
+      throw Exception("Falló la Conexión");
+    }
+  }
+
+  Container widgetDropDownMInit() {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: _ddownFirsMesInitName,
+        icon: const Icon(
+          Icons.expand_more,
+          color: Colors.blue,
+        ),
+        elevation: 16,
+        style: const TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        ),
+        underline: Container(
+          height: 1,
+          color: Colors.blue,
+        ),
+        onChanged: (String? newValue) {
+          setState(() {
+            _ddownFirsMesInitName = newValue!;
+          });
+        },
+        items: _mesesList
+            .map((fc) => DropdownMenuItem<String>(
+                  onTap: () {
+                    _ddownFirsMesInitId = fc.m_id.toString();
+                  },
+                  child: Text(fc.m_mes),
+                  value: fc.m_mes,
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Container widgetDropDownMFinish() {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: _ddownFirsMesFinishName,
+        icon: const Icon(
+          Icons.expand_more,
+          color: Colors.blue,
+        ),
+        elevation: 16,
+        style: const TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        ),
+        underline: Container(
+          height: 1,
+          color: Colors.blue,
+        ),
+        onChanged: (String? newValue) {
+          setState(() {
+            _ddownFirsMesFinishName = newValue!;
+          });
+        },
+        items: _mesesList
+            .map((fc) => DropdownMenuItem<String>(
+                  onTap: () {
+                    _ddownFirsMesFinishId = fc.m_id.toString();
+                  },
+                  child: Text(fc.m_mes),
+                  value: fc.m_mes,
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget widgetDropDownAnio() {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: DropdownButton<String>(
+        value: _ddownFirstAnioName,
+        icon: const Icon(
+          Icons.expand_more,
+          color: Colors.blue,
+        ),
+        elevation: 16,
+        style: const TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        ),
+        underline: Container(
+          height: 1,
+          color: Colors.blue,
+        ),
+        onChanged: (String? newValue) {
+          setState(() {
+            _ddownFirstAnioName = newValue!;
+            cargarListaMeses();
+          });
+        },
+        items: _list_anios
+            .map((fc) => DropdownMenuItem<String>(
+                  onTap: () {
+                    _ddownFirstAnioId = fc.a_id.toString();
+                  },
+                  child: Text(fc.a_anio),
+                  value: fc.a_anio,
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget dropDownBloqueado() {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.blue.shade50,
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: DropdownButton<String>(
+          icon: const Icon(
+            Icons.expand_more,
+            color: Colors.blue,
+          ),
+          underline: Container(),
+          hint: SizedBox(
+            width: 55.0,
+            child: LinearProgressIndicator(
+              color: Colors.blue.shade300,
+              backgroundColor: Colors.white,
+              minHeight: 2,
+            ),
+          ),
+          onChanged: null,
+          items: []),
+    );
   }
 
   @override
   void initState() {
     _ctrl_email_user = TextEditingController(text: widget._user[0].u_email);
+    cargarListaAnios();
     super.initState();
   }
 
@@ -253,7 +306,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
       ),
       body: Container(
         padding: EdgeInsets.all(10.0),
-        color: Colors.white54,
+        color: Colors.white60,
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
@@ -280,11 +333,11 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                         ),
                       ),
                     ),
-                    isActivedReporteConsolidado
+                    statusMessage
                         ? Container(
                             child: Center(
                               child: Text(
-                                '(${calcularMeses(mesesIdselectedInit)} a ${calcularMeses(mesesIdselectedFinish)} - ${anioIdSelected})',
+                                '(${_ddownFirsMesInitName} a ${_ddownFirsMesFinishName} - ${_ddownFirstAnioId})',
                                 style: TextStyle(
                                     color: Color(0xff212F3D), fontSize: 14.0),
                               ),
@@ -297,36 +350,15 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: anioWidgetList(),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: mesesInitedWidgetList(),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            child: mesesFinishedWidgetList(),
-                          ),
+                          statusMes
+                              ? widgetDropDownAnio()
+                              : dropDownBloqueado(),
+                          statusMes
+                              ? widgetDropDownMInit()
+                              : dropDownBloqueado(),
+                          statusMes
+                              ? widgetDropDownMFinish()
+                              : dropDownBloqueado(),
                         ],
                       ),
                     ),
@@ -407,6 +439,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                               ),
                             ),
                             onPressed: () async => {
+                              setState(() => statusMessage = true),
                               await showDialogSendEmail(context),
                             },
                           ),
@@ -418,12 +451,12 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
               ),
               isActivedReporteConsolidado && isLoading
                   ? Container(
-                      margin: EdgeInsets.only(top: 30.0, left: 5.0, right: 5.0),
+                      margin:
+                          EdgeInsets.only(top: 25.0, left: 13.0, right: 13.0),
                       child: LinearProgressIndicator(
-                        backgroundColor: Colors.black12,
+                        backgroundColor: Colors.transparent,
                         valueColor: AlwaysStoppedAnimation(Colors.blue),
-                        minHeight: 1.0,
-                        // value: _progress,
+                        minHeight: 2,
                       ),
                     )
                   : Container(),
@@ -523,7 +556,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                     ),
                     InkWell(
                       onTap: () {
-                        sendEmailValideData(context);
+                        showDialogConfirmEmail(context, _ctrl_email_user.text);
                       },
                       child: Container(
                         child: Column(
@@ -557,30 +590,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
     );
   }
 
-  Future<void> sendEmailValideData(BuildContext context) async {
-    if (anioIdSelected == "Año") {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el año")),
-      );
-    } else if (mesesIdselectedInit == 0) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el mes inicial")),
-      );
-    } else if (mesesIdselectedFinish == 0) {
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el mes Final")),
-      );
-    } else {
-      Navigator.of(context).pop();
-      showDialogConfirmEmail(context, _ctrl_email_user.text);
-    }
-  }
-
   Future<void> showDialogConfirmEmail(
       BuildContext context, String email) async {
+    Navigator.of(context).pop();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -712,6 +724,7 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
                     ? new LinearProgressIndicator(
                         color: Colors.blue,
                         backgroundColor: Colors.white,
+                        minHeight: 2,
                       )
                     : Container(),
                 SizedBox(
@@ -729,9 +742,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
     print('Cliente > ${widget._id_cliente}');
     print('Usuario > ${widget._user[0].u_id}');
     print('Email   > ${_ctrl_email_user.text}');
-    print('Anio   > ${anioIdSelected}');
-    print('MesInit > ${mesesIdselectedInit}');
-    print('MesFin  > ${mesesIdselectedFinish}');
+    print('Anio   > ${_ddownFirstAnioId}');
+    print('MesInit > ${_ddownFirsMesInitId}');
+    print('MesFin  > ${_ddownFirsMesFinishId}');
     bool statusSend = false;
 
     final response = await http.post(
@@ -743,9 +756,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
         'id_cliente': widget._id_cliente,
         'id_usuario': widget._user[0].u_id.toString(),
         'email': _ctrl_email_user.text.toString(),
-        'month1': mesesIdselectedInit.toString(),
-        'month2': mesesIdselectedFinish.toString(),
-        'year': anioIdSelected.toString(),
+        'month1': _ddownFirsMesInitId.toString(),
+        'month2': _ddownFirsMesFinishId.toString(),
+        'year': _ddownFirstAnioId.toString(),
       }),
     );
 
@@ -762,46 +775,36 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
   }
 
   Future<void> generarReporteConsolidado() async {
-    if (anioIdSelected == "Año") {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el año")),
-      );
-    } else if (mesesIdselectedInit == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el mes inicial")),
-      );
-    } else if (mesesIdselectedFinish == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Por favor, seleccione el mes Final")),
-      );
-    } else {
-      print("Generando... Reporte Consolidado");
-      setState(() {
-        isActivedReporteConsolidado = true;
-        isLoading = true;
-        _refresh = true;
-      });
-      await Future.delayed(Duration(seconds: 3));
-      setState(() {
-        _refresh = false;
-      });
-      await Future.delayed(Duration(seconds: 3));
-      setState(() {
-        isLoading = false;
-      });
-    }
+    print("Generando... Reporte Consolidado");
+    setState(() {
+      isActivedReporteConsolidado = true;
+      isLoading = true;
+      _refresh = true;
+      statusMessage = true;
+    });
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      _refresh = false;
+    });
+    await Future.delayed(Duration(seconds: 3));
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Widget pintarGraficos() {
+    print('Anio    : ${_ddownFirstAnioId}');
+    print('MesInit : ${_ddownFirsMesInitId}');
+    print('MesFin  : ${_ddownFirsMesFinishId}');
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           WidgetEquiposInspeccionados(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -809,9 +812,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetDistribucionMedida(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -819,9 +822,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetPosicionRuedaMarca(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -829,9 +832,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetMarcaEjeDireccional(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -839,9 +842,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetMarcaEjeTraccion(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -849,9 +852,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetMarcaEjeApoyo(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -859,9 +862,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetMalEstado(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -869,9 +872,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetResumenScrap(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -879,9 +882,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetResumenRetiro(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -889,9 +892,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetRemanenteUnidad(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -899,9 +902,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetRemanenteMedida(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -909,9 +912,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetServicioReencauche(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -919,9 +922,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetDesgasteIrregular(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -929,9 +932,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetInfladoNeumatico(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -939,9 +942,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetPresionInflado(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -949,9 +952,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetReencauche(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -959,9 +962,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetReencauchabilidad(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
@@ -969,9 +972,9 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           ),
           WidgetInspecciones(
             cliente: widget._id_cliente,
-            anio: anioIdSelected,
-            mes_inicio: mesesIdselectedInit.toString(),
-            mes_fin: mesesIdselectedFinish.toString(),
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
           SizedBox(
