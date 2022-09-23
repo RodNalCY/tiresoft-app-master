@@ -144,7 +144,7 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
           } else if (snapshot.hasData) {
             return Container(
               height: double.infinity,
-              color: Colors.black12,
+              color: Colors.white54,
               padding: EdgeInsets.all(10.0),
               child: SingleChildScrollView(
                 child: Column(
@@ -312,9 +312,9 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
                               },
                             ),
                             SizedBox(height: 20.0),
-                            SizedBox(
-                              width: 130.0,
+                            Center(
                               child: MaterialButton(
+                                minWidth: 130.0,
                                 onPressed: () async {
                                   if (!validateFormIsEmpty()) {
                                     setState(() {
@@ -327,14 +327,10 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
                                 color: Color(0xff212F3D),
                                 child: isLoading
                                     ? Transform.scale(
-                                        scale: 0.5,
-                                        child: Container(
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 1),
-                                          child: CircularProgressIndicator(
-                                              backgroundColor: Colors.white,
-                                              strokeWidth: 5.0),
-                                        ),
+                                        scale: 0.6,
+                                        child: CircularProgressIndicator(
+                                            backgroundColor: Colors.white,
+                                            strokeWidth: 5.0),
                                       )
                                     : Text('Guardar',
                                         style: TextStyle(color: Colors.white)),

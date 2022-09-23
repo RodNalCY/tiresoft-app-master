@@ -303,7 +303,6 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
                     Center(
                       child: MaterialButton(
                         minWidth: 130.0,
-                        height: 40.0,
                         child: isLoading
                             ? Transform.scale(
                                 scale: 0.6,

@@ -197,7 +197,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
                             // print("Send NAME: " + _dropdownFirsValue),
 
                             setState(() => isLoading = true);
-                            await Future.delayed(const Duration(seconds: 1),
+                            await Future.delayed(const Duration(seconds: 2),
                                 () {
                               setState(() => isLoading = false);
                             });
