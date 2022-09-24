@@ -45,6 +45,7 @@ dependencies:
   path_provider: ^2.0.11
   open_file: ^3.2.1
   syncfusion_flutter_charts: ^20.2.44
+  flutter_spinkit: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -87,6 +88,7 @@ flutter:
     - assets/tiresoft-background.jpg
     - assets/persona.png
     - assets/fondo-login.png
+    - assets/ic_tiresoft_splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

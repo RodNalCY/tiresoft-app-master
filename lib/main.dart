@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tiresoft/login/login_screen.dart';
 import 'package:tiresoft/navigation/provider/navigation_change_provider.dart';
+import 'package:tiresoft/splash_screen/splash_screen.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -76,6 +76,6 @@ class _ValidationSessionScreenState extends State<ValidationSessionScreen> {
   @override
   Widget build(BuildContext context) {
     print("2-Method build()");
-    return LoginScreen();
+    return SplashScreen();
   }
 }
