@@ -22,6 +22,7 @@ class CustomerSelectionScreen extends StatefulWidget {
 }
 
 class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
+  ImageProvider imgBackground = AssetImage('assets/fondo-login.png');
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _global_id_cliente = "";
@@ -90,7 +91,7 @@ class _CustomerSelectionScreenState extends State<CustomerSelectionScreen> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/fondo-login.png'),
+                  image: imgBackground,
                   fit: BoxFit.cover,
                 ),
               ),

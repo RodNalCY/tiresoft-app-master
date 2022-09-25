@@ -18,10 +18,16 @@ class NavigationDrawerWidget extends StatefulWidget {
 }
 
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
+  ImageProvider imgBackground = AssetImage('assets/tiresoft-background.jpg');
+  late final ImageProvider imgAvatar;
   String _name = "";
   String _email = "";
   String _cliente = "";
-  String _logo_url = "";
+  @override
+  void initState() {
+    imgAvatar = AssetImage(widget._user[0].u_img_logo);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +35,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
     final safeArea =
         EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top);
-    _logo_url = widget._user[0].u_img_logo;
 
     if ((widget._user[0].u_name + " " + widget._user[0].u_lastname).length >
         15) {
@@ -63,10 +68,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               padding: safeArea,
               width: double.infinity,
               child: buildHeader(context,
-                  urlImage: _logo_url,
-                  name: _name,
-                  email: _email,
-                  client: _cliente),
+                  name: _name, email: _email, client: _cliente),
             ),
             const SizedBox(height: 20.0),
             buildOneMenuItem(context,
@@ -157,14 +159,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildHeader(BuildContext context,
-      {required String urlImage,
-      required String name,
-      required String email,
-      required String client}) {
+      {required String name, required String email, required String client}) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/tiresoft-background.jpg'),
+          image: imgBackground,
           fit: BoxFit.cover,
         ),
       ),
@@ -177,7 +176,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             padding: NavigationDrawerWidget._padding
                 .add(EdgeInsets.symmetric(vertical: 40.0)),
             child: Row(children: [
-              CircleAvatar(radius: 33.0, backgroundImage: AssetImage(urlImage)),
+              CircleAvatar(radius: 33.0, backgroundImage: imgAvatar),
               SizedBox(width: 10.0),
               Container(
                 decoration: BoxDecoration(

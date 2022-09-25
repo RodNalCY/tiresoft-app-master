@@ -89,6 +89,7 @@ flutter:
     - assets/persona.png
     - assets/fondo-login.png
     - assets/ic_tiresoft_splash.png
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
