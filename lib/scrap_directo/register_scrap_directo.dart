@@ -492,170 +492,241 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
           elevation: 0.0,
           backgroundColor: Color(0xff212F3D),
         ),
-        body: FutureBuilder(
-          future: neuDisenioList,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              final error = snapshot.error;
-              return Text('$error');
-            } else if (snapshot.hasData) {
-              return Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(10),
-                child: Form(
-                    key: _globalFormKey,
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(10),
-                              child: const Center(
-                                  child: Text(
-                                      "Por favor ingrese la siguiente información",
-                                      style: TextStyle(fontSize: 14))),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: TextFormField(
-                                controller: _txtEdNumSerie,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Número de serie',
-                                  errorText: _validatetxtEdNumSerie
-                                      ? 'Debe ingresar el número de serie'
-                                      : null,
+        body: Container(
+          color: Color.fromARGB(255, 227, 235, 243),
+          child: FutureBuilder(
+            future: neuDisenioList,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                final error = snapshot.error;
+                return Text('$error');
+              } else if (snapshot.hasData) {
+                return Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Form(
+                      key: _globalFormKey,
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: const Center(
+                                    child: Text(
+                                        "Por favor ingrese la siguiente información",
+                                        style: TextStyle(fontSize: 14))),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: TextFormField(
+                                  controller: _txtEdNumSerie,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Número de serie',
+                                    errorText: _validatetxtEdNumSerie
+                                        ? 'Debe ingresar el número de serie'
+                                        : null,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: TextFormField(
-                                controller: _txtEdDOT,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'DOT',
-                                  errorText: _validatetxtEdDOT
-                                      ? 'Debe ingresar el DOT del neumático'
-                                      : null,
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: TextFormField(
+                                  controller: _txtEdDOT,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'DOT',
+                                    errorText: _validatetxtEdDOT
+                                        ? 'Debe ingresar el DOT del neumático'
+                                        : null,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: _txtEdCostoSnIGV,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Costo sin IGV',
-                                  errorText: _validatetxtEdCostoSnIGV
-                                      ? 'Debe ingresar el costo sin IGV'
-                                      : null,
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: _txtEdCostoSnIGV,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Costo sin IGV',
+                                    errorText: _validatetxtEdCostoSnIGV
+                                        ? 'Debe ingresar el costo sin IGV'
+                                        : null,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Tipo de Moneda:",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black54),
+                                      ),
+                                      SizedBox(width: 15.0),
+                                      tipoMonedaWidgetList(),
+                                    ],
+                                  )),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Condición: ",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black54),
+                                      ),
+                                      SizedBox(width: 15.0),
+                                      condicionNeumaticoWidgetList(),
+                                    ],
+                                  )),
+                              Container(
                                 padding: EdgeInsets.all(10),
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Tipo de Moneda:",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black54),
-                                    ),
-                                    SizedBox(width: 15.0),
-                                    tipoMonedaWidgetList(),
-                                  ],
-                                )),
-                            Container(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Cantidad de Reencauche: ",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black54),
+                                      ),
+                                      statusInputs
+                                          ? cantidadReencauchesoWidgetList()
+                                          : dropDownBloqueado(),
+                                    ]),
+                              ),
+                              Container(
                                 padding: EdgeInsets.all(10),
                                 child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Disenio de Banda: ",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black54),
+                                      ),
+                                      FutureBuilder<List<Disenio>>(
+                                        future: neuDisenioList,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasError) {
+                                            final error = snapshot.error;
+                                            return Text("$error");
+                                          } else if (snapshot.hasData) {
+                                            return statusInputs
+                                                ? DropdownButton<String>(
+                                                    value:
+                                                        _dropdownFirstDisenioValue,
+                                                    icon: const Icon(
+                                                        Icons.unfold_more,
+                                                        color:
+                                                            Color(0xff2874A6)),
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 17.0),
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        _dropdownFirstDisenioValue =
+                                                            newValue!;
+                                                      });
+                                                    },
+                                                    items: snapshot.data!
+                                                        .map((fc) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              onTap: () {
+                                                                _dropdownFirstIdDisenioValue = fc
+                                                                    .v_id
+                                                                    .toString();
+                                                              },
+                                                              child: Text(
+                                                                  fc.v_disenio),
+                                                              value:
+                                                                  fc.v_disenio,
+                                                            ))
+                                                        .toList())
+                                                : dropDownBloqueado();
+                                          } else {
+                                            return const SizedBox(
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 1.0,
+                                              ),
+                                              height: 30.0,
+                                              width: 30.0,
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ]),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
-                                      "Condición: ",
+                                      "Empresa Reencauchadora ",
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           color: Colors.black54),
                                     ),
-                                    SizedBox(width: 15.0),
-                                    condicionNeumaticoWidgetList(),
-                                  ],
-                                )),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Cantidad de Reencauche: ",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black54),
-                                    ),
-                                    statusInputs
-                                        ? cantidadReencauchesoWidgetList()
-                                        : dropDownBloqueado(),
-                                  ]),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Disenio de Banda: ",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black54),
-                                    ),
-                                    FutureBuilder<List<Disenio>>(
-                                      future: neuDisenioList,
+                                    SizedBox(height: 20.0),
+                                    FutureBuilder<List>(
+                                      future: empresasReenList,
                                       builder: (context, snapshot) {
                                         if (snapshot.hasError) {
                                           final error = snapshot.error;
                                           return Text("$error");
                                         } else if (snapshot.hasData) {
-                                          return statusInputs
-                                              ? DropdownButton<String>(
-                                                  value:
-                                                      _dropdownFirstDisenioValue,
-                                                  icon: const Icon(
-                                                      Icons.unfold_more,
-                                                      color: Color(0xff2874A6)),
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 17.0),
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      _dropdownFirstDisenioValue =
-                                                          newValue!;
-                                                    });
-                                                  },
-                                                  items: snapshot.data!
-                                                      .map((fc) =>
-                                                          DropdownMenuItem<
-                                                              String>(
-                                                            onTap: () {
-                                                              _dropdownFirstIdDisenioValue =
-                                                                  fc.v_id
-                                                                      .toString();
-                                                            },
-                                                            child: Text(
-                                                                fc.v_disenio),
-                                                            value: fc.v_disenio,
-                                                          ))
-                                                      .toList())
-                                              : dropDownBloqueado();
+                                          return Center(
+                                            child: statusInputs
+                                                ? DropdownButton<String>(
+                                                    icon: const Icon(
+                                                        Icons.unfold_more,
+                                                        color:
+                                                            Color(0xff2874A6)),
+                                                    value:
+                                                        _dropdownFirstEmpresaValue,
+                                                    onChanged:
+                                                        (String? newValueTwo) {
+                                                      setState(() {
+                                                        _dropdownFirstEmpresaValue =
+                                                            newValueTwo!;
+                                                      });
+                                                    },
+                                                    items: snapshot.data!
+                                                        .map((eprn) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              onTap: () {
+                                                                _dropdownFirstIdEmpresaValue =
+                                                                    eprn["id"]
+                                                                        .toString();
+                                                              },
+                                                              child: Text(eprn[
+                                                                      "razon_social"]
+                                                                  .toString()),
+                                                              value: eprn[
+                                                                      "razon_social"]
+                                                                  .toString(),
+                                                            ))
+                                                        .toList())
+                                                : dropDownBloqueado(),
+                                          );
                                         } else {
                                           return const SizedBox(
                                             child: CircularProgressIndicator(
@@ -667,167 +738,28 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                                         }
                                       },
                                     ),
-                                  ]),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    "Empresa Reencauchadora ",
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: Colors.black54),
-                                  ),
-                                  SizedBox(height: 20.0),
-                                  FutureBuilder<List>(
-                                    future: empresasReenList,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasError) {
-                                        final error = snapshot.error;
-                                        return Text("$error");
-                                      } else if (snapshot.hasData) {
-                                        return Center(
-                                          child: statusInputs
-                                              ? DropdownButton<String>(
-                                                  icon: const Icon(
-                                                      Icons.unfold_more,
-                                                      color: Color(0xff2874A6)),
-                                                  value:
-                                                      _dropdownFirstEmpresaValue,
-                                                  onChanged:
-                                                      (String? newValueTwo) {
-                                                    setState(() {
-                                                      _dropdownFirstEmpresaValue =
-                                                          newValueTwo!;
-                                                    });
-                                                  },
-                                                  items: snapshot.data!
-                                                      .map((eprn) =>
-                                                          DropdownMenuItem<
-                                                              String>(
-                                                            onTap: () {
-                                                              _dropdownFirstIdEmpresaValue =
-                                                                  eprn["id"]
-                                                                      .toString();
-                                                            },
-                                                            child: Text(eprn[
-                                                                    "razon_social"]
-                                                                .toString()),
-                                                            value: eprn[
-                                                                    "razon_social"]
-                                                                .toString(),
-                                                          ))
-                                                      .toList())
-                                              : dropDownBloqueado(),
-                                        );
-                                      } else {
-                                        return const SizedBox(
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 1.0,
-                                          ),
-                                          height: 30.0,
-                                          width: 30.0,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                                padding: EdgeInsets.all(10.0),
-                                child: dropDownMarcaWidget()),
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                child: dropDownModeloWidget()),
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                child: dropDownMedidaWidget()),
-                            Center(
-                              child: Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Text("Niveles de Remanente",
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: Colors.black54)),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          controller: _txtEdRemOriginal,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'R. Original',
-                                            errorText: _validatetxtEdRemOriginal
-                                                ? 'Ingresar remanente original'
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  ],
                                 ),
-                                SizedBox(width: 5.0),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          controller: _txtEdRemFinal,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'R. Final',
-                                            errorText: _validatetxtEdRemFinal
-                                                ? 'Ingresar remanente final'
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 5.0),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          controller: _txtEdRemLimite,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'R. Límite',
-                                            errorText: _validatetxtEdRemLimite
-                                                ? 'Ingresar remanente límite'
-                                                : null,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 15.0),
-                            Center(
-                              child: Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Text("Kilometraje (km)",
-                                    style: TextStyle(
-                                        fontSize: 16.0, color: Colors.black54)),
                               ),
-                            ),
-                            Row(
+                              Container(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: dropDownMarcaWidget()),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: dropDownModeloWidget()),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: dropDownMedidaWidget()),
+                              Center(
+                                child: Container(
+                                  margin: EdgeInsets.all(10.0),
+                                  child: Text("Niveles de Remanente",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black54)),
+                                ),
+                              ),
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
@@ -837,12 +769,12 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                                         Container(
                                           child: TextFormField(
                                             keyboardType: TextInputType.number,
-                                            controller: _txtEdKmInicial,
+                                            controller: _txtEdRemOriginal,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(),
-                                              labelText: 'K Inicial',
-                                              errorText: _validatetxtEdKmInicial
-                                                  ? 'Ingresar km original'
+                                              labelText: 'R. Original',
+                                              errorText: _validatetxtEdRemOriginal
+                                                  ? 'Ingresar remanente original'
                                                   : null,
                                             ),
                                           ),
@@ -857,12 +789,12 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                                         Container(
                                           child: TextFormField(
                                             keyboardType: TextInputType.number,
-                                            controller: _txtEdKmFinal,
+                                            controller: _txtEdRemFinal,
                                             decoration: InputDecoration(
                                               border: OutlineInputBorder(),
-                                              labelText: 'K. Final',
-                                              errorText: _validatetxtEdKmFinal
-                                                  ? 'Ingresar km final'
+                                              labelText: 'R. Final',
+                                              errorText: _validatetxtEdRemFinal
+                                                  ? 'Ingresar remanente final'
                                                   : null,
                                             ),
                                           ),
@@ -870,110 +802,189 @@ class _RegisterScrapDirectoState extends State<RegisterScrapDirecto> {
                                       ],
                                     ),
                                   ),
-                                ]),
-                            SizedBox(height: 10.0),
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "Motivo de Scrap",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black54),
+                                  SizedBox(width: 5.0),
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            controller: _txtEdRemLimite,
+                                            decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'R. Límite',
+                                              errorText: _validatetxtEdRemLimite
+                                                  ? 'Ingresar remanente límite'
+                                                  : null,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: 5.0),
-                                    motivoScrapWidgetList(),
-                                  ],
-                                )),
-                            SizedBox(height: 10.0),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              child: DateTimeField(
-                                initialValue: DateTime.now(),
-                                controller: _txtEdFechaScrap,
-                                // onFieldSubmitted: _onSubmitbornDate,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  errorText: _validatetxtEdFechaScrap
-                                      ? 'Fecha de scrap/retiro es un campo obligatorio'
-                                      : null,
-                                  labelText: "Fecha de Scrap",
-                                  labelStyle: TextStyle(
-                                      fontFamily: "WorkSansSemiBold",
-                                      fontSize: 16.0),
-                                ),
-                                format: txtDateFormat,
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-
-                                  return DateTimeField.tryParse(
-                                      date.toString(), txtDateFormat);
-                                },
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  addPhotoWidgetOne(),
-                                  addPhotoWidgetTwo()
+                                  ),
                                 ],
                               ),
-                            ),
-                            SizedBox(height: 30.0),
-                            Center(
-                              child: MaterialButton(
-                                padding:
-                                    EdgeInsets.only(right: 45.0, left: 45.0),
-                                child: isLoadingSave
-                                    ? Transform.scale(
-                                        scale: 0.5,
-                                        child: Container(
-                                          margin:
-                                              EdgeInsets.symmetric(vertical: 1),
-                                          child: CircularProgressIndicator(
-                                              backgroundColor: Colors.white,
-                                              strokeWidth: 5.0),
-                                        ),
-                                      )
-                                    : Text(
-                                        'Guardar',
-                                        style: TextStyle(fontSize: 15.0),
-                                      ),
-                                color: Color(0xff212F3D),
-                                textColor: Colors.white,
-                                onPressed: () async => {
-                                  if (!validateTextingFormIsEmpty())
-                                    {
-                                      print("Guardar I"),
-                                      setState(() {
-                                        isLoadingSave = true;
-                                      }),
-                                      createScrapDirecto()
-                                    }
-                                },
+                              SizedBox(height: 15.0),
+                              Center(
+                                child: Container(
+                                  margin: EdgeInsets.all(10.0),
+                                  child: Text("Kilometraje (km)",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black54)),
+                                ),
                               ),
-                            ),
-                          ],
-                        ))),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
-                ),
-              );
-            }
-          },
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Container(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              controller: _txtEdKmInicial,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'K Inicial',
+                                                errorText:
+                                                    _validatetxtEdKmInicial
+                                                        ? 'Ingresar km original'
+                                                        : null,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 5.0),
+                                    Expanded(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Container(
+                                            child: TextFormField(
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              controller: _txtEdKmFinal,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'K. Final',
+                                                errorText: _validatetxtEdKmFinal
+                                                    ? 'Ingresar km final'
+                                                    : null,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
+                              SizedBox(height: 10.0),
+                              Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Motivo de Scrap",
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black54),
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      motivoScrapWidgetList(),
+                                    ],
+                                  )),
+                              SizedBox(height: 10.0),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: DateTimeField(
+                                  initialValue: DateTime.now(),
+                                  controller: _txtEdFechaScrap,
+                                  // onFieldSubmitted: _onSubmitbornDate,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    errorText: _validatetxtEdFechaScrap
+                                        ? 'Fecha de scrap/retiro es un campo obligatorio'
+                                        : null,
+                                    labelText: "Fecha de Scrap",
+                                    labelStyle: TextStyle(
+                                        fontFamily: "WorkSansSemiBold",
+                                        fontSize: 16.0),
+                                  ),
+                                  format: txtDateFormat,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+
+                                    return DateTimeField.tryParse(
+                                        date.toString(), txtDateFormat);
+                                  },
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    addPhotoWidgetOne(),
+                                    addPhotoWidgetTwo()
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 30.0),
+                              Center(
+                                child: MaterialButton(
+                                  padding:
+                                      EdgeInsets.only(right: 45.0, left: 45.0),
+                                  child: isLoadingSave
+                                      ? Transform.scale(
+                                          scale: 0.5,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 1),
+                                            child: CircularProgressIndicator(
+                                                backgroundColor: Colors.white,
+                                                strokeWidth: 5.0),
+                                          ),
+                                        )
+                                      : Text(
+                                          'Guardar',
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                  color: Color(0xff212F3D),
+                                  textColor: Colors.white,
+                                  onPressed: () async => {
+                                    if (!validateTextingFormIsEmpty())
+                                      {
+                                        print("Guardar I"),
+                                        setState(() {
+                                          isLoadingSave = true;
+                                        }),
+                                        createScrapDirecto()
+                                      }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ))),
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
+                  ),
+                );
+              }
+            },
+          ),
         ));
   }
 

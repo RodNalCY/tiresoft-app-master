@@ -306,8 +306,8 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
       ),
       body: Container(
         padding: EdgeInsets.all(10.0),
-        color: Colors.white60,
         height: double.infinity,
+        color: Color.fromARGB(255, 227, 235, 243),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

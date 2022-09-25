@@ -21,6 +21,7 @@ class _ListNeumaticosDetailsState extends State<ListNeumaticosDetails> {
           backgroundColor: Color(0xff212F3D),
         ),
         body: Container(
+          color: Color.fromARGB(255, 227, 235, 243),
           padding: EdgeInsets.all(25.0),
           child: Column(
             children: <Widget>[

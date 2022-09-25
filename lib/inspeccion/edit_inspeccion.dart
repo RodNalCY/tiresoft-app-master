@@ -649,7 +649,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
       ),
       body: Center(
         child: Container(
-          color: Colors.white,
+          color: Color.fromARGB(255, 227, 235, 243),
           padding: const EdgeInsets.all(10),
           child: FutureBuilder<List>(
             future: _edit_neumatico,
@@ -777,7 +777,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   ),
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ));
               }
             },
           ),

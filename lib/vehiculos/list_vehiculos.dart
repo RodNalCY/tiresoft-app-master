@@ -92,90 +92,92 @@ class _ListVehiculosState extends State<ListVehiculos> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Reporte Vehículos"),
-          centerTitle: true,
-          backgroundColor: Color(0xff212F3D),
-          elevation: 0.0,
-        ),
-        // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
-        body: Container(
-          child: FutureBuilder(
-            future: _listadoVehiculos,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                  child: Column(children: <Widget>[
-                    Card(
-                      elevation: 5.0,
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            searchString = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                        ),
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Expanded(child: _myListVehiculos(context, snapshot.data))
-                  ]),
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error");
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-        floatingActionButton: FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Reporte Vehículos"),
+        centerTitle: true,
+        backgroundColor: Color(0xff212F3D),
+        elevation: 0.0,
+      ),
+      // drawer: CustomDrawer(widget._id_cliente),
+      drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: FutureBuilder(
           future: _listadoVehiculos,
           builder: (context, snapshot) {
-            return FloatingActionButton(
-              onPressed: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Para descargar el archivo .xlsx'),
-                  content: const Text(
-                      '¿Tiene la aplicación compatible para abrir el archivo excel?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () async {
-                        await _launchUrlAppStore();
-                        Navigator.of(context).pop();
+            if (snapshot.hasData) {
+              return Container(
+                child: Column(children: <Widget>[
+                  Card(
+                    elevation: 5.0,
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
                       },
-                      child: const Text('No, Descargar'),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                      ),
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    TextButton(
-                      onPressed: () async {
-                        await _generateExcelVehiculos(context, snapshot.data);
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Si, Exportar'),
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Expanded(child: _myListVehiculos(context, snapshot.data))
+                ]),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error");
+            }
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.blue,
               ),
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.file_download),
             );
           },
         ),
+      ),
+      floatingActionButton: FutureBuilder(
+        future: _listadoVehiculos,
+        builder: (context, snapshot) {
+          return FloatingActionButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Para descargar el archivo .xlsx'),
+                content: const Text(
+                    '¿Tiene la aplicación compatible para abrir el archivo excel?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      await _launchUrlAppStore();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('No, Descargar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await _generateExcelVehiculos(context, snapshot.data);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Si, Exportar'),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.file_download),
+          );
+        },
       ),
     );
   }
@@ -236,10 +238,18 @@ class _ListVehiculosState extends State<ListVehiculos> {
 
   Widget _myListVehiculos(BuildContext context, data) {
     // backing data
+    double size_placa = 0;
     return ListView.builder(
       itemCount: data.length,
       shrinkWrap: false,
       itemBuilder: (context, index) {
+        size_placa = 0;
+        if ((data[index].v_placa).toString().length >= 6) {
+          size_placa = 9.0;
+        } else {
+          size_placa = 12.0;
+        }
+
         return data[index].v_placa.contains(searchString)
             ? Card(
                 child: ListTile(
@@ -264,12 +274,15 @@ class _ListVehiculosState extends State<ListVehiculos> {
                       ' ' +
                       data[index].v_f_registro),
                   leading: CircleAvatar(
-                      child: Text(
-                    data[index].v_placa,
-                    style: TextStyle(
-                      fontSize: 9.0,
+                    backgroundColor: Color.fromARGB(255, 36, 76, 116),
+                    child: Text(
+                      data[index].v_placa,
+                      style: TextStyle(
+                          fontSize: size_placa,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400),
                     ),
-                  )),
+                  ),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               )

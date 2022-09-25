@@ -135,81 +135,39 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
         backgroundColor: Color(0xff212F3D),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: future_posiciones,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            final error = snapshot.error;
-            return Text('$error');
-          } else if (snapshot.hasData) {
-            return Container(
-              height: double.infinity,
-              color: Colors.white54,
-              padding: EdgeInsets.all(10.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      elevation: 5,
-                      child: Container(
-                        padding: EdgeInsets.all(25.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      text: 'Codigo: ', // default text style
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: widget.vehiculo.v_codigo,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 17.0),
-                                        ),
-                                      ],
-                                    ),
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                  Text.rich(
-                                    TextSpan(
-                                      text:
-                                          'Configuración: ', // default text style
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: widget.vehiculo.v_configuracion,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 17.0),
-                                        ),
-                                      ],
-                                    ),
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text.rich(
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: FutureBuilder(
+          future: future_posiciones,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              final error = snapshot.error;
+              return Text('$error');
+            } else if (snapshot.hasData) {
+              return Container(
+                height: double.infinity,
+                color: Colors.white54,
+                padding: EdgeInsets.all(10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Card(
+                        elevation: 5,
+                        child: Container(
+                          padding: EdgeInsets.all(25.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text.rich(
                                       TextSpan(
-                                        text:
-                                            'N° neumáticos: ', // default text style
+                                        text: 'Codigo: ', // default text style
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: widget
-                                                .vehiculo.v_num_neumaticos,
+                                            text: widget.vehiculo.v_codigo,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 17.0),
@@ -218,16 +176,14 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
                                       ),
                                       style: TextStyle(fontSize: 16.0),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text.rich(
+                                    Text.rich(
                                       TextSpan(
                                         text:
-                                            'Aplicación: ', // default text style
+                                            'Configuración: ', // default text style
                                         children: <TextSpan>[
                                           TextSpan(
-                                            text: widget.vehiculo.v_aplicacion,
+                                            text:
+                                                widget.vehiculo.v_configuracion,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 17.0),
@@ -236,247 +192,310 @@ class _ListVehiculoDetailsState extends State<ListVehiculoDetails> {
                                       ),
                                       style: TextStyle(fontSize: 16.0),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text:
+                                              'N° neumáticos: ', // default text style
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: widget
+                                                  .vehiculo.v_num_neumaticos,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0),
+                                            ),
+                                          ],
+                                        ),
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text:
+                                              'Aplicación: ', // default text style
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  widget.vehiculo.v_aplicacion,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 17.0),
+                                            ),
+                                          ],
+                                        ),
+                                        style: TextStyle(fontSize: 16.0),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Card(
-                      elevation: 5,
-                      child: Container(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            messageValidateKmHr != ""
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: 15, left: 5, right: 5),
-                                    child: Text(
-                                      messageValidateKmHr,
-                                      style: TextStyle(color: Colors.redAccent),
-                                    ),
-                                  )
-                                : Container(),
-                            TextFormField(
-                              controller: _txtEdKmHr,
-                              keyboardType: TextInputType.number,
-                              onChanged: (val) => validateFutureKmHr(val),
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Km/Hr de Vehículo',
-                                errorText: _validateKmHr
-                                    ? 'Km/Hr es un campo obligatorio'
-                                    : null,
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Card(
+                        elevation: 5,
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            children: [
+                              messageValidateKmHr != ""
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: 15, left: 5, right: 5),
+                                      child: Text(
+                                        messageValidateKmHr,
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                    )
+                                  : Container(),
+                              TextFormField(
+                                controller: _txtEdKmHr,
+                                keyboardType: TextInputType.number,
+                                onChanged: (val) => validateFutureKmHr(val),
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Km/Hr de Vehículo',
+                                  errorText: _validateKmHr
+                                      ? 'Km/Hr es un campo obligatorio'
+                                      : null,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            messageValidateFecha != ""
-                                ? Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: 15, left: 5, right: 5),
-                                    child: Text(
-                                      messageValidateFecha,
-                                      style: TextStyle(color: Colors.redAccent),
-                                    ),
-                                  )
-                                : Container(),
-                            DateTimeField(
-                              initialValue: DateTime.now(),
-                              controller: _txtEdFecha,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "Fecha Instalación/Retiro",
-                                errorText: _validateFechita
-                                    ? 'Fecha de inspección es un campo obligatorio'
-                                    : null,
+                              SizedBox(
+                                height: 20,
                               ),
-                              format: txtDateFormat,
-                              onChanged: (val) => validateFutureFechita(val),
-                              onShowPicker: (context, currentValue) async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));
+                              messageValidateFecha != ""
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: 15, left: 5, right: 5),
+                                      child: Text(
+                                        messageValidateFecha,
+                                        style:
+                                            TextStyle(color: Colors.redAccent),
+                                      ),
+                                    )
+                                  : Container(),
+                              DateTimeField(
+                                initialValue: DateTime.now(),
+                                controller: _txtEdFecha,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Fecha Instalación/Retiro",
+                                  errorText: _validateFechita
+                                      ? 'Fecha de inspección es un campo obligatorio'
+                                      : null,
+                                ),
+                                format: txtDateFormat,
+                                onChanged: (val) => validateFutureFechita(val),
+                                onShowPicker: (context, currentValue) async {
+                                  final date = await showDatePicker(
+                                      context: context,
+                                      firstDate: DateTime(1900),
+                                      initialDate:
+                                          currentValue ?? DateTime.now(),
+                                      lastDate: DateTime(2100));
 
-                                return DateTimeField.tryParse(
-                                    date.toString(), txtDateFormat);
-                              },
-                            ),
-                            SizedBox(height: 20.0),
-                            Center(
-                              child: MaterialButton(
-                                minWidth: 130.0,
-                                onPressed: () async {
-                                  if (!validateFormIsEmpty()) {
-                                    setState(() {
-                                      isLoading = true;
-                                    });
-
-                                    enviarListaRetirado();
-                                  }
+                                  return DateTimeField.tryParse(
+                                      date.toString(), txtDateFormat);
                                 },
-                                color: Color(0xff212F3D),
-                                child: isLoading
-                                    ? Transform.scale(
-                                        scale: 0.6,
-                                        child: CircularProgressIndicator(
-                                            backgroundColor: Colors.white,
-                                            strokeWidth: 5.0),
-                                      )
-                                    : Text('Guardar',
-                                        style: TextStyle(color: Colors.white)),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 20.0),
+                              Center(
+                                child: MaterialButton(
+                                  minWidth: 130.0,
+                                  onPressed: () async {
+                                    if (!validateFormIsEmpty()) {
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+
+                                      enviarListaRetirado();
+                                    }
+                                  },
+                                  color: Color(0xff212F3D),
+                                  child: isLoading
+                                      ? Transform.scale(
+                                          scale: 0.6,
+                                          child: CircularProgressIndicator(
+                                              backgroundColor: Colors.white,
+                                              strokeWidth: 5.0),
+                                        )
+                                      : Text('Guardar',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Card(
-                      elevation: 5,
-                      child: Container(
-                        margin: EdgeInsets.all(15.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_A
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "A", 0),
-                                status_B
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "B", 1),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_C
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "C", 4),
-                                status_D
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "D", 2),
-                                status_E
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "E", 3),
-                                status_F
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "F", 5),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_G
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "G", 8),
-                                status_H
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "H", 6),
-                                status_I
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "I", 7),
-                                status_J
-                                    ? positionRetirado()
-                                    : neumatico(context, snapshot.data, "J", 9),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_K
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "K", 12),
-                                status_L
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "L", 10),
-                                status_M
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "M", 11),
-                                status_N
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "N", 13),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_O
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "O", 16),
-                                status_P
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "P", 14),
-                                status_Q
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "Q", 15),
-                                status_R
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "R", 17),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                status_S
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "S", 20),
-                                status_T
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "T", 18),
-                                status_U
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "U", 19),
-                                status_V
-                                    ? positionRetirado()
-                                    : neumatico(
-                                        context, snapshot.data, "V", 21),
-                              ],
-                            ),
-                          ],
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Card(
+                        elevation: 5,
+                        child: Container(
+                          margin: EdgeInsets.all(15.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_A
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "A", 0),
+                                  status_B
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "B", 1),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_C
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "C", 4),
+                                  status_D
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "D", 2),
+                                  status_E
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "E", 3),
+                                  status_F
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "F", 5),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_G
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "G", 8),
+                                  status_H
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "H", 6),
+                                  status_I
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "I", 7),
+                                  status_J
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "J", 9),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_K
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "K", 12),
+                                  status_L
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "L", 10),
+                                  status_M
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "M", 11),
+                                  status_N
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "N", 13),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_O
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "O", 16),
+                                  status_P
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "P", 14),
+                                  status_Q
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "Q", 15),
+                                  status_R
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "R", 17),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  status_S
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "S", 20),
+                                  status_T
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "T", 18),
+                                  status_U
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "U", 19),
+                                  status_V
+                                      ? positionRetirado()
+                                      : neumatico(
+                                          context, snapshot.data, "V", 21),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                  ],
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
-              ),
-            );
-          }
-        },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

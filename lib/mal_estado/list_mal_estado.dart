@@ -93,8 +93,7 @@ class _ListMalEstadoState extends State<ListMalEstado> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text("Neumáticos en mal estado"),
         centerTitle: true,
@@ -103,6 +102,7 @@ class _ListMalEstadoState extends State<ListMalEstado> {
       ),
       drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
       body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
         child: FutureBuilder(
           future: _listado_mal_estado,
           builder: (context, snapshot) {
@@ -138,7 +138,7 @@ class _ListMalEstadoState extends State<ListMalEstado> {
             } else if (snapshot.hasError) {
               return Text("Error");
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
           },
         ),
       ),
@@ -175,7 +175,7 @@ class _ListMalEstadoState extends State<ListMalEstado> {
           );
         },
       ),
-    ));
+    );
   }
 
   Future<void> _generateExcelMalEstado(BuildContext context, data) async {
@@ -257,8 +257,12 @@ class _ListMalEstadoState extends State<ListMalEstado> {
                       " - " +
                       data[index].nme_fecha_retiro),
                   leading: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 36, 76, 116),
                       child: Text(data[index].nme_num_serie,
-                          style: TextStyle(fontSize: 10.0))),
+                          style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400))),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               )

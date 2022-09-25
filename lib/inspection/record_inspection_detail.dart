@@ -564,31 +564,102 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          ///header image button distribution
-          Container(
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.fromLTRB(40, 15, 15, 15),
-            decoration: BoxDecoration(
-              color: Colors.white70,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: Column(
+          children: <Widget>[
+            ///header image button distribution
+            Container(
+              margin: const EdgeInsets.all(15),
+              padding: const EdgeInsets.fromLTRB(40, 15, 15, 15),
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
               ),
+              alignment: Alignment.center,
+              child: tires.length > 0
+                  ? diagramPosition()
+                  : CircularProgressIndicator(
+                      value: controller.value,
+                      semanticsLabel: 'Linear progress indicator',
+                    ),
             ),
-            alignment: Alignment.center,
-            child: tires.length > 0
-                ? diagramPosition()
-                : CircularProgressIndicator(
-                    value: controller.value,
-                    semanticsLabel: 'Linear progress indicator',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MaterialButton(
+                    padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                    child: isLoadingSave
+                        ? Transform.scale(
+                            scale: 0.5,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 1),
+                              child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white,
+                                  strokeWidth: 5.0),
+                            ),
+                          )
+                        : Text('Guardar'),
+                    color: Color(0xff212F3D),
+                    textColor: Colors.white,
+                    onPressed: () => {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Guardar inspeccion'),
+                              content: const Text(
+                                  'Realmente desea guardar la inspección de este neumático'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancelar'),
+                                ),
+                                TextButton(
+                                  onPressed: () => {
+                                    setState(() {
+                                      isLoadingSave = true;
+                                    }),
+                                    createPostInspeccionNeumatico(),
+                                    Navigator.pop(context, 'OK')
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        }),
+                SizedBox(
+                  width: 10.0,
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.hovered))
+                          return Colors.blue.withOpacity(0.04);
+                        if (states.contains(MaterialState.focused) ||
+                            states.contains(MaterialState.pressed))
+                          return Colors.blue.withOpacity(0.12);
+                        return null; // Defer to the widget's default.
+                      },
+                    ),
                   ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              MaterialButton(
-                  padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                  onPressed: isLoadingSave
+                      ? null
+                      : () async {
+                          await finishInspections().then((value) => {
+                                if (value)
+                                  {
+                                    print("TERMINADO Y FINALIZADO"),
+                                    Navigator.of(context).pop(),
+                                  }
+                              });
+                        },
                   child: isLoadingSave
                       ? Transform.scale(
                           scale: 0.5,
@@ -599,87 +670,20 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
                                 strokeWidth: 5.0),
                           ),
                         )
-                      : Text('Guardar'),
-                  color: Color(0xff212F3D),
-                  textColor: Colors.white,
-                  onPressed: () => {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Guardar inspeccion'),
-                            content: const Text(
-                                'Realmente desea guardar la inspección de este neumático'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(context, 'Cancel'),
-                                child: const Text('Cancelar'),
-                              ),
-                              TextButton(
-                                onPressed: () => {
-                                  setState(() {
-                                    isLoadingSave = true;
-                                  }),
-                                  createPostInspeccionNeumatico(),
-                                  Navigator.pop(context, 'OK')
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
+                      : Text(
+                          'Terminar y Finalizar',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      }),
-              SizedBox(
-                width: 10.0,
-              ),
-              TextButton(
-                style: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                  overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.hovered))
-                        return Colors.blue.withOpacity(0.04);
-                      if (states.contains(MaterialState.focused) ||
-                          states.contains(MaterialState.pressed))
-                        return Colors.blue.withOpacity(0.12);
-                      return null; // Defer to the widget's default.
-                    },
-                  ),
-                ),
-                onPressed: isLoadingSave
-                    ? null
-                    : () async {
-                        await finishInspections().then((value) => {
-                              if (value)
-                                {
-                                  print("TERMINADO Y FINALIZADO"),
-                                  Navigator.of(context).pop(),
-                                }
-                            });
-                      },
-                child: isLoadingSave
-                    ? Transform.scale(
-                        scale: 0.5,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 1),
-                          child: CircularProgressIndicator(
-                              backgroundColor: Colors.white, strokeWidth: 5.0),
-                        ),
-                      )
-                    : Text(
-                        'Terminar y Finalizar',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-              )
-            ],
-          ),
+                )
+              ],
+            ),
 
-          Expanded(
-            child:
-                tires.length > 0 ? applyWidget(context) : Text('Cargando...'),
-          ),
-        ],
+            Expanded(
+              child:
+                  tires.length > 0 ? applyWidget(context) : Text('Cargando...'),
+            ),
+          ],
+        ),
       ),
     );
   }

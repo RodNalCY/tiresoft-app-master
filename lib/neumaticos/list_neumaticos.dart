@@ -79,90 +79,88 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Reporte Neumáticos"),
-          centerTitle: true,
-          backgroundColor: Color(0xff212F3D),
-          elevation: 0.0,
-        ),
-        // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
-        body: Container(
-          child: FutureBuilder(
-            future: _listadoNeumaticos,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                  child: Column(children: <Widget>[
-                    Card(
-                      elevation: 5.0,
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            searchString = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                        ),
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                    ),
-                    Expanded(child: _myListNeumaticos(context, snapshot.data))
-                  ]),
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error");
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-        floatingActionButton: FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Reporte Neumáticos"),
+        centerTitle: true,
+        backgroundColor: Color(0xff212F3D),
+        elevation: 0.0,
+      ),
+      // drawer: CustomDrawer(widget._id_cliente),
+      drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: FutureBuilder(
           future: _listadoNeumaticos,
           builder: (context, snapshot) {
-            return FloatingActionButton(
-              onPressed: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Para descargar el archivo .xlsx'),
-                  content: const Text(
-                      '¿Tiene la aplicación compatible para abrir el archivo excel?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () async {
-                        await _launchUrlAppStore();
-                        Navigator.of(context).pop();
+            if (snapshot.hasData) {
+              return Container(
+                child: Column(children: <Widget>[
+                  Card(
+                    elevation: 5.0,
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
                       },
-                      child: const Text('No, Descargar'),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                      ),
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    TextButton(
-                      onPressed: () async {
-                        await _generateExcelNeumaticos(context, snapshot.data);
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Si, Exportar'),
-                    ),
-                  ],
-                ),
-              ),
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.file_download),
-            );
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Expanded(child: _myListNeumaticos(context, snapshot.data))
+                ]),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error");
+            }
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
           },
         ),
+      ),
+      floatingActionButton: FutureBuilder(
+        future: _listadoNeumaticos,
+        builder: (context, snapshot) {
+          return FloatingActionButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Para descargar el archivo .xlsx'),
+                content: const Text(
+                    '¿Tiene la aplicación compatible para abrir el archivo excel?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      await _launchUrlAppStore();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('No, Descargar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await _generateExcelNeumaticos(context, snapshot.data);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Si, Exportar'),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.file_download),
+          );
+        },
       ),
     );
   }
@@ -223,10 +221,18 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
 
   Widget _myListNeumaticos(BuildContext context, data) {
     // backing data
+    double size_serie = 0;
     return ListView.builder(
       itemCount: data.length,
       shrinkWrap: false,
       itemBuilder: (context, index) {
+        size_serie = 0;
+        if ((data[index].n_serie).toString().length >= 6) {
+          size_serie = 9.0;
+        } else {
+          size_serie = 12.0;
+        }
+
         return data[index].n_serie.contains(searchString)
             ? Card(
                 child: ListTile(
@@ -250,10 +256,14 @@ class _ListNeumaticosState extends State<ListNeumaticos> {
                   subtitle: Text(
                       data[index].n_estado + ' ' + data[index].n_f_registro),
                   leading: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 36, 76, 116),
                       child: Text(
-                    data[index].n_serie,
-                    style: TextStyle(fontSize: 10.0),
-                  )),
+                        data[index].n_serie,
+                        style: TextStyle(
+                            fontSize: size_serie,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400),
+                      )),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               )

@@ -101,8 +101,7 @@ class _ListScrapState extends State<ListScrap> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text("Reporte Scrap"),
         centerTitle: true,
@@ -112,6 +111,7 @@ class _ListScrapState extends State<ListScrap> {
       // drawer: CustomDrawer(widget._id_cliente),
       drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
       body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
         child: FutureBuilder(
           future: _listadoScrap,
           builder: (context, snapshot) {
@@ -147,7 +147,7 @@ class _ListScrapState extends State<ListScrap> {
             } else if (snapshot.hasError) {
               return Text("Error");
             }
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color: Colors.blue));
           },
         ),
       ),
@@ -184,7 +184,7 @@ class _ListScrapState extends State<ListScrap> {
           );
         },
       ),
-    ));
+    );
   }
 
   Future<void> _generateExcelScrap(BuildContext context, data) async {
@@ -271,8 +271,12 @@ class _ListScrapState extends State<ListScrap> {
                       ' \n' +
                       data[index].s_fecha_scrap),
                   leading: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 36, 76, 116),
                       child: Text(data[index].s_serie,
-                          style: TextStyle(fontSize: 10.0))),
+                          style: TextStyle(
+                              fontSize: 10.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400))),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               )

@@ -72,6 +72,7 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
           backgroundColor: Color(0xff212F3D),
         ),
         body: Container(
+          color: Color.fromARGB(255, 227, 235, 243),
           child: FutureBuilder(
             future: _listado_details_inspeccion,
             builder: (context, snapshot) {
@@ -175,7 +176,10 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
               } else if (snapshot.hasError) {
                 return Text("Error");
               }
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Colors.blue,
+              ));
             },
           ),
         ));
@@ -203,8 +207,13 @@ class _ListInspeccionDetailsState extends State<ListInspeccionDetails> {
                   title: Text('Serie: ' + data[index].idt_serie,
                       style: TextStyle(fontWeight: FontWeight.w500)),
                   leading: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 36, 76, 116),
                       child: Text("P-" + data[index].idt_posicion.toString(),
-                          style: TextStyle(fontSize: 14.0))),
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ))),
                   trailing: Icon(Icons.edit),
                 )
               : Container();

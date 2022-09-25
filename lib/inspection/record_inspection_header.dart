@@ -144,213 +144,220 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
         elevation: 0.0,
         backgroundColor: Color(0xff212F3D),
       ),
-      body: FutureBuilder(
-        future: listaVehiculos,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            final error = snapshot.error;
-            return Text("$error");
-          } else if (snapshot.hasData) {
-            return Container(
-              color: Colors.white,
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                      child: Center(
-                          child: Text(
-                              "Por favor ingrese la siguiente información",
-                              style: TextStyle(fontSize: 14))),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: SimpleAutocompleteFormField<String>(
-                        suggestionsHeight: 220,
-                        decoration: InputDecoration(
-                            errorText: _validateVehicle
-                                ? 'Debe seleccionar un vehiculo'
-                                : null,
-                            labelText: 'Placa del Vehiculo',
-                            border: OutlineInputBorder()),
-                        // suggestionsHeight: 200.0,
-                        maxSuggestions: 1000,
-                        itemBuilder: (context, item) => Padding(
-                          padding: EdgeInsets.only(top: 7.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xff212F3D),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            padding: EdgeInsets.only(
-                                left: 30.0, bottom: 5.0, top: 5.0),
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: FutureBuilder(
+          future: listaVehiculos,
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              final error = snapshot.error;
+              return Text("$error");
+            } else if (snapshot.hasData) {
+              return Container(
+                padding: EdgeInsets.all(10),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                        child: Center(
                             child: Text(
-                              item!,
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 16.0),
+                                "Por favor ingrese la siguiente información",
+                                style: TextStyle(fontSize: 14))),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: SimpleAutocompleteFormField<String>(
+                          suggestionsHeight: 220,
+                          decoration: InputDecoration(
+                              errorText: _validateVehicle
+                                  ? 'Debe seleccionar un vehiculo'
+                                  : null,
+                              labelText: 'Placa del Vehiculo',
+                              border: OutlineInputBorder()),
+                          // suggestionsHeight: 200.0,
+                          maxSuggestions: 1000,
+                          itemBuilder: (context, item) => Padding(
+                            padding: EdgeInsets.only(top: 7.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xff212F3D),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              padding: EdgeInsets.only(
+                                  left: 30.0, bottom: 5.0, top: 5.0),
+                              child: Text(
+                                item!,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16.0),
+                              ),
                             ),
                           ),
+                          onSearch: (String search) async => search.isEmpty
+                              ? letters
+                              : letters
+                                  .where((letter) =>
+                                      search.toLowerCase().contains(letter))
+                                  .toList(),
+                          itemFromString: (string) => letters.singleWhere(
+                              (letter) => letter == string.toLowerCase(),
+                              orElse: () => ''),
+                          onChanged: (value) => {
+                            setState(() => {
+                                  selectedLetter = value,
+                                }),
+                            for (final element in vehicles)
+                              {
+                                if (element["placa"] == value)
+                                  {
+                                    setState(
+                                        () => {selectedId = element['id']}),
+                                  },
+                              },
+                          },
+                          // onSaved: (value) => setState(() => selectedLetter = value),
+                          validator: (letter) => letter == null
+                              ? 'Placa invalida o no existe'
+                              : null,
                         ),
-                        onSearch: (String search) async => search.isEmpty
-                            ? letters
-                            : letters
-                                .where((letter) =>
-                                    search.toLowerCase().contains(letter))
-                                .toList(),
-                        itemFromString: (string) => letters.singleWhere(
-                            (letter) => letter == string.toLowerCase(),
-                            orElse: () => ''),
-                        onChanged: (value) => {
-                          setState(() => {
-                                selectedLetter = value,
-                              }),
-                          for (final element in vehicles)
-                            {
-                              if (element["placa"] == value)
-                                {
-                                  setState(() => {selectedId = element['id']}),
-                                },
-                            },
-                        },
-                        // onSaved: (value) => setState(() => selectedLetter = value),
-                        validator: (letter) => letter == null
-                            ? 'Placa invalida o no existe'
-                            : null,
                       ),
-                    ),
-                    SizedBox(height: 15.0),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: TextFormField(
-                        controller: _codeController,
-                        inputFormatters: [
-                          new LengthLimitingTextInputFormatter(10),
-                        ],
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Código de inspección'),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        messageValidationKmTiresoft,
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: RawKeyboardListener(
-                        focusNode: FocusNode(),
+                      SizedBox(height: 15.0),
+                      Container(
+                        padding: EdgeInsets.all(10),
                         child: TextFormField(
-                          controller: _kmController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (val) => validateKm(val),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
+                          controller: _codeController,
+                          inputFormatters: [
+                            new LengthLimitingTextInputFormatter(10),
                           ],
                           decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Kilometraje',
-                            errorText: _validateKm
-                                ? 'Km es un campo obligatorio'
-                                : null,
+                              border: OutlineInputBorder(),
+                              labelText: 'Código de inspección'),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          messageValidationKmTiresoft,
+                          style: TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: RawKeyboardListener(
+                          focusNode: FocusNode(),
+                          child: TextFormField(
+                            controller: _kmController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (val) => validateKm(val),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Kilometraje',
+                              errorText: _validateKm
+                                  ? 'Km es un campo obligatorio'
+                                  : null,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text(
-                        messageValidationDateTiresoft,
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      child: DateTimeField(
-                        initialValue: DateTime.now(),
-                        controller: _dateController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          errorText: _validateDate
-                              ? 'Fecha de inspección es un campo obligatorio'
-                              : null,
-                          labelText: "Fecha de inspección",
-                          labelStyle: TextStyle(
-                              fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          messageValidationDateTiresoft,
+                          style: TextStyle(color: Colors.redAccent),
                         ),
-                        format: format,
-                        onShowPicker: (context, currentValue) async {
-                          final date = await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(1900),
-                              initialDate: currentValue ?? DateTime.now(),
-                              lastDate: DateTime(2100));
-
-                          validateDate(date);
-                          return DateTimeField.tryParse(
-                              date.toString(), format);
-                        },
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30.0),
-                    ),
-                    Center(
-                      child: MaterialButton(
-                        minWidth: 130.0,
-                        child: isLoading
-                            ? Transform.scale(
-                                scale: 0.6,
-                                child: CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
-                                    strokeWidth: 5.0),
-                              )
-                            : Text('Siguiente'),
-                        color: Color(0xff212F3D),
-                        textColor: Colors.white,
-                        onPressed: () async => {
-                          setState(() => isLoading = true),
-                          await Future.delayed(const Duration(seconds: 2), () {
-                            setState(() => isLoading = false);
-                          }),
-                          if (!validateFormIsEmpty())
-                            {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RecordInspectionDetail(
-                                    id_cliente: widget._id_cliente,
-                                    name_cliente: widget._name_cliente,
-                                    my_user: widget._user,
-                                    title: 'Registrar inspeccion',
-                                    idVehiculo: selectedId,
-                                    fechaInspeccion: _dateController.text,
-                                    codigoInspeccion: _codeController.text,
-                                    kmInspeccion: int.parse(_kmController.text),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: DateTimeField(
+                          initialValue: DateTime.now(),
+                          controller: _dateController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            errorText: _validateDate
+                                ? 'Fecha de inspección es un campo obligatorio'
+                                : null,
+                            labelText: "Fecha de inspección",
+                            labelStyle: TextStyle(
+                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                          ),
+                          format: format,
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate: currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+
+                            validateDate(date);
+                            return DateTimeField.tryParse(
+                                date.toString(), format);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 30.0),
+                      ),
+                      Center(
+                        child: MaterialButton(
+                          minWidth: 130.0,
+                          child: isLoading
+                              ? Transform.scale(
+                                  scale: 0.6,
+                                  child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                      strokeWidth: 5.0),
+                                )
+                              : Text('Siguiente'),
+                          color: Color(0xff212F3D),
+                          textColor: Colors.white,
+                          onPressed: () async => {
+                            setState(() => isLoading = true),
+                            await Future.delayed(const Duration(seconds: 2),
+                                () {
+                              setState(() => isLoading = false);
+                            }),
+                            if (!validateFormIsEmpty())
+                              {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        RecordInspectionDetail(
+                                      id_cliente: widget._id_cliente,
+                                      name_cliente: widget._name_cliente,
+                                      my_user: widget._user,
+                                      title: 'Registrar inspeccion',
+                                      idVehiculo: selectedId,
+                                      fechaInspeccion: _dateController.text,
+                                      codigoInspeccion: _codeController.text,
+                                      kmInspeccion:
+                                          int.parse(_kmController.text),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            }
-                        },
-                      ),
-                    )
-                  ],
+                              }
+                          },
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
-              ),
-            );
-          }
-        },
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(Colors.blue.shade500),
+                ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

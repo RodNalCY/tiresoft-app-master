@@ -82,89 +82,90 @@ class _ListInspeccionState extends State<ListInspeccion> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Reporte Inspección"),
-          centerTitle: true,
-          backgroundColor: Color(0xff212F3D),
-          elevation: 0.0,
-        ),
-        // drawer: CustomDrawer(widget._id_cliente),
-        drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
-        body: Container(
-          child: FutureBuilder(
-            future: _listadoInspeccion,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                // return _myListInspeccion(context, snapshot.data);
-                return Container(
-                  child: Column(children: <Widget>[
-                    Card(
-                      elevation: 5,
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            searchString = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                        ),
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                    ),
-                    SizedBox(height: 2.0),
-                    Expanded(child: _myListInspeccion(context, snapshot.data))
-                  ]),
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error");
-              }
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
-        floatingActionButton: FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Reporte Inspección"),
+        centerTitle: true,
+        backgroundColor: Color(0xff212F3D),
+        elevation: 0.0,
+      ),
+      // drawer: CustomDrawer(widget._id_cliente),
+      drawer: NavigationDrawerWidget(widget._user, widget._name_cliente),
+      body: Container(
+        color: Color.fromARGB(255, 227, 235, 243),
+        child: FutureBuilder(
           future: _listadoInspeccion,
           builder: (context, snapshot) {
-            return FloatingActionButton(
-              onPressed: () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Para descargar el archivo .xlsx'),
-                  content: const Text(
-                      '¿Tiene la aplicación compatible para abrir el archivo excel?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () async {
-                        await _launchUrlAppStore();
-                        Navigator.of(context).pop();
+            if (snapshot.hasData) {
+              // return _myListInspeccion(context, snapshot.data);
+              return Container(
+                child: Column(children: <Widget>[
+                  Card(
+                    elevation: 5,
+                    child: TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
                       },
-                      child: const Text('No, Descargar'),
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                      ),
+                      style: TextStyle(fontSize: 18.0),
                     ),
-                    TextButton(
-                      onPressed: () async {
-                        await _generateExcelInspeccion(context, snapshot.data);
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Si, Exportar'),
-                    ),
-                  ],
-                ),
-              ),
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.file_download),
-            );
+                  ),
+                  SizedBox(height: 2.0),
+                  Expanded(child: _myListInspeccion(context, snapshot.data))
+                ]),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error");
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              color: Colors.blue,
+            ));
           },
         ),
+      ),
+      floatingActionButton: FutureBuilder(
+        future: _listadoInspeccion,
+        builder: (context, snapshot) {
+          return FloatingActionButton(
+            onPressed: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Para descargar el archivo .xlsx'),
+                content: const Text(
+                    '¿Tiene la aplicación compatible para abrir el archivo excel?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () async {
+                      await _launchUrlAppStore();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('No, Descargar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await _generateExcelInspeccion(context, snapshot.data);
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Si, Exportar'),
+                  ),
+                ],
+              ),
+            ),
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.file_download),
+          );
+        },
       ),
     );
   }
@@ -205,8 +206,13 @@ class _ListInspeccionState extends State<ListInspeccion> {
                       data[index].i_km_inspeccion +
                       ' Fecha: ' +
                       data[index].i_fecha_inspeccion),
-                  leading:
-                      CircleAvatar(child: Text(data[index].i_identificador)),
+                  leading: CircleAvatar(
+                      backgroundColor: Color.fromARGB(255, 36, 76, 116),
+                      child: Text(
+                        data[index].i_identificador,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w400),
+                      )),
                   trailing: Icon(Icons.arrow_forward_ios),
                 ),
               )
