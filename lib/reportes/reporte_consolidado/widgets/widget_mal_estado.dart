@@ -30,7 +30,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
   late Future<List> neumaticos_mal_estado;
   List _mal_estado = [];
   double unityHeight = 35;
-  double unityRowHeight = 25;
+  double unityRowHeight = 120.0;
 
   late bool exits_data;
   late String txt_title = "Resumen de neumáticos en mal Estado";
@@ -47,6 +47,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
     'Serie',
     'NSD',
     'Observaciones',
+    'Imagen',
   ];
 
   Future<List> cargarDatos() async {
@@ -70,6 +71,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
+      print('5-jsonDecode > ${jsonData}');
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
       } else {
@@ -122,7 +124,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                       children: [
                         Container(
                           child: DataTable(
-                            // dataRowHeight: unityRowHeight,
+                            dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
@@ -135,50 +137,62 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                     cells: <DataCell>[
                                       DataCell(
                                         Container(
-                                          width: 80.0,
-                                          child: Text(
-                                            data["placa"].toString(),
+                                          // width: 80.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["placa"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 20.0,
-                                          child: Text(
-                                            data["neumatico_posicion"]
-                                                .toString(),
+                                          // width: 20.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["neumatico_posicion"]
+                                                  .toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 80,
-                                          child: Text(
-                                            data["eje"].toString(),
+                                          // width: 80,
+                                          child: Center(
+                                            child: Text(
+                                              data["eje"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["marca"].toString(),
+                                          // width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              data["marca"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["medida"].toString(),
+                                          // width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["medida"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["modelo"].toString(),
+                                          // width: 100.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["modelo"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -192,33 +206,62 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 80.0,
-                                          child: Text(
-                                            data["disenio"].toString(),
+                                          // width: 80.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["disenio"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 80.0,
-                                          child: Text(
-                                            data["serieneumatico"].toString(),
+                                          // width: 80.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["serieneumatico"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 50.0,
-                                          child: Text(
-                                            data["nsd"].toString(),
+                                          // width: 50.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["nsd"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 200.0,
-                                          child: Text(
-                                            data["observaciones"].toString(),
+                                          // width: 200.0,
+                                          child: Center(
+                                            child: Text(
+                                              data["observaciones"].toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            margin: EdgeInsets.all(5.0),
+                                            width: 200.0,
+                                            height: 400.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    "https://tiresoft2.lab-elsol.com/" +
+                                                        data["ruta1"]
+                                                            .toString(),
+                                                  ),
+                                                  fit: BoxFit.cover),
+                                            ),
                                           ),
                                         ),
                                       ),

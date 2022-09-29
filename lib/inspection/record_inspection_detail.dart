@@ -237,22 +237,29 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
       var newInspectionCreated = json.decode(response.body);
       var id_inspeccion = newInspectionCreated['inspeccion_actual'];
       listIdInspections.add(id_inspeccion);
+
       // print('newInspectionCreated:  ${newInspectionCreated} ');
       // print('tmp-Id:  ${id_inspeccion} ');
+      // print('${tires[position].serie}');
+      // print('${tires[position].vehicle}');
 
       tires[position].brand = 'tmp';
 
       if (id_inspeccion != null && file_image != null) {
-        bool responseImg = await sendImageMalEstado(id_inspeccion,
-            widget.idVehiculo, tires[position].uid, tires[position].position);
+        bool responseImg = await sendImageMalEstado(
+          id_inspeccion,
+          widget.idVehiculo,
+          tires[position].serie,
+          tires[position].position,
+        );
 
         if (responseImg) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Imagen enviado.')),
+            SnackBar(content: Text('Imagen enviado')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error al enviar Imagen.')),
+            SnackBar(content: Text('Error al enviar Imagen')),
           );
         }
       }
@@ -273,7 +280,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
   }
 
   Future<bool> sendImageMalEstado(
-      idInspeccion, idVehiculo, idNeumaticos, posicion) async {
+      idInspeccion, idVehiculo, serNeumaticos, posicion) async {
     bool resul_response = false;
 
     Uri uri = Uri.parse(
@@ -285,7 +292,7 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     request.fields['id_inspeccion'] = idInspeccion.toString();
     request.fields['id_cliente'] = widget.id_cliente;
     request.fields['vehiculo_id'] = idVehiculo.toString();
-    request.fields['serieneumatico'] = idNeumaticos.toString();
+    request.fields['serieneumatico'] = serNeumaticos.toString();
     request.fields['neuposicion'] = posicion.toString();
 
     http.StreamedResponse response = await request.send();
