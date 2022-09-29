@@ -55,11 +55,11 @@ class _LoginScreenState extends State<LoginScreen> {
       DeviceOrientation.portraitDown,
     ]);
     //_pageController = PageController();
-    // _emailController.text = "rcabello@gestorestecnologicos.com";
-    // _passwordController.text = "123456";
-    _emailController.text = "";
-    _passwordController.text = "";
-    setState(() {});
+    _emailController.text = "rcabello@gestorestecnologicos.com";
+    _passwordController.text = "123456";
+    // _emailController.text = "";
+    // _passwordController.text = "";
+    // setState(() {});
   }
 
   Future<String> login() async {

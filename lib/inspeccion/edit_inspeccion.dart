@@ -1011,10 +1011,10 @@ class _EditInspeccionState extends State<EditInspeccion> {
                 child: Container(
                   padding: EdgeInsets.only(top: 20.0, right: 10.0, left: 10.0),
                   child: TextFormField(
-                    maxLength: 4,
+                    maxLength: 3,
                     controller: _ctrlr_presion_actual,
                     keyboardType: TextInputType.number,
-                    onChanged: (val) => validatePresion(val.toString()),
+                    onChanged: (val) => validatePresion(val),
                     decoration: InputDecoration(labelText: 'Presión Actual'),
                   ),
                 ),
@@ -1026,19 +1026,29 @@ class _EditInspeccionState extends State<EditInspeccion> {
     );
   }
 
-  Future<bool> validatePresion(String pressure) async {
-    var presion = int.tryParse(pressure) ?? 0;
-    // print("PSI > " + presion.toString());
-    if (presion > 160) {
-      setState(() {
-        messageValidationPresion = "La presion debe ser menor a 160";
-      });
-      return true;
-    } else {
-      setState(() {
-        messageValidationPresion = "";
-      });
-      return false;
+  Future<void> validatePresion(String pressure) async {
+    for (int i = 0; i < pressure.length; i++) {
+      if (pressure[i] == '.') {
+        /////////////////////////////////////////////////
+        _ctrlr_presion_actual.value = TextEditingValue(
+          text: '',
+          selection: TextSelection.fromPosition(
+            TextPosition(offset: 0),
+          ),
+        );
+        ////////////////////////////////////////////////
+      } else {
+        var presion = int.tryParse(pressure) ?? 0;
+        if (presion >= 161) {
+          setState(() {
+            messageValidationPresion = "La presion debe ser menor a 160";
+          });
+        } else {
+          setState(() {
+            messageValidationPresion = "";
+          });
+        }
+      }
     }
   }
 

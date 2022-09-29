@@ -906,10 +906,10 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
               ),
             ),
             TextFormField(
-              maxLength: 4,
+              maxLength: 3,
               controller: pressureController,
               keyboardType: TextInputType.number,
-              onChanged: (val) => validatePressure(val.toString()),
+              onChanged: (val) => validatePressure(val),
               decoration: InputDecoration(labelText: 'Presión actual'),
             ),
           ],
@@ -1803,18 +1803,30 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
     // }
   }
 
-  Future<bool> validatePressure(String pressure) async {
-    var presion = int.tryParse(pressure) ?? 0;
-    if (presion >= 161) {
-      setState(() {
-        messageValidationPressureTiresoft = "La presion debe ser menor a 160";
-      });
-      return true;
-    } else {
-      setState(() {
-        messageValidationPressureTiresoft = "";
-      });
-      return false;
+  Future<void> validatePressure(String pressure) async {
+    for (int i = 0; i < pressure.length; i++) {
+      if (pressure[i] == '.') {
+        /////////////////////////////////////////////////
+        pressureController.value = TextEditingValue(
+          text: '',
+          selection: TextSelection.fromPosition(
+            TextPosition(offset: 0),
+          ),
+        );
+        ////////////////////////////////////////////////
+      } else {
+        var presion = int.tryParse(pressure) ?? 0;
+        if (presion >= 161) {
+          setState(() {
+            messageValidationPressureTiresoft =
+                "La presion debe ser menor a 160";
+          });
+        } else {
+          setState(() {
+            messageValidationPressureTiresoft = "";
+          });
+        }
+      }
     }
   }
 }
