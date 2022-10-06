@@ -232,6 +232,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
+                            columnSpacing: 10.0,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
                             border:
@@ -446,6 +447,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
+                            columnSpacing: 15.0,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
                             border:
@@ -573,7 +575,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 258,
+            width: 189,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -591,7 +593,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             totalRow(_list_totales[i]),
           ],
           Container(
-            width: 103,
+            width: 79,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -612,7 +614,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
 
   Widget totalRow(numero) {
     return Container(
-      width: 84,
+      width: 38,
       margin: EdgeInsets.zero,
       height: unityHeight,
       decoration: BoxDecoration(
@@ -635,7 +637,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 258,
+            width: 189,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -650,7 +652,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             ),
           ),
           Container(
-            width: 2790,
+            width: 1296,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(

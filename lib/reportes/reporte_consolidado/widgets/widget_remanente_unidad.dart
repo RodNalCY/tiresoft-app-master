@@ -27,7 +27,9 @@ class WidgetRemanenteUnidad extends StatefulWidget {
 
 class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
   // static const DataCell empty = DataCell(SizedBox(width: 0.0, height: 0.0));
-  static const DataCell empty = DataCell(Text("-"));
+  static const DataCell empty = DataCell(Center(
+    child: Text("-"),
+  ));
   late bool refreshing = false;
   late Future<List> remanente_unidad;
   List _remanentes = [];
@@ -63,8 +65,12 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
     '22',
     'Total',
     'Reencauchar',
-    'Próx. a Reenc.'
+    'Próx a Reenc'
   ];
+
+  List<String> columns_dynamic = [];
+  late int total_columns;
+
   late int total_neumaticos;
   late int total_reencauchar;
   late double percent_reencauchar;
@@ -90,6 +96,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
     );
 
     _remanentes = [];
+    columns_dynamic = [];
     aplicacion_rem_reencauche = 0;
     aplicacion_rem_proximo = 0;
 
@@ -130,6 +137,18 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         percent_reencauchar = (total_reencauchar / total_neumaticos) * 100;
         percent_prox_reencauchar =
             (total_prox_reencauchar / total_neumaticos) * 100;
+
+        // total_columns = 22;
+        // columns_dynamic.add('Vehículo');
+        // columns_dynamic.add('Placa');
+
+        // for (var i = 1; i <= total_columns; i++) {
+        //   columns_dynamic.add(i.toString());
+        // }
+
+        // columns_dynamic.add('Total');
+        // columns_dynamic.add('Reencauchar');
+        // columns_dynamic.add('Próx. a Reenc.');
       }
       return _remanentes;
     } else {
@@ -180,6 +199,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
+                            columnSpacing: 15.0,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
                             border:
@@ -190,9 +210,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 50.0,
+                                        Container(
+                                          width: 70.0,
+                                          child: Center(
                                             child: Text(
                                               data["tipovehiculo"].toString(),
                                             ),
@@ -200,9 +220,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                         ),
                                       ),
                                       DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 50.0,
+                                        Container(
+                                          width: 70.0,
+                                          child: Center(
                                             child: Text(
                                               data["placa"].toString(),
                                             ),
@@ -276,9 +296,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                           ? nsdDataCell(data["nsk_minimo_22"])
                                           : empty,
                                       DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 20.0,
+                                        Container(
+                                          width: 20.0,
+                                          child: Center(
                                             child: Text(
                                               data["total_neumaticos"]
                                                   .toString(),
@@ -287,9 +307,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                         ),
                                       ),
                                       DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 20.0,
+                                        Container(
+                                          // width: 20.0,
+                                          child: Center(
                                             child: Text(
                                               data["neumaticos_reencauchar"]
                                                   .toString(),
@@ -298,9 +318,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                         ),
                                       ),
                                       DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 20.0,
+                                        Container(
+                                          // width: 20.0,
+                                          child: Center(
                                             child: Text(
                                               data["neumaticos_proximos_reencauchar"]
                                                   .toString(),
@@ -339,7 +359,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         Container(
           color: Colors.transparent,
           padding: EdgeInsets.all(5),
-          width: 28,
+          // width: 28,
           child: Center(
             child: Text(
               str_nsd.toString(),
@@ -356,7 +376,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         Container(
           color: getNSDColor(int_nsd),
           padding: EdgeInsets.all(5),
-          width: 28,
+          // width: 28,
           child: Center(
             child: Text(
               str_nsd.toString(),
@@ -394,8 +414,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
     return color;
   }
 
-  List<DataColumn> getColumnsTwo(List<String> columns) {
-    return columns
+  List<DataColumn> getColumnsTwo(List<String> _columns) {
+    // print('_columns > ${_columns}');
+    return _columns
         .map(
           (String column) => DataColumn(
             label: Expanded(
@@ -416,7 +437,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 214,
+            width: 187,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -431,7 +452,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 1737,
+            width: 812,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -446,7 +467,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 88,
+            width: 47,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -461,7 +482,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 283,
+            width: 214,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -487,7 +508,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 1952,
+            width: 998,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -502,7 +523,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 88,
+            width: 47,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -517,7 +538,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 140,
+            width: 98,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -532,7 +553,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 144,
+            width: 116,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -558,7 +579,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 1952,
+            width: 998,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -573,7 +594,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 88,
+            width: 47,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -588,7 +609,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 140,
+            width: 98,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -603,7 +624,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 144,
+            width: 116,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
