@@ -35,6 +35,8 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
   late bool exits_data;
   late String txt_title = "Niveles de remanente por medida";
   List _list_totales = [];
+  List<String> neo_lista_totales = [];
+  int suma_neo_totales = 0;
 
   late String aplicacion_name;
   late int aplicacion_reencauche;
@@ -49,43 +51,8 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
   late int total_general;
   late Set medida_detalles;
 
-  List<String> columns = [
-    'Tipo',
-    'Medida',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-    '24',
-    '25',
-    '26',
-    '27',
-    '28',
-    '29',
-    '30',
-    '31',
-    '32',
-    'Total',
-  ];
+  List<String> columns = [];
+  List<dynamic> data_list_medida = [];
   List<String> columns_details = [
     'Aplicación',
     'Reenc.',
@@ -107,6 +74,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         'month1': widget.mes_inicio,
         'month2': widget.mes_fin,
         'year': widget.anio,
+        'proyecto': 'movil',
       }),
     );
 
@@ -120,6 +88,9 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
     double r1_temporal = 0.0;
     double r2_temporal = 0.0;
     medida_detalles = {};
+    columns = [];
+    neo_lista_totales = [];
+    suma_neo_totales = 0;
 
     print('17-Status Code${response.statusCode}');
 
@@ -133,15 +104,6 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         exits_data = true;
         _remanentes = jsonData['success']['datos'];
         _list_totales = jsonData['success']['totales'];
-
-        total_suma = _list_totales.length;
-
-        if (total_suma < 32) {
-          resultado = 32 - total_suma;
-          for (var i = 0; i < resultado; i++) {
-            _list_totales.add("-");
-          }
-        }
 
         for (var data in jsonData['success']['resumen']['aplicacion']) {
           aplicacion_name = data['aplicacion'].toString();
@@ -182,6 +144,32 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
           },
         };
         // print(medida_detalles);
+        columns.add('Tipo');
+        columns.add('Medida');
+        for (var item in jsonData['success']['remanentes']) {
+          columns.add(item.toString());
+        }
+        columns.add('Total');
+
+        neo_lista_totales.add('N°');
+        neo_lista_totales.add('Total');
+        var temporal = "";
+        for (var total in _list_totales) {
+          temporal = "";
+          neo_lista_totales.add(total.toString());
+          temporal = total.toString();
+          suma_neo_totales = suma_neo_totales + int.parse(temporal);
+        }
+        neo_lista_totales.add(suma_neo_totales.toString());
+
+        print(neo_lista_totales);
+
+        for (var n in _remanentes) {
+          // n.add(neo_lista_totales);
+          print(n);
+          // n.addAll(neo_lista_totales);
+        }
+        // _remanentes.addAll(neo_lista_totales);
       }
       return _remanentes;
     } else {
@@ -227,219 +215,351 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerRowMain(),
+                        // headerRowMain(),
                         Container(
                           child: DataTable(
-                            dataRowHeight: unityRowHeight,
-                            headingRowHeight: unityHeight,
-                            columnSpacing: 10.0,
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.blue.shade200),
-                            border:
-                                TableBorder.all(color: Colors.blue.shade100),
-                            columns: getColumnsTwo(columns),
-                            rows: snapshot.data!
-                                .map(
-                                  (data) => DataRow(
+                              dataRowHeight: unityRowHeight,
+                              headingRowHeight: unityHeight,
+                              columnSpacing: 20.0,
+                              headingRowColor: MaterialStateColor.resolveWith(
+                                  (states) => Colors.blue.shade200),
+                              border:
+                                  TableBorder.all(color: Colors.blue.shade100),
+                              columns: getColumnsTwo(columns),
+                              rows: [
+                                for (var row in snapshot.data!) ...[
+                                  DataRow(
                                     cells: <DataCell>[
-                                      DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 50.0,
-                                            child: Text(
-                                              data["tipovehiculo"].toString(),
+                                      for (var item in row) ...[
+                                        DataCell(
+                                          Container(
+                                            child: Center(
+                                              child: Text(
+                                                item.toString(),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Container(
-                                            width: 100.0,
-                                            child: Text(
-                                              data["medida"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      data["totalneumaticos_nsk_minimo_1"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_1"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_2"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_2"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_3"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_3"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_4"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_4"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_5"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_5"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_6"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_6"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_7"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_7"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_8"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_8"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_9"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_9"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_10"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_10"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_11"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_11"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_12"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_12"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_13"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_13"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_14"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_14"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_15"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_15"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_16"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_16"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_17"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_17"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_18"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_18"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_19"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_19"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_20"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_20"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_21"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_21"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_22"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_22"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_23"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_23"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_24"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_24"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_25"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_25"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_26"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_26"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_27"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_27"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_28"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_28"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_29"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_29"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_30"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_30"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_31"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_31"])
-                                          : dataEmpty(),
-                                      data["totalneumaticos_nsk_minimo_32"] !=
-                                              null
-                                          ? nsdDataCell(data[
-                                              "totalneumaticos_nsk_minimo_32"])
-                                          : dataEmpty(),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["total_vehiculo_medidas"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                        )
+                                      ]
                                     ],
                                   ),
-                                )
-                                .toList(),
-                          ),
+                                ],
+                                DataRow(
+                                    color: MaterialStateColor.resolveWith(
+                                      (states) {
+                                        return Colors
+                                            .blue.shade200; //make tha magic!
+                                      },
+                                    ),
+                                    cells: <DataCell>[
+                                      for (var item in neo_lista_totales) ...[
+                                        DataCell(
+                                          Center(
+                                            child: Text(
+                                              item.toString(),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ]),
+                              ]
+                              // snapshot.data.map(
+                              //   (e) => DataRow(
+                              //     cells: <DataCell>[
+                              //       DataCell("-"),
+                              //     ],
+                              //   ),
+                              // )
+                              // [
+                              //   DataRow(
+                              //     cells: <DataCell>[
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //       DataCell(
+                              //         Text("-"),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ]
+
+                              // rows: snapshot.data!
+                              //     .map(
+                              //       (data) => DataRow(
+                              //         cells: <DataCell>[
+                              //           DataCell(
+                              //             Center(
+                              //               child: Container(
+                              //                 width: 50.0,
+                              //                 child: Text(
+                              //                   data["tipovehiculo"].toString(),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ),
+                              //           DataCell(
+                              //             Center(
+                              //               child: Container(
+                              //                 width: 100.0,
+                              //                 child: Text(
+                              //                   data["medida"].toString(),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ),
+                              //           data["totalneumaticos_nsk_minimo_1"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_1"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_2"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_2"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_3"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_3"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_4"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_4"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_5"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_5"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_6"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_6"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_7"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_7"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_8"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_8"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_9"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_9"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_10"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_10"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_11"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_11"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_12"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_12"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_13"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_13"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_14"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_14"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_15"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_15"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_16"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_16"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_17"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_17"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_18"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_18"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_19"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_19"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_20"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_20"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_21"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_21"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_22"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_22"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_23"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_23"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_24"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_24"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_25"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_25"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_26"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_26"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_27"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_27"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_28"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_28"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_29"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_29"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_30"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_30"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_31"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_31"])
+                              //               : dataEmpty(),
+                              //           data["totalneumaticos_nsk_minimo_32"] !=
+                              //                   null
+                              //               ? nsdDataCell(data[
+                              //                   "totalneumaticos_nsk_minimo_32"])
+                              //               : dataEmpty(),
+                              //           DataCell(
+                              //             Container(
+                              //               width: 50.0,
+                              //               child: Center(
+                              //                 child: Text(
+                              //                   data["total_vehiculo_medidas"]
+                              //                       .toString(),
+                              //                 ),
+                              //               ),
+                              //             ),
+                              //           ),
+                              // ],
+                              // ),
+                              // )
+                              // .toList(),
+                              ),
                         ),
-                        footerRowTotal(),
+                        // footerRowTotal(),
                         SizedBox(
                           height: 50,
                         ),
@@ -539,82 +659,82 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
     );
   }
 
-  DataCell dataEmpty() {
-    return DataCell(
-      Container(
-        padding: EdgeInsets.all(5),
-        width: 28,
-        child: Center(
-          child: Text(
-            '-',
-          ),
-        ),
-      ),
-    );
-  }
+  // DataCell dataEmpty() {
+  //   return DataCell(
+  //     Container(
+  //       padding: EdgeInsets.all(5),
+  //       width: 28,
+  //       child: Center(
+  //         child: Text(
+  //           '-',
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  DataCell nsdDataCell(nsd) {
-    String str_nsd = nsd.toString();
-    return DataCell(
-      Container(
-        padding: EdgeInsets.all(5),
-        width: 28,
-        child: Center(
-          child: Text(
-            str_nsd.toString(),
-          ),
-        ),
-      ),
-    );
-  }
+  // DataCell nsdDataCell(nsd) {
+  //   String str_nsd = nsd.toString();
+  //   return DataCell(
+  //     Container(
+  //       padding: EdgeInsets.all(5),
+  //       width: 28,
+  //       child: Center(
+  //         child: Text(
+  //           str_nsd.toString(),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Container footerRowTotal() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 189,
-            margin: EdgeInsets.zero,
-            height: unityHeight,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue.shade100),
-              color: Colors.blue.shade200,
-            ),
-            child: Center(
-              child: Text(
-                'TOTAL',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          for (var i = 0; i < _list_totales.length; i++) ...[
-            totalRow(_list_totales[i]),
-          ],
-          Container(
-            width: 79,
-            margin: EdgeInsets.zero,
-            height: unityHeight,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue.shade100),
-              color: Colors.blue.shade200,
-            ),
-            child: Center(
-              child: Text(
-                total_general.toString(),
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Container footerRowTotal() {
+  //   return Container(
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: [
+  //         Container(
+  //           width: 162,
+  //           margin: EdgeInsets.zero,
+  //           height: unityHeight,
+  //           decoration: BoxDecoration(
+  //             border: Border.all(color: Colors.blue.shade100),
+  //             color: Colors.blue.shade200,
+  //           ),
+  //           child: Center(
+  //             child: Text(
+  //               'TOTAL',
+  //               style: TextStyle(fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //         ),
+  //         for (var i = 0; i < _list_totales.length; i++) ...[
+  //           totalRow(_list_totales[i]),
+  //         ],
+  //         Container(
+  //           width: 79,
+  //           margin: EdgeInsets.zero,
+  //           height: unityHeight,
+  //           decoration: BoxDecoration(
+  //             border: Border.all(color: Colors.blue.shade100),
+  //             color: Colors.blue.shade200,
+  //           ),
+  //           child: Center(
+  //             child: Text(
+  //               total_general.toString(),
+  //               style: TextStyle(fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget totalRow(numero) {
     return Container(
-      width: 38,
+      width: 29,
       margin: EdgeInsets.zero,
       height: unityHeight,
       decoration: BoxDecoration(

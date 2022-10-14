@@ -6,6 +6,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/models/mes.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_desgaste_irregular.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_graphic_inspecciones.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inflado_neumatico.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_inspecciones.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_mal_estado.dart';
@@ -810,33 +811,33 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           // SizedBox(
           //   height: 30.0,
           // ),
-          // WidgetDistribucionMedida(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetPosicionRuedaMarca(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetMarcaEjeDireccional(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
+          WidgetDistribucionMedida(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetPosicionRuedaMarca(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMarcaEjeDireccional(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
           // SizedBox(
           //   height: 30.0,
           // ),
@@ -887,29 +888,29 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           //   mes_fin: _ddownFirsMesFinishId.toString(),
           //   refresh: _refresh,
           // ),
-          SizedBox(
-            height: 30.0,
-          ),
-          WidgetRemanenteUnidad(
-            cliente: widget._id_cliente,
-            anio: _ddownFirstAnioId,
-            mes_inicio: _ddownFirsMesInitId.toString(),
-            mes_fin: _ddownFirsMesFinishId.toString(),
-            refresh: _refresh,
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-          WidgetRemanenteMedida(
-            cliente: widget._id_cliente,
-            anio: _ddownFirstAnioId,
-            mes_inicio: _ddownFirsMesInitId.toString(),
-            mes_fin: _ddownFirsMesFinishId.toString(),
-            refresh: _refresh,
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
+          // SizedBox(
+          //   height: 30.0,
+          // ),
+          // WidgetRemanenteUnidad(
+          //   cliente: widget._id_cliente,
+          //   anio: _ddownFirstAnioId,
+          //   mes_inicio: _ddownFirsMesInitId.toString(),
+          //   mes_fin: _ddownFirsMesFinishId.toString(),
+          //   refresh: _refresh,
+          // ),
+          // SizedBox(
+          //   height: 30.0,
+          // ),
+          // WidgetRemanenteMedida(
+          //   cliente: widget._id_cliente,
+          //   anio: _ddownFirstAnioId,
+          //   mes_inicio: _ddownFirsMesInitId.toString(),
+          //   mes_fin: _ddownFirsMesFinishId.toString(),
+          //   refresh: _refresh,
+          // ),
+          // SizedBox(
+          //   height: 30.0,
+          // ),
           // WidgetServicioReencauche(
           //   cliente: widget._id_cliente,
           //   anio: _ddownFirstAnioId,
@@ -980,6 +981,69 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
           // SizedBox(
           //   height: 30.0,
           // ),
+
+          SizedBox(
+            height: 30.0,
+          ),
+          Center(
+            child: Card(
+              color: Color.fromARGB(255, 225, 245, 252),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                  ),
+                  const ListTile(
+                    leading: Icon(
+                      Icons.swipe_right,
+                      size: 35,
+                      color: Colors.blue,
+                    ),
+                    subtitle: Text(
+                      'Para visualizar las inspecciones debe ir a la siguiente vista.',
+                      style: TextStyle(
+                          fontSize: 15.0, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        child: const Text('VOLVER'),
+                        onPressed: null,
+                      ),
+                      const SizedBox(width: 8),
+                      TextButton(
+                        child: const Text(
+                          'SIGUIENTE',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                        onPressed: () {
+                          final detail_inspeccion =
+                              '${_ddownFirsMesInitName} a ${_ddownFirsMesFinishName} - ${_ddownFirstAnioId}';
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WidgetGraphicInspecciones(
+                                  cliente: widget._id_cliente,
+                                  anio: _ddownFirstAnioId,
+                                  mes_inicio: _ddownFirsMesInitId.toString(),
+                                  mes_fin: _ddownFirsMesFinishId.toString(),
+                                  refresh: _refresh,
+                                  details: detail_inspeccion),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

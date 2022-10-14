@@ -25,6 +25,11 @@ class WidgetInspecciones extends StatefulWidget {
 }
 
 class _WidgetInspeccionesState extends State<WidgetInspecciones> {
+  // late List<Widget> _widgets = [];
+  late String _first_placa;
+  // late List<String> _order_inspeccion;
+  late Map<String, dynamic> _order_inspeccion;
+
   late bool refreshing = false;
 
   late Future<List> inspecciones;
@@ -72,6 +77,7 @@ class _WidgetInspeccionesState extends State<WidgetInspecciones> {
     );
 
     _inpeccion = [];
+    _order_inspeccion = {};
     print('18-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
@@ -83,6 +89,18 @@ class _WidgetInspeccionesState extends State<WidgetInspecciones> {
       } else {
         exits_data = true;
         _inpeccion = jsonData['success']['datos'];
+        _first_placa = jsonData['success']['datos'][0]['placa'];
+
+        for (var item in _inpeccion) {
+          if (item['placa'] == _first_placa) {
+            _order_inspeccion.addAll({
+              'placa': item['placa'],
+              'pos': item['posicion'],
+            });
+          }
+        }
+
+        print(_order_inspeccion);
       }
       return _inpeccion;
     } else {
@@ -116,6 +134,9 @@ class _WidgetInspeccionesState extends State<WidgetInspecciones> {
             return Center(child: Text("$error"));
           } else if (snapshot.hasData) {
             if (exits_data) {
+              // print('Data > 1');
+              // print(snapshot.data);
+
               return GraphicCard(
                 title: txt_title,
                 widget: SingleChildScrollView(
@@ -127,232 +148,282 @@ class _WidgetInspeccionesState extends State<WidgetInspecciones> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // for (var item in generarTabla()) ...[item]
+                        // ,
+                        //   SizedBox(
+                        //     height: 500,
+                        //     child: ListView.builder(
+                        //       scrollDirection: Axis.vertical,
+                        //       shrinkWrap: true,
+                        //       itemCount: snapshot.data!.length,
+                        //       itemBuilder: (context, index) {
+                        //         // return Text(snapshot.data![index]['placa']);
+                        //         // print("Comparativo");
+                        //         // print(index);
+                        //         // print();
+                        //         // var
+                        //         return Card(
+                        //           child: ListTile(
+                        //             title: Text(snapshot.data![index]['placa']),
+                        //             subtitle: Text(snapshot.data![index]
+                        //                     ['posicion']
+                        //                 .toString()),
+                        //           ),
+                        //         );
+                        //       },
+                        //     ),
+                        //   ),
                         // headerRowPerformance(),
-                        Container(
-                          child: DataTable(
-                            dataRowHeight: unityRowHeight,
-                            headingRowHeight: unityHeight,
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.blue.shade200),
-                            border:
-                                TableBorder.all(color: Colors.blue.shade100),
-                            columns: getColumnsTwo(columns),
-                            rows: snapshot.data!
-                                .map(
-                                  (data) => DataRow(
-                                    cells: <DataCell>[
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["posicion"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["marcaneumatico"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              data["medidaneumatico"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              data["modeloneumatico"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["estadoneumatico"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["disenioneumatico"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["razon_social"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["num_serie"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["valvula"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["accesibilidad"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["malogrado"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 30.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["presionactual"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 30.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["presion_recomendada"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 120.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["estadopresion"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["remanente_original"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["exterior"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["medio"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["interior"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["nsk_minimo"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 200.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["recomendacion"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        ),
+                        // for (var item in ) ...[
+                        //   temp_km = item['km_inspeccion'],
+                        //   temp_fechita = item['fecha_inspeccion'],
+                        //   if (item['posicion'] == 1 ||
+                        //       item['km_inspeccion'] == temp_km ||
+                        //       item['fecha_inspeccion'] == temp_fechita)
+                        //     ...[
+
+                        //     ]
+                        // ]
+
+                        // for (var i = 0; i < snapshot.data!.length; i++) ...[
+                        //   if (snapshot.data![i]['placa'] == temp_placa) ...[
+                        //     Text(snapshot.data![i]['placa']),
+                        //   ] else ...[
+                        //     SizedBox(
+                        //       height: 20,
+                        //     ),
+                        //   ]
+                        // ]
+
+                        // Text(snapshot.data!.length.toString()),
+
+                        // Container(
+                        //   child: DataTable(
+                        //     dataRowHeight: unityRowHeight,
+                        //     headingRowHeight: unityHeight,
+                        //     headingRowColor: MaterialStateColor.resolveWith(
+                        //         (states) => Colors.blue.shade200),
+                        //     border:
+                        //         TableBorder.all(color: Colors.blue.shade100),
+                        //     columns: getColumnsTwo(columns),
+                        //     rows: snapshot.data!
+                        //         .map(
+                        //           (data) => DataRow(
+                        //             cells: <DataCell>[
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["posicion"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["marcaneumatico"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["medidaneumatico"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["modeloneumatico"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["estadoneumatico"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["disenioneumatico"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["razon_social"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 100.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["num_serie"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 20.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["valvula"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 20.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["accesibilidad"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 20.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["malogrado"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 30.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["presionactual"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 30.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["presion_recomendada"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 120.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["estadopresion"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["remanente_original"]
+                        //                           .toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["exterior"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["medio"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["interior"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 50.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["nsk_minimo"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               DataCell(
+                        //                 Container(
+                        //                   width: 200.0,
+                        //                   child: Center(
+                        //                     child: Text(
+                        //                       data["recomendacion"].toString(),
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         )
+                        //         .toList(),
+                        //   ),
+                        // ),
+
+                        // _first_placa="1";
                       ],
                     ),
                   ),
@@ -383,4 +454,29 @@ class _WidgetInspeccionesState extends State<WidgetInspecciones> {
         )
         .toList();
   }
+
+  // List<Widget> generarTabla() {
+  //   var temp_placa = _inpeccion[0]['placa'];
+
+  //   for (var i = 0; i < _inpeccion.length; i++) {
+  //     if (_inpeccion[i]['placa'] == temp_placa) {
+  //       print(_inpeccion[i]['placa']);
+  //       _widgets.add(
+  //         Container(
+  //           child: DataTable(
+  //             columns: getColumnsTwo(columns),
+  //             rows: [],
+  //           ),
+  //         ),
+  //       );
+  //     } else {
+  //       temp_placa = _inpeccion[i]['placa'];
+  //       _widgets.add(SizedBox(
+  //         height: 50.0,
+  //       ));
+  //     }
+  //   }
+
+  //   return _widgets;
+  // }
 }

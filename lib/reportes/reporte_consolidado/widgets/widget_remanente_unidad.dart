@@ -38,38 +38,37 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
   late bool exits_data;
   late String txt_title = "Niveles de remanente por unidad";
 
-  List<String> columns = [
-    'Vehículo',
-    'Placa',
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    'Total',
-    'Reencauchar',
-    'Próx a Reenc'
-  ];
+  // List<String> columns = [
+  //   'Vehículo',
+  //   'Placa',
+  //   '1',
+  //   '2',
+  //   '3',
+  //   '4',
+  //   '5',
+  //   '6',
+  //   '7',
+  //   '8',
+  //   '9',
+  //   '10',
+  //   '11',
+  //   '12',
+  //   '13',
+  //   '14',
+  //   '15',
+  //   '16',
+  //   '17',
+  //   '18',
+  //   '19',
+  //   '20',
+  //   '21',
+  //   '22',
+  //   'Total',
+  //   'Reencauchar',
+  //   'Próx a Reenc'
+  // ];
 
   List<String> columns_dynamic = [];
-  late int total_columns;
 
   late int total_neumaticos;
   late int total_reencauchar;
@@ -92,6 +91,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         'month1': widget.mes_inicio,
         'month2': widget.mes_fin,
         'year': widget.anio,
+        'proyecto': 'movil',
       }),
     );
 
@@ -138,17 +138,16 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         percent_prox_reencauchar =
             (total_prox_reencauchar / total_neumaticos) * 100;
 
-        // total_columns = 22;
-        // columns_dynamic.add('Vehículo');
-        // columns_dynamic.add('Placa');
+        columns_dynamic.add('Vehículo');
+        columns_dynamic.add('Placa');
 
-        // for (var i = 1; i <= total_columns; i++) {
-        //   columns_dynamic.add(i.toString());
-        // }
+        for (var element in jsonData['success']['posiciones']) {
+          columns_dynamic.add(element.toString());
+        }
 
-        // columns_dynamic.add('Total');
-        // columns_dynamic.add('Reencauchar');
-        // columns_dynamic.add('Próx. a Reenc.');
+        columns_dynamic.add('Total');
+        columns_dynamic.add('Reencauchar');
+        columns_dynamic.add('Próx. a Reenc.');
       }
       return _remanentes;
     } else {
@@ -194,7 +193,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerRow(),
+                        // headerRow(),
                         Container(
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
@@ -204,134 +203,154 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                                 (states) => Colors.blue.shade200),
                             border:
                                 TableBorder.all(color: Colors.blue.shade100),
-                            columns: getColumnsTwo(columns),
-                            rows: snapshot.data!
-                                .map(
-                                  (data) => DataRow(
-                                    cells: <DataCell>[
+                            columns: getColumnsTwo(columns_dynamic),
+                            rows: [
+                              for (var row in snapshot.data!) ...[
+                                DataRow(
+                                  cells: <DataCell>[
+                                    for (var item in row) ...[
                                       DataCell(
                                         Container(
-                                          width: 70.0,
                                           child: Center(
                                             child: Text(
-                                              data["tipovehiculo"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          width: 70.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["placa"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      data["nsk_minimo_1"] != null
-                                          ? nsdDataCell(data["nsk_minimo_1"])
-                                          : empty,
-                                      data["nsk_minimo_2"] != null
-                                          ? nsdDataCell(data["nsk_minimo_2"])
-                                          : empty,
-                                      data["nsk_minimo_3"] != null
-                                          ? nsdDataCell(data["nsk_minimo_3"])
-                                          : empty,
-                                      data["nsk_minimo_4"] != null
-                                          ? nsdDataCell(data["nsk_minimo_4"])
-                                          : empty,
-                                      data["nsk_minimo_5"] != null
-                                          ? nsdDataCell(data["nsk_minimo_5"])
-                                          : empty,
-                                      data["nsk_minimo_6"] != null
-                                          ? nsdDataCell(data["nsk_minimo_6"])
-                                          : empty,
-                                      data["nsk_minimo_7"] != null
-                                          ? nsdDataCell(data["nsk_minimo_7"])
-                                          : empty,
-                                      data["nsk_minimo_8"] != null
-                                          ? nsdDataCell(data["nsk_minimo_8"])
-                                          : empty,
-                                      data["nsk_minimo_9"] != null
-                                          ? nsdDataCell(data["nsk_minimo_9"])
-                                          : empty,
-                                      data["nsk_minimo_10"] != null
-                                          ? nsdDataCell(data["nsk_minimo_10"])
-                                          : empty,
-                                      data["nsk_minimo_11"] != null
-                                          ? nsdDataCell(data["nsk_minimo_11"])
-                                          : empty,
-                                      data["nsk_minimo_12"] != null
-                                          ? nsdDataCell(data["nsk_minimo_12"])
-                                          : empty,
-                                      data["nsk_minimo_13"] != null
-                                          ? nsdDataCell(data["nsk_minimo_13"])
-                                          : empty,
-                                      data["nsk_minimo_14"] != null
-                                          ? nsdDataCell(data["nsk_minimo_14"])
-                                          : empty,
-                                      data["nsk_minimo_15"] != null
-                                          ? nsdDataCell(data["nsk_minimo_15"])
-                                          : empty,
-                                      data["nsk_minimo_16"] != null
-                                          ? nsdDataCell(data["nsk_minimo_16"])
-                                          : empty,
-                                      data["nsk_minimo_17"] != null
-                                          ? nsdDataCell(data["nsk_minimo_17"])
-                                          : empty,
-                                      data["nsk_minimo_18"] != null
-                                          ? nsdDataCell(data["nsk_minimo_18"])
-                                          : empty,
-                                      data["nsk_minimo_19"] != null
-                                          ? nsdDataCell(data["nsk_minimo_19"])
-                                          : empty,
-                                      data["nsk_minimo_20"] != null
-                                          ? nsdDataCell(data["nsk_minimo_20"])
-                                          : empty,
-                                      data["nsk_minimo_21"] != null
-                                          ? nsdDataCell(data["nsk_minimo_21"])
-                                          : empty,
-                                      data["nsk_minimo_22"] != null
-                                          ? nsdDataCell(data["nsk_minimo_22"])
-                                          : empty,
-                                      DataCell(
-                                        Container(
-                                          width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["total_neumaticos"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          // width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["neumaticos_reencauchar"]
-                                                  .toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          // width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["neumaticos_proximos_reencauchar"]
-                                                  .toString(),
+                                              item.toString(),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  ],
                                 )
-                                .toList(),
+                              ],
+                            ],
+
+                            // snapshot.data!
+                            //     .map(
+                            //       (data) => DataRow(
+                            //         cells: <DataCell>[
+                            //           DataCell(
+                            //             Container(
+                            //               width: 70.0,
+                            //               child: Center(
+                            //                 child: Text(
+                            //                   data["tipovehiculo"].toString(),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //           DataCell(
+                            //             Container(
+                            //               width: 70.0,
+                            //               child: Center(
+                            //                 child: Text(
+                            //                   data["placa"].toString(),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //           data["nsk_minimo_1"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_1"])
+                            //               : empty,
+                            //           data["nsk_minimo_2"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_2"])
+                            //               : empty,
+                            //           data["nsk_minimo_3"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_3"])
+                            //               : empty,
+                            //           data["nsk_minimo_4"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_4"])
+                            //               : empty,
+                            //           data["nsk_minimo_5"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_5"])
+                            //               : empty,
+                            //           data["nsk_minimo_6"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_6"])
+                            //               : empty,
+                            //           data["nsk_minimo_7"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_7"])
+                            //               : empty,
+                            //           data["nsk_minimo_8"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_8"])
+                            //               : empty,
+                            //           data["nsk_minimo_9"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_9"])
+                            //               : empty,
+                            //           data["nsk_minimo_10"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_10"])
+                            //               : empty,
+                            //           data["nsk_minimo_11"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_11"])
+                            //               : empty,
+                            //           data["nsk_minimo_12"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_12"])
+                            //               : empty,
+                            //           data["nsk_minimo_13"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_13"])
+                            //               : empty,
+                            //           data["nsk_minimo_14"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_14"])
+                            //               : empty,
+                            //           data["nsk_minimo_15"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_15"])
+                            //               : empty,
+                            //           data["nsk_minimo_16"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_16"])
+                            //               : empty,
+                            //           data["nsk_minimo_17"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_17"])
+                            //               : empty,
+                            //           data["nsk_minimo_18"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_18"])
+                            //               : empty,
+                            //           data["nsk_minimo_19"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_19"])
+                            //               : empty,
+                            //           data["nsk_minimo_20"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_20"])
+                            //               : empty,
+                            //           data["nsk_minimo_21"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_21"])
+                            //               : empty,
+                            //           data["nsk_minimo_22"] != null
+                            //               ? nsdDataCell(data["nsk_minimo_22"])
+                            //               : empty,
+                            //           DataCell(
+                            //             Container(
+                            //               width: 20.0,
+                            //               child: Center(
+                            //                 child: Text(
+                            //                   data["total_neumaticos"]
+                            //                       .toString(),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //           DataCell(
+                            //             Container(
+                            //               // width: 20.0,
+                            //               child: Center(
+                            //                 child: Text(
+                            //                   data["neumaticos_reencauchar"]
+                            //                       .toString(),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //           DataCell(
+                            //             Container(
+                            //               // width: 20.0,
+                            //               child: Center(
+                            //                 child: Text(
+                            //                   data["neumaticos_proximos_reencauchar"]
+                            //                       .toString(),
+                            //                 ),
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )
+                            //     .toList(),
                           ),
                         ),
                         footerRowOne(),
@@ -380,9 +399,9 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
           child: Center(
             child: Text(
               str_nsd.toString(),
-              style: TextStyle(
-                color: getTextColor(int_nsd),
-              ),
+              // style: TextStyle(
+              //   color: getTextColor(int_nsd),
+              // ),
             ),
           ),
         ),
@@ -508,7 +527,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 998,
+            width: 514,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -553,7 +572,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 116,
+            width: 123,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -579,7 +598,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 998,
+            width: 514,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -624,7 +643,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
             ),
           ),
           Container(
-            width: 116,
+            width: 123,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
