@@ -801,16 +801,16 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // WidgetEquiposInspeccionados(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
+          WidgetEquiposInspeccionados(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
           WidgetDistribucionMedida(
             cliente: widget._id_cliente,
             anio: _ddownFirstAnioId,
@@ -838,213 +838,202 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             mes_fin: _ddownFirsMesFinishId.toString(),
             refresh: _refresh,
           ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetMarcaEjeTraccion(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetMarcaEjeApoyo(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetMalEstado(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetResumenScrap(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetResumenRetiro(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetRemanenteUnidad(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetRemanenteMedida(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetServicioReencauche(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetDesgasteIrregular(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetInfladoNeumatico(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetPresionInflado(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetReencauche(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetReencauchabilidad(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-          // WidgetInspecciones(
-          //   cliente: widget._id_cliente,
-          //   anio: _ddownFirstAnioId,
-          //   mes_inicio: _ddownFirsMesInitId.toString(),
-          //   mes_fin: _ddownFirsMesFinishId.toString(),
-          //   refresh: _refresh,
-          // ),
-          // SizedBox(
-          //   height: 30.0,
-          // ),
-
           SizedBox(
             height: 30.0,
           ),
-          Center(
-            child: Card(
-              color: Color.fromARGB(255, 225, 245, 252),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 20,
-                  ),
-                  const ListTile(
-                    leading: Icon(
-                      Icons.swipe_right,
-                      size: 35,
-                      color: Colors.blue,
-                    ),
-                    subtitle: Text(
-                      'Para visualizar las inspecciones debe ir a la siguiente vista.',
-                      style: TextStyle(
-                          fontSize: 15.0, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      TextButton(
-                        child: const Text('VOLVER'),
-                        onPressed: null,
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        child: const Text(
-                          'SIGUIENTE',
-                          style: TextStyle(
-                            color: Colors.blue,
-                          ),
-                        ),
-                        onPressed: () {
-                          final detail_inspeccion =
-                              '${_ddownFirsMesInitName} a ${_ddownFirsMesFinishName} - ${_ddownFirstAnioId}';
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WidgetGraphicInspecciones(
-                                  cliente: widget._id_cliente,
-                                  anio: _ddownFirstAnioId,
-                                  mes_inicio: _ddownFirsMesInitId.toString(),
-                                  mes_fin: _ddownFirsMesFinishId.toString(),
-                                  refresh: _refresh,
-                                  details: detail_inspeccion),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
-                ],
+          WidgetMarcaEjeTraccion(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMarcaEjeApoyo(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetMalEstado(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetResumenScrap(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetResumenRetiro(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetRemanenteUnidad(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetRemanenteMedida(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetServicioReencauche(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetDesgasteIrregular(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetInfladoNeumatico(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetPresionInflado(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetReencauche(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetReencauchabilidad(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetInpeccionesCard()
+        ],
+      ),
+    );
+  }
+
+  Center WidgetInpeccionesCard() {
+    return Center(
+      child: Card(
+        color: Color.fromARGB(255, 225, 245, 252),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            const ListTile(
+              leading: Icon(
+                Icons.swipe_right,
+                size: 35,
+                color: Colors.blue,
+              ),
+              subtitle: Text(
+                'Para visualizar las inspecciones debe ir a la siguiente vista.',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w400),
               ),
             ),
-          )
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: const Text('VOLVER'),
+                  onPressed: null,
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  child: const Text(
+                    'SIGUIENTE',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  onPressed: () {
+                    final detail_inspeccion =
+                        '${_ddownFirsMesInitName} a ${_ddownFirsMesFinishName} - ${_ddownFirstAnioId}';
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WidgetGraphicInspecciones(
+                            cliente: widget._id_cliente,
+                            anio: _ddownFirstAnioId,
+                            mes_inicio: _ddownFirsMesInitId.toString(),
+                            mes_fin: _ddownFirsMesFinishId.toString(),
+                            refresh: _refresh,
+                            details: detail_inspeccion),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 8),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
