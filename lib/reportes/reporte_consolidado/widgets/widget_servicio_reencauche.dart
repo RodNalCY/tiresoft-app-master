@@ -35,7 +35,7 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
 
   late bool exits_data;
   late String txt_title = "Neumáticos para servicio de reencauche";
-
+  late String total_data;
   final columns = [
     'Vehículo',
     'POS',
@@ -67,16 +67,22 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
     );
 
     _reencauches = [];
+    total_data = "";
+    int sumar = 0;
     print('15-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
+
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
       } else {
         exits_data = true;
         _reencauches = jsonData['success']['datos'];
+        sumar = (jsonData['success']['resumen']['proximosreencauchar'] +
+            jsonData['success']['resumen']['reuncauchar']);
+        total_data = sumar.toString();
       }
       return _reencauches;
     } else {
@@ -112,7 +118,7 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
           } else if (snapshot.hasData) {
             if (exits_data) {
               return GraphicCard(
-                title: txt_title,
+                title: txt_title + "\nTotal : " + total_data,
                 widget: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
@@ -126,6 +132,7 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
+                            columnSpacing: 10,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
                             border:
@@ -136,99 +143,75 @@ class _WidgetServicioReencaucheState extends State<WidgetServicioReencauche> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["placa"].toString(),
-                                          ),
+                                        Text(
+                                          data["placa"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 20.0,
+                                        Center(
                                           child: Text(
                                             data["posicion"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["marca"].toString(),
-                                          ),
+                                        Text(
+                                          data["marca"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["medida"].toString(),
-                                          ),
+                                        Text(
+                                          data["medida"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["modelo"].toString(),
-                                          ),
+                                        Text(
+                                          data["modelo"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 10.0,
+                                        Center(
                                           child: Text(
                                             data["estado"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["num_serie"].toString(),
-                                          ),
+                                        Text(
+                                          data["num_serie"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["interior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["medio"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["exterior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["nsd"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 150.0,
-                                          child: Text(
-                                            data["recomendacion"].toString(),
-                                          ),
+                                        Text(
+                                          data["recomendacion"].toString(),
                                         ),
                                       ),
                                     ],

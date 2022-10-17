@@ -36,6 +36,8 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
   late bool exits_data;
   late String txt_title = "Rotaciones - Desgastes irregulares";
 
+  late String total_data;
+
   final columns = [
     'Vehículo',
     'POS',
@@ -66,6 +68,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
     );
 
     _irregular = [];
+    total_data = "";
     print('1-Status Code${response.statusCode}');
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -75,6 +78,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
       } else {
         exits_data = true;
         _irregular = jsonData['success']['datos'];
+        total_data = (jsonData['success']['datos'].length).toString();
       }
       return _irregular;
     } else {
@@ -111,7 +115,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
           } else if (snapshot.hasData) {
             if (exits_data) {
               return GraphicCard(
-                title: txt_title,
+                title: txt_title + "\nTotal : " + total_data,
                 widget: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
@@ -126,6 +130,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
+                            columnSpacing: 10,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
                             border:
@@ -136,91 +141,70 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["placa"].toString(),
-                                          ),
+                                        Text(
+                                          data["placa"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 20.0,
+                                        Center(
                                           child: Text(
                                             data["posicion"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["marca"].toString(),
-                                          ),
+                                        Text(
+                                          data["marca"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["medida"].toString(),
-                                          ),
+                                        Text(
+                                          data["medida"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["modelo"].toString(),
-                                          ),
+                                        Text(
+                                          data["modelo"].toString(),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 10.0,
+                                        Center(
                                           child: Text(
                                             data["estado"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["num_serie"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["interior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["exterior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["nsd"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
-                                          child: Text(
-                                            data["td_adicional"].toString(),
-                                          ),
+                                        Text(
+                                          data["td_adicional"].toString(),
                                         ),
                                       ),
                                     ],
@@ -267,7 +251,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 960,
+            width: 453,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -282,7 +266,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
             ),
           ),
           Container(
-            width: 326,
+            width: 185,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
@@ -297,7 +281,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
             ),
           ),
           Container(
-            width: 152,
+            width: 124,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
