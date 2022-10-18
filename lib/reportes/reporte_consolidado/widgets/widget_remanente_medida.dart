@@ -215,7 +215,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // headerRowMain(),
+                        headerRowMain(),
                         Container(
                           child: DataTable(
                               dataRowHeight: unityRowHeight,
@@ -245,26 +245,27 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                                   ),
                                 ],
                                 DataRow(
-                                    color: MaterialStateColor.resolveWith(
-                                      (states) {
-                                        return Colors
-                                            .blue.shade200; //make tha magic!
-                                      },
-                                    ),
-                                    cells: <DataCell>[
-                                      for (var item in neo_lista_totales) ...[
-                                        DataCell(
-                                          Center(
-                                            child: Text(
-                                              item.toString(),
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                  color: MaterialStateColor.resolveWith(
+                                    (states) {
+                                      return Colors
+                                          .blue.shade200; //make tha magic!
+                                    },
+                                  ),
+                                  cells: <DataCell>[
+                                    for (var item in neo_lista_totales) ...[
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            item.toString(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ]),
+                                      ),
+                                    ],
+                                  ],
+                                ),
                               ]
                               // snapshot.data.map(
                               //   (e) => DataRow(
@@ -757,7 +758,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 189,
+            width: 185,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -772,7 +773,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
             ),
           ),
           Container(
-            width: 1296,
+            width: 885,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -792,19 +793,57 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
   }
 
   List<DataColumn> getColumnsTwo(List<String> columns) {
-    return columns
-        .map(
-          (String column) => DataColumn(
-            label: Expanded(
-              child: Container(
-                child: Text(
-                  column,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+    return columns.map((String column) {
+      // print('column $column');
+      return DataColumn(
+        label: Expanded(
+          child: Text(
+            column,
+            textAlign: TextAlign.center,
           ),
-        )
-        .toList();
+        ),
+      );
+      // if (column != "Tipo" &&
+      //     column != "Medida" &&
+      //     column != "Total" &&
+      //     column != "Aplicación" &&
+      //     column != "Reenc." &&
+      //     column != "Próx. Reenc." &&
+      //     column != "Operativo" &&
+      //     column != "Porcentaje") {
+      //   int r_value = int.parse(column);
+      //   if (r_value <= 5) {
+      //     return DataColumn(
+      //       label: Container(
+      //         padding: EdgeInsets.all(10),
+      //         color: Colors.yellow,
+      //         child: Center(
+      //           child: Text(
+      //             column.toString(),
+      //           ),
+      //         ),
+      //       ),
+      //     );
+      //   } else {
+      //     return DataColumn(
+      //       label: Container(
+      //         // color: Colors.yellow,
+      //         child: Text(
+      //           column.toString(),
+      //         ),
+      //       ),
+      //     );
+      //   }
+      // } else {
+      //   return DataColumn(
+      //     label: Expanded(
+      //       child: Text(
+      //         column,
+      //         textAlign: TextAlign.center,
+      //       ),
+      //     ),
+      //   );
+      // }
+    }).toList();
   }
 }
