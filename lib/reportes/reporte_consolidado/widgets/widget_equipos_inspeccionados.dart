@@ -36,6 +36,7 @@ class _WidgetEquiposInspeccionadosState
   double unityRowHeight = 25;
   late bool exits_data;
   late String txt_title = "Equipos Inspeccionados";
+  late String total_equipos;
   final columns = [
     'Tipo',
     'Marca',
@@ -61,6 +62,7 @@ class _WidgetEquiposInspeccionadosState
     );
 
     _equipos = [];
+    total_equipos = "";
     print('3-Status Code${response.statusCode}');
 
     if (response.statusCode == 200) {
@@ -72,6 +74,8 @@ class _WidgetEquiposInspeccionadosState
       } else {
         exits_data = true;
         _equipos = jsonData['success']['datos'];
+        total_equipos =
+            jsonData['success']['total_equipos_inspeccionados'].toString();
       }
       return _equipos;
     } else {
@@ -107,7 +111,7 @@ class _WidgetEquiposInspeccionadosState
           } else if (snapshot.hasData) {
             if (exits_data) {
               return GraphicCard(
-                title: txt_title,
+                title: txt_title + "\nTotal : " + total_equipos,
                 widget: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
@@ -120,6 +124,7 @@ class _WidgetEquiposInspeccionadosState
                         headerRowPerformance(),
                         Container(
                           child: DataTable(
+                            columnSpacing: 20.0,
                             dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
                             headingRowColor: MaterialStateColor.resolveWith(
@@ -132,40 +137,35 @@ class _WidgetEquiposInspeccionadosState
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          width: 70.0,
+                                        Center(
                                           child: Text(
                                             data["nomtipo"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["marca"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 160,
+                                        Center(
                                           child: Text(
                                             data["modelo"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
+                                        Center(
                                           child: Text(
                                             data["medidaDelanteros"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["medidaPosteriores"]
                                                 .toString(),
@@ -173,8 +173,7 @@ class _WidgetEquiposInspeccionadosState
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 20.0,
+                                        Center(
                                           child: Text(
                                             data["total_neumaticos"].toString(),
                                           ),
@@ -224,7 +223,7 @@ class _WidgetEquiposInspeccionadosState
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 494,
+            width: 195,
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -239,7 +238,7 @@ class _WidgetEquiposInspeccionadosState
             ),
           ),
           Container(
-            width: 396,
+            width: 390,
             height: unityHeight,
             margin: EdgeInsets.zero,
             decoration: BoxDecoration(
