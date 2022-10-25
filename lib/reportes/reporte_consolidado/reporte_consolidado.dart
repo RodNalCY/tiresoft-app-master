@@ -3,6 +3,7 @@ import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/navigation/navigation_drawer_widget.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/models/anio.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/models/mes.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_costo_por_kilometro.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_desgaste_irregular.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_distribucion_medida.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_equipos_inspeccionados.dart';
@@ -962,6 +963,16 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             height: 30.0,
           ),
           WidgetReencauchabilidad(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          WidgetCostoPorKilometro(
             cliente: widget._id_cliente,
             anio: _ddownFirstAnioId,
             mes_inicio: _ddownFirsMesInitId.toString(),
