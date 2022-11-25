@@ -46,6 +46,7 @@ dependencies:
   open_file: ^3.2.1
   syncfusion_flutter_charts: ^20.2.44
   flutter_spinkit: ^5.1.0
+  syncfusion_flutter_datagrid: ^20.3.50
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/models/equipo.dart';
 import 'dart:convert';
 
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_not_data.dart';
@@ -29,24 +31,16 @@ class WidgetEquiposInspeccionados extends StatefulWidget {
 class _WidgetEquiposInspeccionadosState
     extends State<WidgetEquiposInspeccionados> {
   late bool refreshing = false;
-
-  late Future<List> equipos_inspeccionados;
-  List _equipos = [];
   double unityHeight = 35;
   double unityRowHeight = 25;
   late bool exits_data;
   late String txt_title = "Equipos Inspeccionados";
   late String total_equipos;
-  final columns = [
-    'Tipo',
-    'Marca',
-    'Modelo',
-    'Delantero',
-    'Posterior',
-    'Total'
-  ];
+  late Future<List<Equipo>> equipos_inspeccionados;
+  List<Equipo> _equipos = <Equipo>[];
+  late EquiposDataSource equiposDataSource;
 
-  Future<List> cargarDatos() async {
+  Future<List<Equipo>> cargarDatos() async {
     final response = await http.post(
       Uri.parse(
           "https://tiresoft2.lab-elsol.com/api/reporte/equipos_inspeccionados"),
@@ -71,12 +65,23 @@ class _WidgetEquiposInspeccionadosState
 
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
+        total_equipos = "0";
       } else {
         exits_data = true;
-        _equipos = jsonData['success']['datos'];
         total_equipos =
             jsonData['success']['total_equipos_inspeccionados'].toString();
+        for (var item in jsonData['success']['datos']) {
+          _equipos.add(Equipo(
+            item["nomtipo"],
+            item["marca"],
+            item["modelo"],
+            item["medidaDelanteros"],
+            item["medidaPosteriores"],
+            item["total_neumaticos"],
+          ));
+        }
       }
+      equiposDataSource = EquiposDataSource(_equipos);
       return _equipos;
     } else {
       throw Exception("Falló la Conexión");
@@ -112,79 +117,102 @@ class _WidgetEquiposInspeccionadosState
             if (exits_data) {
               return GraphicCard(
                 title: txt_title + "\nTotal : " + total_equipos,
-                widget: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
-                  child: Container(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        headerRowPerformance(),
-                        Container(
-                          child: DataTable(
-                            columnSpacing: 20.0,
-                            dataRowHeight: unityRowHeight,
-                            headingRowHeight: unityHeight,
-                            headingRowColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.blue.shade200),
-                            border:
-                                TableBorder.all(color: Colors.blue.shade100),
-                            columns: getColumnsTwo(columns),
-                            rows: snapshot.data!
-                                .map(
-                                  (data) => DataRow(
-                                    cells: <DataCell>[
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["nomtipo"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["marca"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["modelo"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["medidaDelanteros"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["medidaPosteriores"]
-                                                .toString(),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Center(
-                                          child: Text(
-                                            data["total_neumaticos"].toString(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                                .toList(),
+                widget: Container(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: SfDataGrid(
+                      headerRowHeight: 30,
+                      rowHeight: 30,
+                      columnWidthMode: ColumnWidthMode.auto,
+                      // allowSorting: true,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      source: equiposDataSource,
+                      columns: [
+                        GridColumn(
+                          columnName: 'tipo',
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Tipo',
+                            ),
                           ),
                         ),
+                        GridColumn(
+                          columnName: 'marca',
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Marca',
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          columnName: 'modelo',
+                          minimumWidth: 130,
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Modelo',
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          columnName: 'delantero',
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Delanteros',
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          columnName: 'posterior',
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Posteriores',
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          columnName: 'total',
+                          label: Container(
+                            color: Colors.blue.shade200,
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Total',
+                            ),
+                          ),
+                        )
+                      ],
+                      stackedHeaderRows: <StackedHeaderRow>[
+                        StackedHeaderRow(cells: [
+                          StackedHeaderCell(
+                            columnNames: ['tipo', 'marca', 'modelo'],
+                            child: Container(
+                              color: Colors.blue.shade200,
+                              child: Center(
+                                child: Text('Equipo'),
+                              ),
+                            ),
+                          ),
+                          StackedHeaderCell(
+                            columnNames: ['delantero', 'posterior', 'total'],
+                            child: Container(
+                              color: Colors.blue.shade200,
+                              child: Center(
+                                child: Text('Neumático'),
+                              ),
+                            ),
+                          )
+                        ])
                       ],
                     ),
                   ),
@@ -200,60 +228,62 @@ class _WidgetEquiposInspeccionadosState
       ),
     );
   }
+}
 
-  List<DataColumn> getColumnsTwo(List<String> columns) {
-    return columns
-        .map(
-          (String column) => DataColumn(
-            label: Expanded(
-              child: Text(
-                column,
-                textAlign: TextAlign.center,
+class EquiposDataSource extends DataGridSource {
+  late List<DataGridRow> dataGridRows;
+
+  @override
+  List<DataGridRow> get rows => dataGridRows;
+
+  EquiposDataSource(List<Equipo> equipos) {
+    dataGridRows = equipos
+        .map<DataGridRow>(
+          (data) => DataGridRow(
+            cells: [
+              DataGridCell<String>(
+                columnName: 'tipo',
+                value: data.tipo,
               ),
-            ),
+              DataGridCell<String>(
+                columnName: 'marca',
+                value: data.marca,
+              ),
+              DataGridCell<String>(
+                columnName: 'modelo',
+                value: data.modelo,
+              ),
+              DataGridCell<String>(
+                columnName: 'delantero',
+                value: data.delantero,
+              ),
+              DataGridCell<String>(
+                columnName: 'posterior',
+                value: data.posterior,
+              ),
+              DataGridCell<int>(
+                columnName: 'total',
+                value: data.total,
+              ),
+            ],
           ),
         )
         .toList();
   }
 
-  Container headerRowPerformance() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 195,
-            margin: EdgeInsets.zero,
-            height: unityHeight,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue.shade100),
-              color: Colors.blue.shade200,
+  @override
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map<Widget>(
+        (dataGridCell) {
+          return Container(
+            alignment: Alignment.center,
+            child: Text(
+              dataGridCell.value.toString(),
             ),
-            child: Center(
-              child: Text(
-                'Equipo',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Container(
-            width: 390,
-            height: unityHeight,
-            margin: EdgeInsets.zero,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue.shade100),
-              color: Colors.blue.shade200,
-            ),
-            child: Center(
-              child: Text(
-                'Neumático',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
-      ),
+          );
+        },
+      ).toList(),
     );
   }
 }
