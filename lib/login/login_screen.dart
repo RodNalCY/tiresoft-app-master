@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart';
-import 'package:tiresoft/inspection/models/vehicle.dart';
-import 'package:tiresoft/inspection/record_inspection_detail.dart';
+import 'package:tiresoft/inspeccion/models/vehicle.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_detail.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tiresoft/inspection/record_inspection_header.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_header.dart';
 import 'package:tiresoft/login/customer_selection_screen.dart';
 import 'package:tiresoft/login/models/cliente.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
     ]);
     //_pageController = PageController();
     _emailController.text = "rcabello@gestorestecnologicos.com";
-    _passwordController.text = "123456";
+    _passwordController.text = "@75870480AZ";
     // _emailController.text = "";
     // _passwordController.text = "";
     // setState(() {});

@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiresoft/inspeccion/list_inspeccion.dart';
-import 'package:tiresoft/inspection/models/tire.dart';
+import 'package:tiresoft/inspeccion/models/tire.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:tiresoft/inspection/record_inspection_header.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_header.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/widgets/custom_cart.dart';
 
@@ -230,15 +230,15 @@ class _RecordInspectionDetailState extends State<RecordInspectionDetail>
           "resultado": duales_mal_hermanados,
         }));
 
-    // print('Status: ${response.statusCode}');
-    // print('response: ${response}');
+    print('Status: ${response.statusCode}');
+    print('response: ${response}');
     if (response.statusCode == 201) {
       // Si la llamada al servidor fue exitosa, analiza el JSON
       var newInspectionCreated = json.decode(response.body);
       var id_inspeccion = newInspectionCreated['inspeccion_actual'];
       listIdInspections.add(id_inspeccion);
 
-      // print('newInspectionCreated:  ${newInspectionCreated} ');
+      print('newInspectionCreated:  ${newInspectionCreated} ');
       // print('tmp-Id:  ${id_inspeccion} ');
       // print('${tires[position].serie}');
       // print('${tires[position].vehicle}');

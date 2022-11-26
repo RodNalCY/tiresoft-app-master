@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:tiresoft/inspeccion/list_inspeccion.dart';
-import 'package:tiresoft/inspection/record_inspection_header.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_header.dart';
 import 'package:tiresoft/login/login_screen.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/mal_estado/list_mal_estado.dart';

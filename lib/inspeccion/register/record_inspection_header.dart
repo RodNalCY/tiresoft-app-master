@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:simple_autocomplete_formfield/simple_autocomplete_formfield.dart';
-import 'package:tiresoft/inspection/models/vehicle.dart';
-import 'package:tiresoft/inspection/record_inspection_detail.dart';
+import 'package:tiresoft/inspeccion/models/vehicle.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_detail.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiresoft/login/models/user.dart';
@@ -66,8 +66,6 @@ class _RecordInspectionHeaderState extends State<RecordInspectionHeader> {
       String body = utf8.decode(response.bodyBytes);
       final _json_decode = jsonDecode(body);
       final _lista_vehiculos = _json_decode['success']['resultado'] as List;
-      // print("LISTA DEL VEHICULOS");
-      // print(_lista_vehiculos);
 
       for (final element in _lista_vehiculos) {
         if (element['neumaticos']) {

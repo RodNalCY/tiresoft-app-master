@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tiresoft/listInspection/tire_detail_screen.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

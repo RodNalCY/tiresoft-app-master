@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiresoft/home.dart';
 import 'dart:convert';
-import 'package:tiresoft/inspection/record_inspection_header.dart';
+import 'package:tiresoft/inspeccion/register/record_inspection_header.dart';
 import 'package:tiresoft/login/models/cliente.dart';
 import 'package:tiresoft/login/models/user.dart';
 import 'package:tiresoft/widgets/custom_drawer.dart';
