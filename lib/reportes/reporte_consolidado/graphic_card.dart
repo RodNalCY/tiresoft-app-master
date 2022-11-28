@@ -30,7 +30,7 @@ class GraphicCard extends StatelessWidget {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.90,
-            padding: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(2),
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 225, 245, 252),
               borderRadius: BorderRadius.only(

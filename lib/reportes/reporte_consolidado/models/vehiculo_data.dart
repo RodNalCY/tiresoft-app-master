@@ -174,7 +174,7 @@ class Detalle {
         malogrado: json["malogrado"],
         presionactual: json["presionactual"].toString(),
         presionRecomendada: json["presion_recomendada"].toString(),
-        remanenteOriginal: json["remanente_original"],
+        remanenteOriginal: json["remanente_original"].toString(),
         exterior: json["exterior"],
         medio: json["medio"],
         interior: json["interior"],

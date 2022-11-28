@@ -162,13 +162,13 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
         }
         neo_lista_totales.add(suma_neo_totales.toString());
 
-        print(neo_lista_totales);
+        // print(neo_lista_totales);
 
-        for (var n in _remanentes) {
-          // n.add(neo_lista_totales);
-          print(n);
-          // n.addAll(neo_lista_totales);
-        }
+        // for (var n in _remanentes) {
+        //   // n.add(neo_lista_totales);
+        //   print(n);
+        //   // n.addAll(neo_lista_totales);
+        // }
         // _remanentes.addAll(neo_lista_totales);
       }
       return _remanentes;
@@ -215,7 +215,7 @@ class _WidgetRemanenteMedidaState extends State<WidgetRemanenteMedida> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerRowMain(),
+                        // headerRowMain(),
                         Container(
                           child: DataTable(
                               dataRowHeight: unityRowHeight,

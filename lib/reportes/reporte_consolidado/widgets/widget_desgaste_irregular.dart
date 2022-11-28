@@ -125,7 +125,7 @@ class _WidgetDesgasteIrregularState extends State<WidgetDesgasteIrregular> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerRowPerformance(),
+                        // headerRowPerformance(),
                         Container(
                           child: DataTable(
                             dataRowHeight: unityRowHeight,

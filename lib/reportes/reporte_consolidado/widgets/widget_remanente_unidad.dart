@@ -78,6 +78,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
 
   late int aplicacion_rem_reencauche;
   late int aplicacion_rem_proximo;
+  late int columns_widht;
 
   Future<List> cargarDatos() async {
     final response = await http.post(
@@ -107,6 +108,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
     percent_prox_reencauchar = 0.0;
     double r1_temporal = 0.0;
     double r2_temporal = 0.0;
+    columns_widht = 0;
 
     print('16-Status Code${response.statusCode}');
 
@@ -143,7 +145,10 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
 
         for (var element in jsonData['success']['posiciones']) {
           columns_dynamic.add(element.toString());
+          columns_widht++;
         }
+
+        print('columns_widht > ${columns_widht}');
 
         columns_dynamic.add('Total');
         columns_dynamic.add('Reencauchar');
@@ -193,7 +198,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerRow(),
+                        // headerRow(),
                         Container(
                           child: DataTable(
                             dataRowHeight: unityRowHeight,
@@ -254,13 +259,29 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
           ),
         ),
       );
+    } else if (nsd == "-") {
+      String str_nsd = nsd.toString();
+      return DataCell(
+        Container(
+          color: Colors.transparent,
+          width: 25,
+          child: Center(
+            child: Text(
+              str_nsd,
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+      );
     } else {
       String str_nsd = nsd.toString();
       return DataCell(
         Container(
           color: Colors.transparent,
           // padding: EdgeInsets.all(5),
-          // width: 28,
+          // width: 10,
           child: Center(
             child: Text(
               str_nsd,
@@ -392,7 +413,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 630,
+            width: 150 + (columns_widht * 40),
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(
@@ -463,7 +484,7 @@ class _WidgetRemanenteUnidadState extends State<WidgetRemanenteUnidad> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 630,
+            width: 150 + (columns_widht * 40),
             margin: EdgeInsets.zero,
             height: unityHeight,
             decoration: BoxDecoration(

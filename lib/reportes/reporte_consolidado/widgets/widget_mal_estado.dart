@@ -71,7 +71,7 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
       final jsonData = jsonDecode(body);
-      print('5-jsonDecode > ${jsonData}');
+      // print('5-jsonDecode > ${jsonData}');
       if (jsonData['success']['datos'].length == 0) {
         exits_data = false;
       } else {
@@ -136,107 +136,79 @@ class _WidgetMalEstadoState extends State<WidgetMalEstado> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          // width: 80.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["placa"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["placa"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 20.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["neumatico_posicion"]
-                                                  .toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["neumatico_posicion"]
+                                                .toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 80,
-                                          child: Center(
-                                            child: Text(
-                                              data["eje"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["eje"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 100,
-                                          child: Center(
-                                            child: Text(
-                                              data["marca"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["marca"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["medida"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["medida"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 100.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["modelo"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["modelo"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 200.0,
+                                        Center(
                                           child: Text(
                                             data["estado"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          // width: 80.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["disenio"].toString(),
-                                            ),
+                                        Center(
+                                          child: Text(
+                                            data["disenio"].toString(),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            data["serieneumatico"].toString(),
+                                          ),
+                                        ),
+                                      ),
+                                      DataCell(
+                                        Center(
+                                          child: Text(
+                                            data["nsd"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
                                         Container(
-                                          // width: 80.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["serieneumatico"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          // width: 50.0,
-                                          child: Center(
-                                            child: Text(
-                                              data["nsd"].toString(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          // width: 200.0,
+                                          width: 150,
                                           child: Center(
                                             child: Text(
                                               data["observaciones"].toString(),

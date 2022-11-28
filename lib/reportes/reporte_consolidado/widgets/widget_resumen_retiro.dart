@@ -122,7 +122,7 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                       children: [
                         Container(
                           child: DataTable(
-                            // dataRowHeight: unityRowHeight,
+                            dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
@@ -134,88 +134,79 @@ class _WidgetResumenRetiroState extends State<WidgetResumenRetiro> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["placa"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 20.0,
+                                        Center(
                                           child: Text(
                                             data["posicion"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
+                                        Center(
                                           child: Text(
                                             data["marca"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
-                                          child: Text(
-                                            data["medida"].toString(),
+                                        Center(
+                                          child: Center(
+                                            child: Text(
+                                              data["medida"].toString(),
+                                            ),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["modelo"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 10.0,
+                                        Center(
                                           child: Text(
                                             data["estado"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["num_serie"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["interior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["exterior"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 50.0,
+                                        Center(
                                           child: Text(
                                             data["nsd"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["recomendacion"].toString(),
                                           ),

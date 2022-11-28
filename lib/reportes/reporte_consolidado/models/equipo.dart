@@ -5,6 +5,7 @@ class Equipo {
   final String delantero;
   final String posterior;
   final int total;
+  final int total_equipos;
   Equipo(
     this.tipo,
     this.marca,
@@ -12,5 +13,6 @@ class Equipo {
     this.delantero,
     this.posterior,
     this.total,
+    this.total_equipos,
   );
 }

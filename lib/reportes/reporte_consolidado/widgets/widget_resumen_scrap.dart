@@ -30,7 +30,7 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
   late Future<List> neumaticos_resumen_scrap;
   List _resumen_scrap = [];
   double unityHeight = 35;
-  double unityRowHeight = 25;
+  double unityRowHeight = 120;
 
   late bool exits_data;
   late String txt_title = "Resumen de Neumáticos En Scrap";
@@ -116,7 +116,7 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                       children: [
                         Container(
                           child: DataTable(
-                            // dataRowHeight: unityRowHeight,
+                            dataRowHeight: unityRowHeight,
                             headingRowHeight: unityHeight,
                             headingRowColor: MaterialStateColor.resolveWith(
                                 (states) => Colors.blue.shade200),
@@ -128,24 +128,21 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                                   (data) => DataRow(
                                     cells: <DataCell>[
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["placa"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100.0,
+                                        Center(
                                           child: Text(
                                             data["num_serie"].toString(),
                                           ),
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 20,
+                                        Center(
                                           child: Text(
                                             data["neumatico_posicion"]
                                                 .toString(),
@@ -153,8 +150,7 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          width: 100,
+                                        Center(
                                           child: Text(
                                             data["motivo"].toString(),
                                           ),
@@ -162,10 +158,22 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                                       ),
                                       DataCell(
                                         Container(
-                                          width: 200.0,
-                                          child: Text(
-                                            data["neumaticoimgruta1"]
-                                                .toString(),
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            margin: EdgeInsets.all(5.0),
+                                            width: 200.0,
+                                            height: 400.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                    "https://tiresoft2.lab-elsol.com/" +
+                                                        data["neumaticoimgruta1"]
+                                                            .toString(),
+                                                  ),
+                                                  fit: BoxFit.cover),
+                                            ),
                                           ),
                                         ),
                                       ),

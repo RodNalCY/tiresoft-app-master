@@ -1128,7 +1128,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      maxLength: 4,
+                      maxLength: 5,
                       controller: _ctrlr_rm_exterior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Exterior'),
@@ -1141,7 +1141,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      maxLength: 4,
+                      maxLength: 5,
                       controller: _ctrlr_rm_medio,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Medio'),
@@ -1156,7 +1156,7 @@ class _EditInspeccionState extends State<EditInspeccion> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: TextFormField(
-                      maxLength: 4,
+                      maxLength: 5,
                       controller: _ctrlr_rm_interior,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(labelText: 'Interior'),

@@ -72,13 +72,13 @@ class _WidgetEquiposInspeccionadosState
             jsonData['success']['total_equipos_inspeccionados'].toString();
         for (var item in jsonData['success']['datos']) {
           _equipos.add(Equipo(
-            item["nomtipo"],
-            item["marca"],
-            item["modelo"],
-            item["medidaDelanteros"],
-            item["medidaPosteriores"],
-            item["total_neumaticos"],
-          ));
+              item["nomtipo"],
+              item["marca"],
+              item["modelo"],
+              item["medidaDelanteros"],
+              item["medidaPosteriores"],
+              item["total_neumaticos"],
+              item["total_vehiculos"]));
         }
       }
       equiposDataSource = EquiposDataSource(_equipos);
@@ -118,103 +118,120 @@ class _WidgetEquiposInspeccionadosState
               return GraphicCard(
                 title: txt_title + "\nTotal : " + total_equipos,
                 widget: Container(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: SfDataGrid(
-                      headerRowHeight: 30,
-                      rowHeight: 30,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      // allowSorting: true,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      source: equiposDataSource,
-                      columns: [
-                        GridColumn(
-                          columnName: 'tipo',
-                          label: Container(
+                  // color: Colors.brown,
+                  padding: EdgeInsets.only(bottom: 15.0),
+                  child: SfDataGrid(
+                    headerRowHeight: 30,
+                    rowHeight: 30,
+                    columnWidthMode: ColumnWidthMode.auto,
+                    shrinkWrapRows: true,
+                    verticalScrollPhysics: NeverScrollableScrollPhysics(),
+
+                    // allowSorting: true,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    source: equiposDataSource,
+                    columns: [
+                      GridColumn(
+                        columnName: 'tipo',
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Tipo',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'marca',
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Marca',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'modelo',
+                        minimumWidth: 130,
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Modelo',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'total_equipos',
+                        minimumWidth: 130,
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Total',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'delantero',
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Delanteros',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'posterior',
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Posteriores',
+                          ),
+                        ),
+                      ),
+                      GridColumn(
+                        columnName: 'total',
+                        label: Container(
+                          color: Colors.blue.shade200,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Total',
+                          ),
+                        ),
+                      )
+                    ],
+                    stackedHeaderRows: <StackedHeaderRow>[
+                      StackedHeaderRow(cells: [
+                        StackedHeaderCell(
+                          columnNames: [
+                            'tipo',
+                            'marca',
+                            'modelo',
+                            'total_equipos'
+                          ],
+                          child: Container(
                             color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Tipo',
+                            child: Center(
+                              child: Text('Equipo'),
                             ),
                           ),
                         ),
-                        GridColumn(
-                          columnName: 'marca',
-                          label: Container(
+                        StackedHeaderCell(
+                          columnNames: ['delantero', 'posterior', 'total'],
+                          child: Container(
                             color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Marca',
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'modelo',
-                          minimumWidth: 130,
-                          label: Container(
-                            color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Modelo',
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'delantero',
-                          label: Container(
-                            color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Delanteros',
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'posterior',
-                          label: Container(
-                            color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Posteriores',
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'total',
-                          label: Container(
-                            color: Colors.blue.shade200,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Total',
+                            child: Center(
+                              child: Text('Neumático'),
                             ),
                           ),
                         )
-                      ],
-                      stackedHeaderRows: <StackedHeaderRow>[
-                        StackedHeaderRow(cells: [
-                          StackedHeaderCell(
-                            columnNames: ['tipo', 'marca', 'modelo'],
-                            child: Container(
-                              color: Colors.blue.shade200,
-                              child: Center(
-                                child: Text('Equipo'),
-                              ),
-                            ),
-                          ),
-                          StackedHeaderCell(
-                            columnNames: ['delantero', 'posterior', 'total'],
-                            child: Container(
-                              color: Colors.blue.shade200,
-                              child: Center(
-                                child: Text('Neumático'),
-                              ),
-                            ),
-                          )
-                        ])
-                      ],
-                    ),
+                      ])
+                    ],
                   ),
                 ),
               );
@@ -252,6 +269,10 @@ class EquiposDataSource extends DataGridSource {
               DataGridCell<String>(
                 columnName: 'modelo',
                 value: data.modelo,
+              ),
+              DataGridCell<int>(
+                columnName: 'total_equipos',
+                value: data.total_equipos,
               ),
               DataGridCell<String>(
                 columnName: 'delantero',
