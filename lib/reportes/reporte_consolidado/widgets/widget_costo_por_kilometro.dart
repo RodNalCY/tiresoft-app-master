@@ -38,6 +38,7 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
 
   late bool exits_data;
   late String txt_title = "Indicador Costo por Kilómetro";
+  late double count_data;
 
   Future<List<CostoKilometro>> cargarDatos() async {
     final response = await http.post(
@@ -57,6 +58,9 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
     _costo_x_kilometro = [];
     _list_meses_name = [];
     print('16-Status Code${response.statusCode}');
+    count_data = 1.0;
+    int int_count = 0;
+    String str_count = "";
 
     if (response.statusCode == 200) {
       String body = utf8.decode(response.bodyBytes);
@@ -66,6 +70,12 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
         exits_data = false;
       } else {
         exits_data = true;
+        count_data = 0;
+        int_count = jsonData['success']['datos'].length;
+        str_count = int_count.toString();
+        count_data = double.parse(str_count);
+        // print("TOTAL COSTO KM");
+        // print(count_data);
 
         for (var mes in jsonData['success']['meses']) {
           switch (mes) {
@@ -154,6 +164,7 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
       print("16-No se ejecuta");
       refreshing = true;
     }
+
     return FutureBuilder<List<CostoKilometro>>(
         future: costo_kilometro,
         builder: (context, snapshot) {
@@ -175,7 +186,7 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
                             Container(
                               width: 50,
                               margin: EdgeInsets.zero,
-                              height: 110,
+                              height: 50 * count_data,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blue.shade100),
                                 color: Colors.blue.shade200,
@@ -198,7 +209,7 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
                             Container(
                               width: 50,
                               margin: EdgeInsets.zero,
-                              height: 110,
+                              height: 50 * count_data,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blue.shade100),
                                 color: Colors.blue.shade200,
@@ -343,7 +354,8 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
     required String deficiente,
   }) {
     late Widget _widget;
-    late Color _color;
+    late Color _color = Colors.transparent;
+    late Color _color_text = Colors.transparent;
 
     double d_indicador = 0.0;
     double d_objetivo = 0.0;
@@ -353,15 +365,23 @@ class _WidgetCostoPorKilometroState extends State<WidgetCostoPorKilometro> {
       d_indicador = double.parse(indicador);
       d_objetivo = double.parse(objetivo);
       d_deficiente = double.parse(deficiente);
-      if (d_indicador < d_objetivo && d_indicador > d_deficiente) {
-        _color = Colors.yellow;
-      } else if (d_indicador < d_objetivo) {
+
+      if (d_indicador < d_objetivo) {
         _color = Colors.green;
+        _color_text = Colors.white;
+      } else if (d_indicador > d_objetivo && d_indicador < d_deficiente) {
+        _color = Colors.yellow;
+        _color_text = Colors.black;
       } else if (d_indicador > d_deficiente) {
         _color = Colors.red;
+        _color_text = Colors.white;
       }
       _widget = colRow(
-          title: indicador, widht: 100, color: _color, txtcolor: Colors.white);
+        title: indicador,
+        widht: 100,
+        color: _color,
+        txtcolor: _color_text,
+      );
     } else {
       _widget = Container();
     }

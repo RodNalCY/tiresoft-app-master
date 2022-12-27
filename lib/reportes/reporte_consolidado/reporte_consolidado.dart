@@ -14,6 +14,7 @@ import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_mal_estado.
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_apoyo.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marca_eje_traccion.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_marcas_eje_direccional.dart';
+import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_perdida_scrap.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_posicion_rueda_marca.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_presion_inflado.dart';
 import 'package:tiresoft/reportes/reporte_consolidado/widgets/widget_reencauchabilidad.dart';
@@ -973,6 +974,13 @@ class _ReporteConsolidadoState extends State<ReporteConsolidado> {
             height: 30.0,
           ),
           WidgetCostoPorKilometro(
+            cliente: widget._id_cliente,
+            anio: _ddownFirstAnioId,
+            mes_inicio: _ddownFirsMesInitId.toString(),
+            mes_fin: _ddownFirsMesFinishId.toString(),
+            refresh: _refresh,
+          ),
+          WidgetPerdidaScrap(
             cliente: widget._id_cliente,
             anio: _ddownFirstAnioId,
             mes_inicio: _ddownFirsMesInitId.toString(),

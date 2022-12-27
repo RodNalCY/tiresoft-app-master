@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:tiresoft/reportes/reporte_consolidado/graphic_card.dart';
 import 'dart:convert';
@@ -157,24 +159,11 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
                                         ),
                                       ),
                                       DataCell(
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                            margin: EdgeInsets.all(5.0),
-                                            width: 200.0,
-                                            height: 400.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                    "https://tiresoft2.lab-elsol.com/" +
-                                                        data["neumaticoimgruta1"]
-                                                            .toString(),
-                                                  ),
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
+                                        ImageFutureBuilder(
+                                          image:
+                                              "https://tiresoft2.lab-elsol.com/" +
+                                                  data["neumaticoimgruta1"]
+                                                      .toString(),
                                         ),
                                       ),
                                     ],
@@ -196,6 +185,49 @@ class _WidgetResumenScrapState extends State<WidgetResumenScrap> {
           }
         },
       ),
+    );
+  }
+
+  Future<String?> getImgUrlValidate(String imagen) async {
+    String imgUrl = imagen;
+
+    try {
+      Uint8List bytes =
+          (await NetworkAssetBundle(Uri.parse(imgUrl)).load(imgUrl))
+              .buffer
+              .asUint8List();
+      // print("The image exists!");
+      return imgUrl;
+    } catch (e) {
+      // print("Error: $e");
+      return null;
+    }
+  }
+
+  Widget ImageFutureBuilder({required String image}) {
+    return FutureBuilder(
+      future: getImgUrlValidate(image),
+      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+        bool error = snapshot.data == null;
+        return Container(
+          alignment: Alignment.center,
+          child: Container(
+            margin: EdgeInsets.all(5.0),
+            width: 200.0,
+            height: 400.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              image: DecorationImage(
+                  image: error
+                      ? NetworkImage(
+                          "https://tiresoft2.lab-elsol.com/images/imagen-no-disponible.jpg",
+                        )
+                      : NetworkImage(snapshot.data!),
+                  fit: BoxFit.cover),
+            ),
+          ),
+        );
+      },
     );
   }
 
